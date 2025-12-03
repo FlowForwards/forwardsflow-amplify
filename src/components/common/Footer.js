@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin, Phone, Mail, Building2, Instagram, Linkedin, Youtube } from 'lucide-react';
+import NewsletterSignup from './NewsletterSignup';
 
 // Custom icons for platforms not in Lucide
 const TikTokIcon = () => (
@@ -26,6 +27,21 @@ const Footer = () => {
 
   return (
     <footer className="bg-gray-900 text-gray-300">
+      {/* Newsletter Section */}
+      <div className="border-b border-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div>
+              <h3 className="text-2xl font-bold text-white mb-2">Subscribe to Flows™</h3>
+              <p className="text-gray-400">Get exclusive frontier fixed income investment opportunities delivered directly to your inbox.</p>
+            </div>
+            <div>
+              <NewsletterSignup variant="compact" />
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Main Footer */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
