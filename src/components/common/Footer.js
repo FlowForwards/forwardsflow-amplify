@@ -27,16 +27,16 @@ const Footer = () => {
 
   return (
     <footer className="bg-gray-900 text-gray-300">
-      {/* Newsletter Section */}
-      <div className="border-b border-gray-800">
+      {/* Newsletter Section - White background */}
+      <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div>
-              <h3 className="text-2xl font-bold text-white mb-2">Subscribe to Flows™</h3>
-              <p className="text-gray-400">Get exclusive frontier fixed income investment opportunities delivered directly to your inbox.</p>
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">Subscribe to Flows™</h3>
+              <p className="text-gray-600">Frontier investment fixed income opportunities & on the ground market intelligence delivered to your inbox monthly.</p>
             </div>
             <div>
-              <NewsletterSignup variant="compact" />
+              <NewsletterSignup variant="inline" />
             </div>
           </div>
         </div>
