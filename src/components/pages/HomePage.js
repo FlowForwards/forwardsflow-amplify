@@ -1,9 +1,82 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Building2, Briefcase, Shield, TrendingUp, Globe, Users, DollarSign, CheckCircle, ChevronRight } from 'lucide-react';
+import { 
+  ArrowRight, Building2, Briefcase, Shield, TrendingUp, Globe, Users, 
+  DollarSign, CheckCircle, ChevronRight, Star, Lock, Layers, RefreshCw,
+  BarChart3, Banknote
+} from 'lucide-react';
 import { Logo } from '../common';
+import Footer from '../common/Footer';
 
 const HomePage = () => {
+  // Feature narratives from spec
+  const featureCategories = [
+    {
+      title: 'Curated',
+      subtitle: 'Embedded due diligence',
+      icon: Star,
+      color: 'from-blue-500 to-indigo-600',
+      features: [
+        'Domestic counterparty intelligence',
+        "Moody's A+ rated beneficial counterparty banks",
+        '18%+ BIS average capital adequacy ratios',
+        '50% of statutory core capital funds absorption ceilings',
+        "Moody's Baa3+ rated geographies",
+        'Persistent geographical & counterparty ratings slippage monitoring & alerts',
+      ],
+    },
+    {
+      title: 'Risk Mitigated',
+      subtitle: 'Embedded risk management',
+      icon: Shield,
+      color: 'from-green-500 to-emerald-600',
+      features: [
+        'Built-in exchange rate forwards hedges',
+        'FDIC insured sweep network custodial bank',
+        'Default fiduciary responsibility stand-in counterparty (Delaware)',
+        'Built-in automatic capital repatriation',
+        'Built-in fiscal & FATCA compliance',
+      ],
+    },
+    {
+      title: 'Bite Sized',
+      subtitle: 'Accommodating ticket sizes',
+      icon: Layers,
+      color: 'from-purple-500 to-violet-600',
+      features: [
+        'Pooled fixed deposits: $1,000 minimum ticket, $10,000 minimum pool',
+        'Proprietary fixed deposits: $10,000 minimum ticket',
+        'Hedged sovereign debt: $10,000 minimum ticket',
+      ],
+    },
+    {
+      title: 'Liquidity Preserving',
+      subtitle: 'Secondary money market',
+      icon: RefreshCw,
+      color: 'from-amber-500 to-orange-600',
+      features: [
+        'Competitive early asset cash-in terms',
+        'Multiple bank liquid repurchase counterparties',
+        'Renders assets amenable digital collateral',
+        'Enables flexible response to market conditions',
+        'Market driven FX, interest rate and forwards contract price discovery',
+      ],
+    },
+    {
+      title: 'Low-Correlating',
+      subtitle: 'Diversify your portfolio',
+      icon: BarChart3,
+      color: 'from-pink-500 to-rose-600',
+      features: [
+        'Emerging economies exposure',
+        'Frontier economies access',
+        'Non-volatile returns',
+        'High-yield opportunities',
+        'Cash & near-cash, liquid assets',
+      ],
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
@@ -14,7 +87,7 @@ const HomePage = () => {
             <div className="hidden md:flex items-center gap-8">
               <a href="#features" className="text-sm text-gray-600 hover:text-gray-900">Features</a>
               <a href="#how-it-works" className="text-sm text-gray-600 hover:text-gray-900">How it Works</a>
-              <a href="#impact" className="text-sm text-gray-600 hover:text-gray-900">Impact</a>
+              <a href="#value-props" className="text-sm text-gray-600 hover:text-gray-900">Why ForwardsFlow</a>
             </div>
             <div className="flex items-center gap-4">
               <Link to="/login" className="text-sm font-medium text-gray-700 hover:text-gray-900">Sign In</Link>
@@ -66,7 +139,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Features */}
+      {/* Core Features */}
       <section id="features" className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -94,8 +167,46 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* Value Propositions - Feature Narratives */}
+      <section id="value-props" className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Why Choose ForwardsFlow?</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">Comprehensive risk management and institutional-grade infrastructure for frontier market investments</p>
+          </div>
+          
+          <div className="space-y-8">
+            {featureCategories.map((category, idx) => (
+              <div key={idx} className="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow">
+                <div className={`bg-gradient-to-r ${category.color} px-6 py-4`}>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                      <category.icon className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-white">{category.title}</h3>
+                      <p className="text-white/80 text-sm">{category.subtitle}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-6">
+                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {category.features.map((feature, fIdx) => (
+                      <div key={fIdx} className="flex items-start gap-3">
+                        <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                        <span className="text-gray-700">{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* How it Works */}
-      <section id="how-it-works" className="py-20">
+      <section id="how-it-works" className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">How ForwardsFlow Works</h2>
@@ -118,6 +229,47 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* Trust Indicators */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-3xl p-8 md:p-12">
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <div>
+                <h2 className="text-3xl font-bold text-white mb-6">Institutional-Grade Security & Compliance</h2>
+                <div className="space-y-4">
+                  {[
+                    { icon: Lock, text: 'FDIC insured sweep network custodial bank' },
+                    { icon: Shield, text: 'Default fiduciary responsibility stand-in counterparty (Delaware)' },
+                    { icon: Banknote, text: 'Built-in fiscal & FATCA compliance' },
+                    { icon: RefreshCw, text: 'Automatic capital repatriation' },
+                  ].map((item, idx) => (
+                    <div key={idx} className="flex items-center gap-4 text-gray-300">
+                      <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center">
+                        <item.icon className="w-5 h-5 text-primary-400" />
+                      </div>
+                      <span>{item.text}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  { value: "Moody's A+", label: 'Counterparty Banks' },
+                  { value: '18%+', label: 'BIS Capital Adequacy' },
+                  { value: "Baa3+", label: 'Geography Ratings' },
+                  { value: '50%', label: 'Capital Absorption Ceiling' },
+                ].map((stat, idx) => (
+                  <div key={idx} className="bg-white/10 rounded-xl p-5 text-center backdrop-blur">
+                    <p className="text-2xl font-bold text-white">{stat.value}</p>
+                    <p className="text-sm text-gray-400 mt-1">{stat.label}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="py-20 bg-gradient-brand">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -135,22 +287,7 @@ const HomePage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 bg-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-2">
-              <div className="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center text-white font-bold">FF</div>
-              <span className="text-white font-semibold text-xl">ForwardsFlow</span>
-            </div>
-            <div className="flex items-center gap-8 text-gray-400 text-sm">
-              <a href="#" className="hover:text-white">Privacy Policy</a>
-              <a href="#" className="hover:text-white">Terms of Service</a>
-              <a href="#" className="hover:text-white">Contact</a>
-            </div>
-            <p className="text-gray-500 text-sm">© 2024 ForwardsFlow. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };
