@@ -2,28 +2,18 @@ import React from 'react';
 import { Bell, ChevronDown, LogOut, Settings, User, Search, Menu, Filter } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
-// ForwardsFlow Logo SVG Component
-const LogoIcon = ({ className }) => (
-  <svg className={className} viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-    <rect width="32" height="32" rx="6" fill="#3832E3"/>
-    <g stroke="#ffffff" strokeWidth="3" strokeLinecap="round" fill="none">
-      <path d="M 8 8 L 24 16 L 8 24"/>
-      <path d="M 8 11 L 20 16 L 8 21"/>
-      <path d="M 8 14 L 16 16"/>
-      <path d="M 22 10 L 26 14"/>
-      <path d="M 23 11 L 26 14"/>
-    </g>
-  </svg>
-);
-
-// ForwardsFlow Logo
+// ForwardsFlow Logo - references the actual logo.svg file
 export const Logo = ({ size = 'default', showText = true, variant = 'default' }) => {
   const sizeClasses = { small: 'w-8 h-8', default: 'w-10 h-10', large: 'w-12 h-12' };
   const textSizeClasses = { small: 'text-lg', default: 'text-xl', large: 'text-2xl' };
 
   return (
     <div className="flex items-center gap-2.5">
-      <LogoIcon className={`${sizeClasses[size]} rounded-lg shadow-sm`} />
+      <img 
+        src="/logo.svg" 
+        alt="ForwardsFlow" 
+        className={`${sizeClasses[size]} rounded-lg shadow-sm object-contain`}
+      />
       {showText && (
         <span className={`${textSizeClasses[size]} font-semibold`}>
           <span className={variant === 'white' ? 'text-white' : 'text-gray-900'}>Forwards</span>

@@ -77,7 +77,7 @@ const BankRegistrationPage = () => {
           {/* Logo Badge */}
           <div className="flex justify-center mb-6">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 rounded-lg">
-              <span className="text-white font-bold text-lg">FF</span>
+              <img src="/logo.svg" alt="ForwardsFlow" className="w-8 h-8 rounded object-contain" />
               <span className="text-white font-semibold">Forwards Flow</span>
             </div>
           </div>
