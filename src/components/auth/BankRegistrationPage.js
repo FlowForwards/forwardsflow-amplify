@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
-import { LoadingSpinner } from '../common';
+import { Logo, LoadingSpinner } from '../common';
 import { useAuth } from '../../context/AuthContext';
 import { lendingInstitutionTypes, countries } from '../../data/mockData';
 
@@ -74,12 +74,9 @@ const BankRegistrationPage = () => {
         </Link>
 
         <div className="bg-white rounded-2xl shadow-soft border border-gray-100 p-8">
-          {/* Logo Badge */}
+          {/* Logo */}
           <div className="flex justify-center mb-6">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 rounded-lg">
-              <img src="/logo.svg" alt="ForwardsFlow" className="w-8 h-8 rounded object-contain" />
-              <span className="text-white font-semibold">Forwards Flow</span>
-            </div>
+            <Logo />
           </div>
 
           {/* Header */}
