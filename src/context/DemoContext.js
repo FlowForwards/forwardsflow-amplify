@@ -327,4 +327,5 @@ ForwardsFlow Platform
   );
 };
 
+export { DemoProvider };
 export default DemoContext;
