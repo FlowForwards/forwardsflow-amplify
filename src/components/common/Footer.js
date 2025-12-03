@@ -87,11 +87,12 @@ const Footer = () => {
           <div>
             <h3 className="text-white font-semibold mb-6">Quick Links</h3>
             <ul className="space-y-3 text-sm">
+              <li><Link to="/products" className="hover:text-white transition-colors">Products</Link></li>
               <li><Link to="/register/investor" className="hover:text-white transition-colors">Investor Registration</Link></li>
               <li><Link to="/register/bank" className="hover:text-white transition-colors">Partner Bank Registration</Link></li>
               <li><Link to="/login" className="hover:text-white transition-colors">Sign In</Link></li>
-              <li><a href="#features" className="hover:text-white transition-colors">Features</a></li>
-              <li><a href="#how-it-works" className="hover:text-white transition-colors">How It Works</a></li>
+              <li><a href="/#features" className="hover:text-white transition-colors">Features</a></li>
+              <li><a href="/#how-it-works" className="hover:text-white transition-colors">How It Works</a></li>
             </ul>
           </div>
 

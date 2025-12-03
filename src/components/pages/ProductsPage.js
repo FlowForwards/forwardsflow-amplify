@@ -1,0 +1,655 @@
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { 
+  Building2, Briefcase, Phone, ArrowRight, CheckCircle, TrendingUp, 
+  Globe, Shield, DollarSign, Users, Smartphone, MessageSquare, 
+  Zap, Clock, Lock, BarChart3, Banknote, ArrowUpRight, Star,
+  RefreshCw, Target, PieChart, Wallet
+} from 'lucide-react';
+import { Logo } from '../common';
+import Footer from '../common/Footer';
+
+// Product Card Component
+const ProductCard = ({ product, gradient }) => (
+  <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 group">
+    <div className={`bg-gradient-to-r ${gradient} px-6 py-5`}>
+      <div className="flex items-center justify-between">
+        <div>
+          <h3 className="text-xl font-bold text-white">{product.title}</h3>
+          <p className="text-white/80 text-sm mt-1">{product.subtitle}</p>
+        </div>
+        {product.apr && (
+          <div className="text-right">
+            <p className="text-3xl font-bold text-white">{product.apr}</p>
+            <p className="text-white/70 text-xs">APR (USD)</p>
+          </div>
+        )}
+      </div>
+    </div>
+    <div className="p-6">
+      <p className="text-gray-600 mb-6">{product.description}</p>
+      
+      {product.specs && (
+        <div className="space-y-3 mb-6">
+          {product.specs.map((spec, idx) => (
+            <div key={idx} className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-primary-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                <spec.icon className="w-4 h-4 text-primary-600" />
+              </div>
+              <span className="text-sm text-gray-700">{spec.text}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {product.features && (
+        <div className="space-y-2 mb-6">
+          {product.features.map((feature, idx) => (
+            <div key={idx} className="flex items-start gap-2">
+              <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+              <span className="text-sm text-gray-600">{feature}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {product.bestFor && (
+        <div className="bg-gray-50 rounded-xl px-4 py-3 mb-6">
+          <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Best For</p>
+          <p className="text-sm font-medium text-gray-900">{product.bestFor}</p>
+        </div>
+      )}
+
+      <Link 
+        to={product.ctaLink || '/register'} 
+        className="flex items-center justify-center gap-2 w-full py-3 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition-colors group-hover:shadow-lg"
+      >
+        {product.ctaText || 'Get Started'} <ArrowRight className="w-4 h-4" />
+      </Link>
+    </div>
+  </div>
+);
+
+// Bank Deal Flow Card
+const BankDealCard = ({ deal, gradient }) => (
+  <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
+    <div className={`bg-gradient-to-r ${gradient} px-6 py-5`}>
+      <div className="flex items-center gap-3">
+        <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+          <deal.icon className="w-6 h-6 text-white" />
+        </div>
+        <div>
+          <h3 className="text-xl font-bold text-white">{deal.title}</h3>
+          <p className="text-white/80 text-sm">{deal.subtitle}</p>
+        </div>
+      </div>
+    </div>
+    <div className="p-6">
+      <p className="text-gray-600 mb-6">{deal.description}</p>
+      <div className="space-y-3">
+        {deal.benefits.map((benefit, idx) => (
+          <div key={idx} className="flex items-start gap-3">
+            <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+            <span className="text-gray-700">{benefit}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+);
+
+// Stat Card for Lender section
+const MarketStatCard = ({ stat }) => (
+  <div className="bg-white rounded-2xl border border-gray-100 p-6 text-center hover:shadow-lg transition-shadow">
+    <div className={`w-14 h-14 mx-auto rounded-xl flex items-center justify-center mb-4 ${stat.iconBg}`}>
+      <stat.icon className={`w-7 h-7 ${stat.iconColor}`} />
+    </div>
+    <p className="text-3xl font-bold text-gray-900 mb-1">{stat.value}</p>
+    <p className="text-sm text-gray-500">{stat.label}</p>
+  </div>
+);
+
+const ProductsPage = () => {
+  const [activeTab, setActiveTab] = useState('investors');
+
+  const tabs = [
+    { id: 'investors', label: 'For Investors', icon: Briefcase },
+    { id: 'banks', label: 'For Banks', icon: Building2 },
+    { id: 'lenders', label: 'For Lenders', icon: Phone },
+  ];
+
+  // Investor Products
+  const investorProducts = [
+    {
+      title: 'Pooled Fixed Deposits',
+      subtitle: 'Earn the same high interest rates as big ticket depositors',
+      apr: '8.00%+',
+      description: 'Access institutional-grade returns with accessible minimum investments. Pool your capital with other investors to unlock premium deposit rates.',
+      specs: [
+        { icon: DollarSign, text: '$1,000 minimum & multiples thereof ticket size' },
+        { icon: Users, text: '$10,000 minimum pool size' },
+        { icon: TrendingUp, text: '8.00%+ APR (USD denominated)' },
+      ],
+      features: [
+        'Pre-maturity liquidation secondary marketplace',
+        'Diversified across multiple partner banks',
+        'Embedded FX hedging',
+        'Quarterly interest payments',
+      ],
+      bestFor: 'Ordinary and medium net worth individuals',
+      ctaLink: '/register/investor',
+      ctaText: 'Start Investing',
+    },
+    {
+      title: 'Proprietary Fixed Deposits',
+      subtitle: 'Earn uncorrelated & adventurous private sector bank interest rates',
+      apr: '10.00%+',
+      description: 'Direct deposit relationships with carefully vetted frontier economy banks. Higher yields with comprehensive risk mitigation.',
+      specs: [
+        { icon: DollarSign, text: '$10,000 & multiples thereof ticket size' },
+        { icon: TrendingUp, text: '10.00%+ APR (USD denominated)' },
+        { icon: Shield, text: 'Built-in risk mitigation and compliance' },
+      ],
+      features: [
+        'Pre-maturity liquidation secondary marketplace',
+        'Direct counterparty relationship',
+        'Moody\'s rated partner banks',
+        'Automatic capital repatriation',
+      ],
+      bestFor: 'High-net-worth individuals',
+      ctaLink: '/register/investor',
+      ctaText: 'Start Investing',
+    },
+    {
+      title: 'Hedged Sovereign Debt',
+      subtitle: 'Earn uncorrelated & adventurous central bank interest rates',
+      apr: '9.00%+',
+      description: 'Access frontier economy government securities with embedded currency hedging. Sovereign-backed returns with institutional-grade risk management.',
+      specs: [
+        { icon: DollarSign, text: '$10,000 & multiples thereof ticket size' },
+        { icon: TrendingUp, text: '9.00%+ APR (USD denominated)' },
+        { icon: Shield, text: 'Built-in risk mitigation and compliance' },
+      ],
+      features: [
+        'Pre-maturity liquidation secondary marketplace',
+        'Government-backed securities',
+        'FX forwards hedging included',
+        'Baa3+ rated geographies',
+      ],
+      bestFor: 'Single-family offices',
+      ctaLink: '/register/investor',
+      ctaText: 'Start Investing',
+    },
+    {
+      title: 'Hedged Private Credit',
+      subtitle: 'Earn uncorrelated & ultra-high yield 30-day commercial paper rates',
+      apr: '108.00%+',
+      description: 'Access the mobile lending market through carefully structured private credit instruments. Ultra-high yields backed by diversified loan portfolios.',
+      specs: [
+        { icon: DollarSign, text: '$10,000 and multiples thereof experimental ticket sizes' },
+        { icon: TrendingUp, text: '108.00%+ APR (USD denominated)' },
+        { icon: Shield, text: 'Built-in counterparty due diligence' },
+      ],
+      features: [
+        'Pre-maturity liquidation secondary marketplace',
+        '30-day rolling commercial paper',
+        'Diversified mobile loan portfolio backing',
+        'Real-time portfolio monitoring',
+      ],
+      bestFor: 'Risk & growth oriented funds',
+      ctaLink: '/register/investor',
+      ctaText: 'Start Investing',
+    },
+  ];
+
+  // Bank Deal Flows
+  const bankDeals = [
+    {
+      title: 'Forex Deal Flow',
+      subtitle: 'Grow foreign exchange transaction deal flow',
+      icon: Globe,
+      description: 'Access a steady stream of foreign exchange transactions from international impact investors seeking frontier market exposure.',
+      benefits: [
+        'Direct access to international investor capital',
+        'Competitive FX spread opportunities',
+        'Automated transaction settlement',
+        'Real-time rate discovery and execution',
+        'Compliance-ready documentation',
+      ],
+    },
+    {
+      title: 'Forex Fixed Deposits',
+      subtitle: 'Grow foreign exchange denominated fixed deposits',
+      icon: Banknote,
+      description: 'Attract stable, long-term foreign currency deposits from institutional and retail impact investors worldwide.',
+      benefits: [
+        'Low-cost foreign currency funding',
+        'Diversified depositor base',
+        'Flexible tenor options (3-36 months)',
+        'Automated interest calculations',
+        'Investor relationship management tools',
+      ],
+    },
+    {
+      title: 'Forwards Deal Flow',
+      subtitle: 'Grow foreign exchange rate forwards contract deal flow',
+      icon: TrendingUp,
+      description: 'Generate additional revenue through FX forwards contracts that hedge investor currency exposure.',
+      benefits: [
+        'Premium income from forwards contracts',
+        'Natural hedge for your FX book',
+        'Automated contract management',
+        'Mark-to-market reporting',
+        'Risk limit monitoring',
+      ],
+    },
+    {
+      title: 'Secondary Deal Flow',
+      subtitle: 'Grow secondary-market pre-maturity liquidity deal flow',
+      icon: RefreshCw,
+      description: 'Participate in the secondary market for deposit instruments, providing liquidity and earning spreads.',
+      benefits: [
+        'Secondary market trading revenue',
+        'Liquidity provision opportunities',
+        'Portfolio optimization tools',
+        'Competitive bidding platform',
+        'Settlement automation',
+      ],
+    },
+  ];
+
+  // WhatsApp/Mobile Lending Benefits
+  const whatsappBenefits = [
+    {
+      icon: Smartphone,
+      title: '2.7 Billion Users',
+      description: 'WhatsApp is the world\'s most popular messaging app with unparalleled reach in emerging markets.',
+    },
+    {
+      icon: Zap,
+      title: 'Zero App Download',
+      description: 'No app installation required. Customers access loans through their existing WhatsApp - zero friction.',
+    },
+    {
+      icon: Clock,
+      title: '< 3 Minutes',
+      description: 'Average loan application to disbursement time. Instant credit decisions powered by AI.',
+    },
+    {
+      icon: Lock,
+      title: 'End-to-End Encrypted',
+      description: 'WhatsApp\'s built-in encryption ensures secure transmission of sensitive financial data.',
+    },
+    {
+      icon: MessageSquare,
+      title: 'Conversational UX',
+      description: 'Natural language processing enables intuitive, human-like loan application experience.',
+    },
+    {
+      icon: Globe,
+      title: '180+ Countries',
+      description: 'WhatsApp\'s global presence enables expansion across multiple frontier markets.',
+    },
+  ];
+
+  // Mobile Lending Market Stats
+  const marketStats = [
+    { icon: Banknote, value: 'KES 600Bn+', label: 'Mobile Lending Market Size', iconBg: 'bg-green-100', iconColor: 'text-green-600' },
+    { icon: TrendingUp, value: '365%', label: 'Maximum APR', iconBg: 'bg-blue-100', iconColor: 'text-blue-600' },
+    { icon: Users, value: '20M+', label: 'Potential Borrowers', iconBg: 'bg-purple-100', iconColor: 'text-purple-600' },
+    { icon: PieChart, value: '85%+', label: 'Smartphone Penetration', iconBg: 'bg-amber-100', iconColor: 'text-amber-600' },
+  ];
+
+  // Revenue Calculator Data
+  const revenueProjections = [
+    { capital: '$100,000', loans: '~3,300', monthlyRevenue: '$25,000+', annualRevenue: '$300,000+' },
+    { capital: '$500,000', loans: '~16,500', monthlyRevenue: '$125,000+', annualRevenue: '$1,500,000+' },
+    { capital: '$1,000,000', loans: '~33,000', monthlyRevenue: '$250,000+', annualRevenue: '$3,000,000+' },
+  ];
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Navigation */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <Link to="/"><Logo /></Link>
+            <div className="hidden md:flex items-center gap-8">
+              <Link to="/" className="text-sm text-gray-600 hover:text-gray-900">Home</Link>
+              <Link to="/products" className="text-sm text-primary-600 font-medium">Products</Link>
+              <a href="/#features" className="text-sm text-gray-600 hover:text-gray-900">Features</a>
+              <a href="/#how-it-works" className="text-sm text-gray-600 hover:text-gray-900">How it Works</a>
+            </div>
+            <div className="flex items-center gap-4">
+              <Link to="/login" className="text-sm font-medium text-gray-700 hover:text-gray-900">Sign In</Link>
+              <Link to="/register" className="px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700">Get Started</Link>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero */}
+      <section className="pt-24 pb-12 bg-gradient-to-b from-primary-600 to-primary-700">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Our Products</h1>
+          <p className="text-xl text-white/80 max-w-2xl mx-auto">
+            Comprehensive financial solutions for investors, banks, and lenders in frontier markets
+          </p>
+        </div>
+      </section>
+
+      {/* Tab Navigation */}
+      <section className="sticky top-16 z-40 bg-white border-b border-gray-200 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-center">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center gap-2 px-6 py-4 text-sm font-medium border-b-2 transition-colors ${
+                  activeTab === tab.id
+                    ? 'border-primary-600 text-primary-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                <tab.icon className="w-5 h-5" />
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Content */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        
+        {/* Investors Tab */}
+        {activeTab === 'investors' && (
+          <div className="animate-fade-in">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">Investment Products</h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Access frontier market returns with institutional-grade risk management and compliance
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-8">
+              {investorProducts.map((product, idx) => (
+                <ProductCard 
+                  key={idx} 
+                  product={product} 
+                  gradient={
+                    idx === 0 ? 'from-blue-500 to-indigo-600' :
+                    idx === 1 ? 'from-purple-500 to-violet-600' :
+                    idx === 2 ? 'from-emerald-500 to-teal-600' :
+                    'from-amber-500 to-orange-600'
+                  }
+                />
+              ))}
+            </div>
+
+            {/* Comparison Table */}
+            <div className="mt-16 bg-white rounded-2xl border border-gray-100 overflow-hidden">
+              <div className="bg-gradient-to-r from-blue-500 to-indigo-600 px-6 py-4">
+                <h3 className="text-xl font-bold text-white">Product Comparison</h3>
+                <p className="text-white/80 text-sm">Choose the right product for your investment goals</p>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="bg-gray-50">
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Feature</th>
+                      <th className="px-6 py-4 text-center text-sm font-semibold text-gray-900">Pooled</th>
+                      <th className="px-6 py-4 text-center text-sm font-semibold text-gray-900">Proprietary</th>
+                      <th className="px-6 py-4 text-center text-sm font-semibold text-gray-900">Sovereign</th>
+                      <th className="px-6 py-4 text-center text-sm font-semibold text-gray-900">Private Credit</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    <tr>
+                      <td className="px-6 py-4 text-sm text-gray-700">Min. Investment</td>
+                      <td className="px-6 py-4 text-center text-sm font-medium">$1,000</td>
+                      <td className="px-6 py-4 text-center text-sm font-medium">$10,000</td>
+                      <td className="px-6 py-4 text-center text-sm font-medium">$10,000</td>
+                      <td className="px-6 py-4 text-center text-sm font-medium">$10,000</td>
+                    </tr>
+                    <tr className="bg-gray-50">
+                      <td className="px-6 py-4 text-sm text-gray-700">Target APR</td>
+                      <td className="px-6 py-4 text-center text-sm font-medium text-green-600">8.00%+</td>
+                      <td className="px-6 py-4 text-center text-sm font-medium text-green-600">10.00%+</td>
+                      <td className="px-6 py-4 text-center text-sm font-medium text-green-600">9.00%+</td>
+                      <td className="px-6 py-4 text-center text-sm font-medium text-green-600">108.00%+</td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 text-sm text-gray-700">Risk Level</td>
+                      <td className="px-6 py-4 text-center"><span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">Low</span></td>
+                      <td className="px-6 py-4 text-center"><span className="px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-medium">Medium</span></td>
+                      <td className="px-6 py-4 text-center"><span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">Low</span></td>
+                      <td className="px-6 py-4 text-center"><span className="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs font-medium">High</span></td>
+                    </tr>
+                    <tr className="bg-gray-50">
+                      <td className="px-6 py-4 text-sm text-gray-700">Secondary Market</td>
+                      <td className="px-6 py-4 text-center"><CheckCircle className="w-5 h-5 text-green-500 mx-auto" /></td>
+                      <td className="px-6 py-4 text-center"><CheckCircle className="w-5 h-5 text-green-500 mx-auto" /></td>
+                      <td className="px-6 py-4 text-center"><CheckCircle className="w-5 h-5 text-green-500 mx-auto" /></td>
+                      <td className="px-6 py-4 text-center"><CheckCircle className="w-5 h-5 text-green-500 mx-auto" /></td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 text-sm text-gray-700">FX Hedging</td>
+                      <td className="px-6 py-4 text-center"><CheckCircle className="w-5 h-5 text-green-500 mx-auto" /></td>
+                      <td className="px-6 py-4 text-center"><CheckCircle className="w-5 h-5 text-green-500 mx-auto" /></td>
+                      <td className="px-6 py-4 text-center"><CheckCircle className="w-5 h-5 text-green-500 mx-auto" /></td>
+                      <td className="px-6 py-4 text-center"><CheckCircle className="w-5 h-5 text-green-500 mx-auto" /></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Banks Tab */}
+        {activeTab === 'banks' && (
+          <div className="animate-fade-in">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">Bank Solutions</h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Grow your foreign exchange and deposit business with access to international impact investors
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-8">
+              {bankDeals.map((deal, idx) => (
+                <BankDealCard 
+                  key={idx} 
+                  deal={deal} 
+                  gradient={
+                    idx === 0 ? 'from-blue-500 to-indigo-600' :
+                    idx === 1 ? 'from-green-500 to-emerald-600' :
+                    idx === 2 ? 'from-purple-500 to-violet-600' :
+                    'from-amber-500 to-orange-600'
+                  }
+                />
+              ))}
+            </div>
+
+            {/* Bank CTA */}
+            <div className="mt-16 bg-gradient-to-r from-gray-900 to-gray-800 rounded-2xl p-8 md:p-12">
+              <div className="grid md:grid-cols-2 gap-8 items-center">
+                <div>
+                  <h3 className="text-2xl font-bold text-white mb-4">Ready to Grow Your Bank's Deal Flow?</h3>
+                  <p className="text-gray-300 mb-6">
+                    Join ForwardsFlow's network of partner banks and access a steady stream of foreign currency deposits from international impact investors.
+                  </p>
+                  <Link to="/register/bank" className="inline-flex items-center gap-2 px-6 py-3 bg-white text-gray-900 font-semibold rounded-xl hover:bg-gray-100">
+                    Register Your Bank <ArrowRight className="w-5 h-5" />
+                  </Link>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-white/10 rounded-xl p-5 text-center">
+                    <p className="text-3xl font-bold text-white">$16.9M+</p>
+                    <p className="text-sm text-gray-400">Capital Deployed</p>
+                  </div>
+                  <div className="bg-white/10 rounded-xl p-5 text-center">
+                    <p className="text-3xl font-bold text-white">8+</p>
+                    <p className="text-sm text-gray-400">Partner Banks</p>
+                  </div>
+                  <div className="bg-white/10 rounded-xl p-5 text-center">
+                    <p className="text-3xl font-bold text-white">31.2%</p>
+                    <p className="text-sm text-gray-400">Average Yield</p>
+                  </div>
+                  <div className="bg-white/10 rounded-xl p-5 text-center">
+                    <p className="text-3xl font-bold text-white">5</p>
+                    <p className="text-sm text-gray-400">Countries</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Lenders Tab */}
+        {activeTab === 'lenders' && (
+          <div className="animate-fade-in">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">Mobile Lending Solutions</h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Access the KES 600Bn+ mobile lending market through WhatsApp - the world's most frictionless route to market
+              </p>
+            </div>
+
+            {/* Market Opportunity */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+              {marketStats.map((stat, idx) => (
+                <MarketStatCard key={idx} stat={stat} />
+              ))}
+            </div>
+
+            {/* WhatsApp Benefits */}
+            <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden mb-12">
+              <div className="bg-gradient-to-r from-green-500 to-emerald-600 px-6 py-5">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                    <MessageSquare className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-white">WhatsApp: The Frictionless Route to Market</h3>
+                    <p className="text-white/80 text-sm">Pre-deployed, secure, and universally accessible</p>
+                  </div>
+                </div>
+              </div>
+              <div className="p-8">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {whatsappBenefits.map((benefit, idx) => (
+                    <div key={idx} className="flex gap-4">
+                      <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <benefit.icon className="w-6 h-6 text-green-600" />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-gray-900 mb-1">{benefit.title}</h4>
+                        <p className="text-sm text-gray-600">{benefit.description}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Revenue Potential */}
+            <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden mb-12">
+              <div className="bg-gradient-to-r from-amber-500 to-orange-600 px-6 py-5">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                    <TrendingUp className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-white">Revenue Potential</h3>
+                    <p className="text-white/80 text-sm">Projected earnings from mobile lending deployment</p>
+                  </div>
+                </div>
+              </div>
+              <div className="p-6">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="bg-gray-50">
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Capital Deployed</th>
+                        <th className="px-6 py-4 text-center text-sm font-semibold text-gray-900">Est. Loans/Month</th>
+                        <th className="px-6 py-4 text-center text-sm font-semibold text-gray-900">Monthly Revenue</th>
+                        <th className="px-6 py-4 text-center text-sm font-semibold text-gray-900">Annual Revenue</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100">
+                      {revenueProjections.map((row, idx) => (
+                        <tr key={idx} className={idx % 2 === 1 ? 'bg-gray-50' : ''}>
+                          <td className="px-6 py-4 text-sm font-medium text-gray-900">{row.capital}</td>
+                          <td className="px-6 py-4 text-center text-sm text-gray-700">{row.loans}</td>
+                          <td className="px-6 py-4 text-center text-sm font-medium text-green-600">{row.monthlyRevenue}</td>
+                          <td className="px-6 py-4 text-center text-sm font-bold text-green-600">{row.annualRevenue}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <p className="text-xs text-gray-500 mt-4 text-center">
+                  *Based on average loan size of KES 3,000 (~$30), 30-day terms, and 15% monthly interest. Actual results may vary.
+                </p>
+              </div>
+            </div>
+
+            {/* Key Benefits */}
+            <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden mb-12">
+              <div className="bg-gradient-to-r from-purple-500 to-violet-600 px-6 py-5">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                    <Star className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-white">Why Partner with ForwardsFlow?</h3>
+                    <p className="text-white/80 text-sm">Comprehensive mobile lending infrastructure</p>
+                  </div>
+                </div>
+              </div>
+              <div className="p-8">
+                <div className="grid md:grid-cols-2 gap-6">
+                  {[
+                    { title: 'Zero Development Cost', desc: 'No app development required. Launch in weeks, not months.' },
+                    { title: 'Pre-KYC\'d Customers', desc: 'Access a pre-verified customer base ready to borrow.' },
+                    { title: 'AI-Powered Credit Scoring', desc: 'Advanced machine learning models for instant credit decisions.' },
+                    { title: 'M-PESA Integration', desc: 'Seamless disbursement and collection via mobile money.' },
+                    { title: 'Regulatory Compliance', desc: 'Built-in KYC/AML and regulatory reporting tools.' },
+                    { title: 'Real-Time Analytics', desc: 'Monitor portfolio performance and risk metrics in real-time.' },
+                  ].map((benefit, idx) => (
+                    <div key={idx} className="flex items-start gap-4">
+                      <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0" />
+                      <div>
+                        <h4 className="font-semibold text-gray-900">{benefit.title}</h4>
+                        <p className="text-sm text-gray-600">{benefit.desc}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Lender CTA */}
+            <div className="bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl p-8 md:p-12 text-center">
+              <h3 className="text-2xl font-bold text-white mb-4">Ready to Access the Mobile Lending Market?</h3>
+              <p className="text-white/80 mb-8 max-w-2xl mx-auto">
+                Join ForwardsFlow and start generating revenue from Kenya's KES 600Bn+ mobile lending market today.
+              </p>
+              <Link to="/register/bank" className="inline-flex items-center gap-2 px-8 py-4 bg-white text-green-700 font-semibold rounded-xl hover:bg-gray-100">
+                Get Started <ArrowRight className="w-5 h-5" />
+              </Link>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Footer */}
+      <Footer />
+    </div>
+  );
+};
+
+export default ProductsPage;

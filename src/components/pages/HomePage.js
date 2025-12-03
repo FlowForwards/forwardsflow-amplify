@@ -86,6 +86,7 @@ const HomePage = () => {
             <Logo />
             <div className="hidden md:flex items-center gap-8">
               <a href="#features" className="text-sm text-gray-600 hover:text-gray-900">Features</a>
+              <Link to="/products" className="text-sm text-gray-600 hover:text-gray-900">Products</Link>
               <a href="#how-it-works" className="text-sm text-gray-600 hover:text-gray-900">How it Works</a>
               <a href="#value-props" className="text-sm text-gray-600 hover:text-gray-900">Why ForwardsFlow</a>
             </div>
