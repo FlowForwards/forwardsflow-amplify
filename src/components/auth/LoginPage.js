@@ -45,7 +45,7 @@ const LoginPage = () => {
         <div className="space-y-6">
           <h1 className="text-4xl font-bold text-white leading-tight">
             Frontier Economy Returns,<br />
-            Advanced Economy Security
+            Advanced Economy Security.
           </h1>
           <p className="text-lg text-white/80">
             Connect impact investors with frontier economy banks for high-yield deposit instruments.

@@ -14,6 +14,8 @@ import BankRegistrationPage from './components/auth/BankRegistrationPage';
 import HomePage from './components/pages/HomePage';
 import ProductsPage from './components/pages/ProductsPage';
 import ConfirmSubscriptionPage from './components/pages/ConfirmSubscriptionPage';
+import PrivacyPolicyPage from './components/pages/PrivacyPolicyPage';
+import DisclaimerPage from './components/pages/DisclaimerPage';
 
 // Dashboard Pages
 import SuperAdminDashboard from './components/super-admin/SuperAdminDashboard';
@@ -116,6 +118,8 @@ function App() {
           <Route path="/unauthorized" element={<UnauthorizedPage />} />
           <Route path="/products" element={<ProductsPage />} />
           <Route path="/confirm-subscription" element={<ConfirmSubscriptionPage />} />
+          <Route path="/privacy" element={<PrivacyPolicyPage />} />
+          <Route path="/disclaimer" element={<DisclaimerPage />} />
           <Route path="/dashboard" element={<SmartRedirect />} />
           
           {/* Super Admin Routes */}

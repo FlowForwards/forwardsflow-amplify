@@ -135,11 +135,13 @@ const Footer = () => {
       <div className="border-t border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-gray-500">© {new Date().getFullYear()} Flow inc. All rights reserved.</p>
+            <div className="text-sm text-gray-500 text-center md:text-left">
+              <p>© {new Date().getFullYear()} Flow inc. All rights reserved.</p>
+              <p className="mt-1 text-xs text-gray-600">WIPO utility patents pending. We defend IP.</p>
+            </div>
             <div className="flex items-center gap-6 text-sm text-gray-500">
-              <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-              <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-              <a href="#" className="hover:text-white transition-colors">Cookie Policy</a>
+              <Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+              <Link to="/disclaimer" className="hover:text-white transition-colors">Disclaimer</Link>
             </div>
           </div>
         </div>

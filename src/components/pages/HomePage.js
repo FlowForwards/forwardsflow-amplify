@@ -103,7 +103,7 @@ const HomePage = () => {
             </div>
             <h1 className="text-5xl sm:text-6xl font-bold text-gray-900 leading-tight mb-6">
               Frontier Economy Returns,<br />
-              <span className="bg-gradient-to-r from-primary-600 to-blue-600 bg-clip-text text-transparent">Advanced Economy Security</span>
+              <span className="bg-gradient-to-r from-primary-600 to-blue-600 bg-clip-text text-transparent">Advanced Economy Security.</span>
             </h1>
             <p className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
               Connect impact investors with frontier economy banks for high-yield deposit instruments and frictionless mobile lending market access.
