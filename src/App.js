@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate, Link } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { DemoProvider } from './context/DemoContext';
 
 // Layouts
 import { SuperAdminLayout, BankAdminLayout, InvestorAdminLayout, BankUserLayout, InvestorUserLayout } from './components/layouts/DashboardLayouts';
@@ -22,6 +23,12 @@ import SuperAdminDashboard from './components/super-admin/SuperAdminDashboard';
 import BankAdminDashboard from './components/bank/BankAdminDashboard';
 import InvestorUserDashboard from './components/investor/InvestorUserDashboard';
 import InvestmentOpportunitiesPage from './components/investor/InvestmentOpportunitiesPage';
+
+// Demo MVP Components
+import CreateCapitalCallPage from './components/bank/CreateCapitalCallPage';
+import BankCapitalCallsPage from './components/bank/BankCapitalCallsPage';
+import InvestorOpportunitiesPage from './components/investor/InvestorOpportunitiesPageNew';
+import InvestorInvestmentsPage from './components/investor/InvestorInvestmentsPage';
 
 // Registration Router
 const RegisterRouter = () => (
@@ -107,15 +114,16 @@ const SmartRedirect = () => {
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterRouter />} />
-          <Route path="/register/investor" element={<InvestorRegistrationPage />} />
-          <Route path="/register/bank" element={<BankRegistrationPage />} />
-          <Route path="/unauthorized" element={<UnauthorizedPage />} />
+      <DemoProvider>
+        <BrowserRouter>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterRouter />} />
+            <Route path="/register/investor" element={<InvestorRegistrationPage />} />
+            <Route path="/register/bank" element={<BankRegistrationPage />} />
+            <Route path="/unauthorized" element={<UnauthorizedPage />} />
           <Route path="/products" element={<ProductsPage />} />
           <Route path="/confirm-subscription" element={<ConfirmSubscriptionPage />} />
           <Route path="/privacy" element={<PrivacyPolicyPage />} />
@@ -156,6 +164,8 @@ function App() {
           {/* Bank User Routes */}
           <Route path="/bank" element={<BankUserLayout />}>
             <Route index element={<BankAdminDashboard />} />
+            <Route path="calls" element={<BankCapitalCallsPage />} />
+            <Route path="calls/create" element={<CreateCapitalCallPage />} />
             <Route path="instruments" element={<PlaceholderPage title="Instruments" />} />
             <Route path="lending" element={<PlaceholderPage title="Mobile Lending" />} />
             <Route path="settlements" element={<PlaceholderPage title="Settlements" />} />
@@ -182,9 +192,11 @@ function App() {
           {/* Investor User Routes */}
           <Route path="/investor" element={<InvestorUserLayout />}>
             <Route index element={<InvestorUserDashboard />} />
-            <Route path="calls" element={<InvestmentOpportunitiesPage />} />
+            <Route path="opportunities" element={<InvestorOpportunitiesPage />} />
+            <Route path="investments" element={<InvestorInvestmentsPage />} />
+            <Route path="calls" element={<InvestorOpportunitiesPage />} />
             <Route path="puts" element={<PlaceholderPage title="Create Investment Request" />} />
-            <Route path="portfolio" element={<PlaceholderPage title="Portfolio" />} />
+            <Route path="portfolio" element={<InvestorInvestmentsPage />} />
             <Route path="analytics" element={<PlaceholderPage title="Analytics" />} />
             <Route path="reports" element={<PlaceholderPage title="Reports" />} />
             <Route path="impact" element={<PlaceholderPage title="Impact Reports" />} />
@@ -196,6 +208,7 @@ function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
+      </DemoProvider>
     </AuthProvider>
   );
 }

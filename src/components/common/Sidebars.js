@@ -144,8 +144,9 @@ export const BankUserSidebar = () => (
         <SidebarLink to="/bank" icon={Home} end>Home/Overview</SidebarLink>
       </SidebarSection>
       <SidebarSection title="CAPITAL MARKETS">
+        <SidebarLink to="/bank/calls" icon={DollarSign}>Capital Calls</SidebarLink>
         <SidebarLink to="/bank/instruments" icon={CreditCard}>Deposit Instruments</SidebarLink>
-        <SidebarLink to="/bank/settlement" icon={Wallet}>Settlement</SidebarLink>
+        <SidebarLink to="/bank/settlements" icon={Wallet}>Settlement</SidebarLink>
       </SidebarSection>
       <SidebarSection title="LENDING OPERATIONS">
         <SidebarLink to="/bank/lending" icon={Phone}>Mobile Lending</SidebarLink>
@@ -218,11 +219,11 @@ export const InvestorUserSidebar = () => (
     <nav className="flex-1 px-3 space-y-1">
       <SidebarSection title="PORTFOLIO MANAGEMENT">
         <SidebarLink to="/investor" icon={Home} end>Home/Dashboard</SidebarLink>
-        <SidebarLink to="/investor/portfolio" icon={Briefcase}>Portfolio</SidebarLink>
+        <SidebarLink to="/investor/investments" icon={Briefcase}>My Investments</SidebarLink>
       </SidebarSection>
       <SidebarSection title="INVESTMENT OPPORTUNITIES">
-        <SidebarLink to="/investor/calls" icon={Target}>Calls (Investment Opportunities)</SidebarLink>
-        <SidebarLink to="/investor/puts" icon={TrendingUp}>Puts (Create Requests)</SidebarLink>
+        <SidebarLink to="/investor/opportunities" icon={Target}>Available Opportunities</SidebarLink>
+        <SidebarLink to="/investor/puts" icon={TrendingUp}>Create Request (Put)</SidebarLink>
       </SidebarSection>
       <SidebarSection title="ANALYTICS & REPORTING">
         <SidebarLink to="/investor/analytics" icon={BarChart3}>Analytics</SidebarLink>
