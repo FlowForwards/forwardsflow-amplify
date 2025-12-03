@@ -3,30 +3,32 @@ import { Link } from 'react-router-dom';
 import { 
   Building2, Briefcase, Phone, ArrowRight, CheckCircle, TrendingUp, 
   Globe, Shield, DollarSign, Users, Smartphone, MessageSquare, 
-  Zap, Clock, Lock, BarChart3, Banknote, ArrowUpRight, Star,
-  RefreshCw, Target, PieChart, Wallet
+  Zap, Clock, Lock, BarChart3, Banknote, Star,
+  RefreshCw, PieChart
 } from 'lucide-react';
 import { Logo } from '../common';
 import Footer from '../common/Footer';
 
-// Product Card Component
-const ProductCard = ({ product, gradient }) => (
-  <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 group">
-    <div className={`bg-gradient-to-r ${gradient} px-6 py-5`}>
-      <div className="flex items-center justify-between">
-        <div>
-          <h3 className="text-xl font-bold text-white">{product.title}</h3>
-          <p className="text-white/80 text-sm mt-1">{product.subtitle}</p>
-        </div>
-        {product.apr && (
-          <div className="text-right">
-            <p className="text-3xl font-bold text-white">{product.apr}</p>
-            <p className="text-white/70 text-xs">APR (USD)</p>
-          </div>
-        )}
+// Unified gradient for all headers
+const HEADER_GRADIENT = 'from-blue-500 to-indigo-600';
+const HEADER_HEIGHT = 'h-24'; // Consistent header height
+
+// Product Card Component with fixed height
+const ProductCard = ({ product }) => (
+  <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 group flex flex-col h-full">
+    <div className={`bg-gradient-to-r ${HEADER_GRADIENT} px-6 ${HEADER_HEIGHT} flex items-center justify-between`}>
+      <div>
+        <h3 className="text-xl font-bold text-white">{product.title}</h3>
+        <p className="text-white/80 text-sm mt-1">{product.subtitle}</p>
       </div>
+      {product.apr && (
+        <div className="text-right">
+          <p className="text-3xl font-bold text-white">{product.apr}</p>
+          <p className="text-white/70 text-xs">APR (USD)</p>
+        </div>
+      )}
     </div>
-    <div className="p-6">
+    <div className="p-6 flex flex-col flex-grow">
       <p className="text-gray-600 mb-6">{product.description}</p>
       
       {product.specs && (
@@ -53,6 +55,9 @@ const ProductCard = ({ product, gradient }) => (
         </div>
       )}
 
+      {/* Spacer to push content to bottom */}
+      <div className="flex-grow"></div>
+
       {product.bestFor && (
         <div className="bg-gray-50 rounded-xl px-4 py-3 mb-6">
           <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Best For</p>
@@ -70,10 +75,10 @@ const ProductCard = ({ product, gradient }) => (
   </div>
 );
 
-// Bank Deal Flow Card
-const BankDealCard = ({ deal, gradient }) => (
-  <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
-    <div className={`bg-gradient-to-r ${gradient} px-6 py-5`}>
+// Bank Deal Flow Card with fixed height
+const BankDealCard = ({ deal }) => (
+  <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col h-full">
+    <div className={`bg-gradient-to-r ${HEADER_GRADIENT} px-6 ${HEADER_HEIGHT} flex items-center`}>
       <div className="flex items-center gap-3">
         <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
           <deal.icon className="w-6 h-6 text-white" />
@@ -84,15 +89,30 @@ const BankDealCard = ({ deal, gradient }) => (
         </div>
       </div>
     </div>
-    <div className="p-6">
+    <div className="p-6 flex flex-col flex-grow">
       <p className="text-gray-600 mb-6">{deal.description}</p>
-      <div className="space-y-3">
+      <div className="space-y-3 flex-grow">
         {deal.benefits.map((benefit, idx) => (
           <div key={idx} className="flex items-start gap-3">
             <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
             <span className="text-gray-700">{benefit}</span>
           </div>
         ))}
+      </div>
+    </div>
+  </div>
+);
+
+// Section Header Component
+const SectionHeader = ({ icon: Icon, title, subtitle }) => (
+  <div className={`bg-gradient-to-r ${HEADER_GRADIENT} px-6 ${HEADER_HEIGHT} flex items-center`}>
+    <div className="flex items-center gap-3">
+      <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+        <Icon className="w-6 h-6 text-white" />
+      </div>
+      <div>
+        <h3 className="text-xl font-bold text-white">{title}</h3>
+        <p className="text-white/80 text-sm">{subtitle}</p>
       </div>
     </div>
   </div>
@@ -294,10 +314,10 @@ const ProductsPage = () => {
 
   // Mobile Lending Market Stats
   const marketStats = [
-    { icon: Banknote, value: 'KES 600Bn+', label: 'Mobile Lending Market Size', iconBg: 'bg-green-100', iconColor: 'text-green-600' },
+    { icon: Banknote, value: 'KES 600Bn+', label: 'Mobile Lending Market Size', iconBg: 'bg-blue-100', iconColor: 'text-blue-600' },
     { icon: TrendingUp, value: '365%', label: 'Maximum APR', iconBg: 'bg-blue-100', iconColor: 'text-blue-600' },
-    { icon: Users, value: '20M+', label: 'Potential Borrowers', iconBg: 'bg-purple-100', iconColor: 'text-purple-600' },
-    { icon: PieChart, value: '85%+', label: 'Smartphone Penetration', iconBg: 'bg-amber-100', iconColor: 'text-amber-600' },
+    { icon: Users, value: '20M+', label: 'Potential Borrowers', iconBg: 'bg-blue-100', iconColor: 'text-blue-600' },
+    { icon: PieChart, value: '85%+', label: 'Smartphone Penetration', iconBg: 'bg-blue-100', iconColor: 'text-blue-600' },
   ];
 
   // Revenue Calculator Data
@@ -375,25 +395,17 @@ const ProductsPage = () => {
             
             <div className="grid md:grid-cols-2 gap-8">
               {investorProducts.map((product, idx) => (
-                <ProductCard 
-                  key={idx} 
-                  product={product} 
-                  gradient={
-                    idx === 0 ? 'from-blue-500 to-indigo-600' :
-                    idx === 1 ? 'from-purple-500 to-violet-600' :
-                    idx === 2 ? 'from-emerald-500 to-teal-600' :
-                    'from-amber-500 to-orange-600'
-                  }
-                />
+                <ProductCard key={idx} product={product} />
               ))}
             </div>
 
             {/* Comparison Table */}
             <div className="mt-16 bg-white rounded-2xl border border-gray-100 overflow-hidden">
-              <div className="bg-gradient-to-r from-blue-500 to-indigo-600 px-6 py-4">
-                <h3 className="text-xl font-bold text-white">Product Comparison</h3>
-                <p className="text-white/80 text-sm">Choose the right product for your investment goals</p>
-              </div>
+              <SectionHeader 
+                icon={BarChart3} 
+                title="Product Comparison" 
+                subtitle="Choose the right product for your investment goals" 
+              />
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
@@ -460,16 +472,7 @@ const ProductsPage = () => {
             
             <div className="grid md:grid-cols-2 gap-8">
               {bankDeals.map((deal, idx) => (
-                <BankDealCard 
-                  key={idx} 
-                  deal={deal} 
-                  gradient={
-                    idx === 0 ? 'from-blue-500 to-indigo-600' :
-                    idx === 1 ? 'from-green-500 to-emerald-600' :
-                    idx === 2 ? 'from-purple-500 to-violet-600' :
-                    'from-amber-500 to-orange-600'
-                  }
-                />
+                <BankDealCard key={idx} deal={deal} />
               ))}
             </div>
 
@@ -527,23 +530,17 @@ const ProductsPage = () => {
 
             {/* WhatsApp Benefits */}
             <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden mb-12">
-              <div className="bg-gradient-to-r from-green-500 to-emerald-600 px-6 py-5">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                    <MessageSquare className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-white">WhatsApp: The Frictionless Route to Market</h3>
-                    <p className="text-white/80 text-sm">Pre-deployed, secure, and universally accessible</p>
-                  </div>
-                </div>
-              </div>
+              <SectionHeader 
+                icon={MessageSquare} 
+                title="WhatsApp: The Frictionless Route to Market" 
+                subtitle="Pre-deployed, secure, and universally accessible" 
+              />
               <div className="p-8">
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {whatsappBenefits.map((benefit, idx) => (
                     <div key={idx} className="flex gap-4">
-                      <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                        <benefit.icon className="w-6 h-6 text-green-600" />
+                      <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <benefit.icon className="w-6 h-6 text-blue-600" />
                       </div>
                       <div>
                         <h4 className="font-semibold text-gray-900 mb-1">{benefit.title}</h4>
@@ -557,17 +554,11 @@ const ProductsPage = () => {
 
             {/* Revenue Potential */}
             <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden mb-12">
-              <div className="bg-gradient-to-r from-amber-500 to-orange-600 px-6 py-5">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                    <TrendingUp className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-white">Revenue Potential</h3>
-                    <p className="text-white/80 text-sm">Projected earnings from mobile lending deployment</p>
-                  </div>
-                </div>
-              </div>
+              <SectionHeader 
+                icon={TrendingUp} 
+                title="Revenue Potential" 
+                subtitle="Projected earnings from mobile lending deployment" 
+              />
               <div className="p-6">
                 <div className="overflow-x-auto">
                   <table className="w-full">
@@ -599,17 +590,11 @@ const ProductsPage = () => {
 
             {/* Key Benefits */}
             <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden mb-12">
-              <div className="bg-gradient-to-r from-purple-500 to-violet-600 px-6 py-5">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                    <Star className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-white">Why Partner with ForwardsFlow?</h3>
-                    <p className="text-white/80 text-sm">Comprehensive mobile lending infrastructure</p>
-                  </div>
-                </div>
-              </div>
+              <SectionHeader 
+                icon={Star} 
+                title="Why Partner with ForwardsFlow?" 
+                subtitle="Comprehensive mobile lending infrastructure" 
+              />
               <div className="p-8">
                 <div className="grid md:grid-cols-2 gap-6">
                   {[
@@ -633,12 +618,12 @@ const ProductsPage = () => {
             </div>
 
             {/* Lender CTA */}
-            <div className="bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl p-8 md:p-12 text-center">
+            <div className="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl p-8 md:p-12 text-center">
               <h3 className="text-2xl font-bold text-white mb-4">Ready to Access the Mobile Lending Market?</h3>
               <p className="text-white/80 mb-8 max-w-2xl mx-auto">
                 Join ForwardsFlow and start generating revenue from Kenya's KES 600Bn+ mobile lending market today.
               </p>
-              <Link to="/register/bank" className="inline-flex items-center gap-2 px-8 py-4 bg-white text-green-700 font-semibold rounded-xl hover:bg-gray-100">
+              <Link to="/register/bank" className="inline-flex items-center gap-2 px-8 py-4 bg-white text-blue-700 font-semibold rounded-xl hover:bg-gray-100">
                 Get Started <ArrowRight className="w-5 h-5" />
               </Link>
             </div>

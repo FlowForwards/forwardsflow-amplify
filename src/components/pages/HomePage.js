@@ -15,7 +15,6 @@ const HomePage = () => {
       title: 'Curated',
       subtitle: 'Embedded due diligence',
       icon: Star,
-      color: 'from-blue-500 to-indigo-600',
       features: [
         'Domestic counterparty intelligence',
         "Moody's A+ rated beneficial counterparty banks",
@@ -29,7 +28,6 @@ const HomePage = () => {
       title: 'Risk Mitigated',
       subtitle: 'Embedded risk management',
       icon: Shield,
-      color: 'from-green-500 to-emerald-600',
       features: [
         'Built-in exchange rate forwards hedges',
         'FDIC insured sweep network custodial bank',
@@ -42,7 +40,6 @@ const HomePage = () => {
       title: 'Bite Sized',
       subtitle: 'Accommodating ticket sizes',
       icon: Layers,
-      color: 'from-purple-500 to-violet-600',
       features: [
         'Pooled fixed deposits: $1,000 minimum ticket, $10,000 minimum pool',
         'Proprietary fixed deposits: $10,000 minimum ticket',
@@ -53,7 +50,6 @@ const HomePage = () => {
       title: 'Liquidity Preserving',
       subtitle: 'Secondary money market',
       icon: RefreshCw,
-      color: 'from-amber-500 to-orange-600',
       features: [
         'Competitive early asset cash-in terms',
         'Multiple bank liquid repurchase counterparties',
@@ -66,7 +62,6 @@ const HomePage = () => {
       title: 'Low-Correlating',
       subtitle: 'Diversify your portfolio',
       icon: BarChart3,
-      color: 'from-pink-500 to-rose-600',
       features: [
         'Emerging economies exposure',
         'Frontier economies access',
@@ -179,10 +174,10 @@ const HomePage = () => {
           <div className="space-y-8">
             {featureCategories.map((category, idx) => (
               <div key={idx} className="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow">
-                <div className={`bg-gradient-to-r ${category.color} px-6 py-4`}>
+                <div className="bg-gradient-to-r from-blue-500 to-indigo-600 px-6 h-24 flex items-center">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
-                      <category.icon className="w-5 h-5 text-white" />
+                    <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                      <category.icon className="w-6 h-6 text-white" />
                     </div>
                     <div>
                       <h3 className="text-xl font-bold text-white">{category.title}</h3>
