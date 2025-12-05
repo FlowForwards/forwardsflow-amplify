@@ -238,7 +238,7 @@ const ProductsPage = () => {
     {
       title: 'Forex Fixed Deposits',
       subtitle: 'Grow foreign exchange denominated fixed deposits',
-      icon: Banknote,
+      icon: DollarSign,
       description: 'Attract stable, long-term foreign currency deposits from institutional and retail impact investors worldwide.',
       benefits: [
         'Low-cost foreign currency funding',

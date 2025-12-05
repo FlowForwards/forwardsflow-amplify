@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { 
   DollarSign, Phone, TrendingUp, BarChart3, Plus, RefreshCw, CheckCircle, Clock, ArrowUpRight,
   Lock, Smartphone, MessageSquare, Zap, Globe, Shield, Users, Banknote, PieChart as PieChartIcon,
-  AlertTriangle, Eye, EyeOff, ChevronDown, ChevronUp
+  Eye, EyeOff, ChevronDown, ChevronUp
 } from 'lucide-react';
 import { Badge, DataTable, Modal } from '../common';
 import { bankAnalytics, demoLoans, demoInstruments } from '../../data/mockData';
@@ -22,8 +22,8 @@ const BankStatCard = ({ icon: Icon, label, value, iconBg, iconColor }) => (
   </div>
 );
 
-// Trade Secret Mobile Lending Section - Internal Only
-const MobileLendingTradeSecret = () => {
+// Strategic Capital Deployment Section - Bank Admin Only
+const MobileLendingStrategy = () => {
   const [isExpanded, setIsExpanded] = useState(true);
   const [showDetails, setShowDetails] = useState(false);
 
@@ -57,15 +57,12 @@ const MobileLendingTradeSecret = () => {
         onClick={() => setIsExpanded(!isExpanded)}
       >
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-amber-500/20 rounded-xl flex items-center justify-center">
-            <Lock className="w-6 h-6 text-amber-400" />
+          <div className="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center">
+            <TrendingUp className="w-6 h-6 text-green-400" />
           </div>
           <div>
-            <div className="flex items-center gap-2">
-              <h3 className="text-xl font-bold text-white">Strategic Capital Deployment</h3>
-              <span className="px-2 py-0.5 bg-amber-500/20 text-amber-400 text-xs font-semibold rounded-full">CONFIDENTIAL</span>
-            </div>
-            <p className="text-gray-400 text-sm">WhatsApp Mobile Lending Infrastructure - Internal Use Only</p>
+            <h3 className="text-xl font-bold text-white">Strategic Capital Deployment</h3>
+            <p className="text-gray-400 text-sm">Maximize returns through WhatsApp mobile lending infrastructure</p>
           </div>
         </div>
         {isExpanded ? <ChevronUp className="w-6 h-6 text-gray-400" /> : <ChevronDown className="w-6 h-6 text-gray-400" />}
@@ -73,20 +70,11 @@ const MobileLendingTradeSecret = () => {
 
       {isExpanded && (
         <div className="px-6 pb-6 space-y-6">
-          {/* Warning Banner */}
-          <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 flex items-start gap-3">
-            <AlertTriangle className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
-            <div>
-              <p className="text-amber-200 font-medium">Trade Secret Information</p>
-              <p className="text-amber-200/70 text-sm">This information is proprietary to ForwardsFlow and subject to NDA. Do not share externally.</p>
-            </div>
-          </div>
-
-          {/* The Secret Sauce Explanation */}
+          {/* The Strategy Explanation */}
           <div className="bg-white/5 rounded-xl p-6">
             <h4 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
               <Shield className="w-5 h-5 text-green-400" />
-              The Secret Sauce: Why This Works
+              How It Works
             </h4>
             <div className="space-y-4 text-gray-300 text-sm leading-relaxed">
               <p>
@@ -112,7 +100,7 @@ const MobileLendingTradeSecret = () => {
               </p>
               <p className="bg-green-500/10 border border-green-500/30 rounded-lg p-4 text-green-300">
                 <span className="font-bold">Result:</span> Investors get 15% USD returns with FX protection. 
-                Banks generate 300%+ returns on deployed capital. Everyone wins - except competitors who don't understand the model.
+                Banks generate 300%+ returns on deployed capital. A win-win arrangement.
               </p>
             </div>
           </div>
@@ -407,8 +395,8 @@ const BankAdminDashboard = () => {
         </button>
       </div>
 
-      {/* Trade Secret: Mobile Lending Strategy - Bank Admin Only */}
-      <MobileLendingTradeSecret />
+      {/* Strategic Capital Deployment - Bank Admin Only */}
+      <MobileLendingStrategy />
 
       {/* Create Modal */}
       <Modal isOpen={showCreateModal} onClose={() => setShowCreateModal(false)} title="Create New Deposit Instrument" size="large">
