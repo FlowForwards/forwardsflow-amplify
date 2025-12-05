@@ -147,21 +147,6 @@ For context, here's what happens on the investor side:
 
 ---
 
-## Mobile Lending Opportunity (Coming Soon)
-
-ForwardsFlow also enables banks to deploy capital into the **KES 600Bn+ mobile lending market**:
-
-- WhatsApp-based lending to 20M+ potential borrowers
-- AI-powered credit scoring
-- M-PESA integration for disbursement/collection
-- 85%+ smartphone penetration in Kenya
-- Average loan size: KES 3,000 (~$30)
-- 30-day rolling terms
-
-Contact us to discuss mobile lending deployment options.
-
----
-
 ## Questions?
 
 Contact: info@forwardsflow.com

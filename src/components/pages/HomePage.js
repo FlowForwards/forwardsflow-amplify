@@ -106,7 +106,7 @@ const HomePage = () => {
               <span className="bg-gradient-to-r from-primary-600 to-blue-600 bg-clip-text text-transparent">Advanced Economy Security.</span>
             </h1>
             <p className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
-              Connect impact investors with frontier economy banks for high-yield deposit instruments and frictionless mobile lending market access.
+              Connect impact investors with frontier economy banks for high-yield deposit instruments with embedded FX hedging.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link to="/register/investor" className="w-full sm:w-auto px-8 py-4 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 shadow-lg shadow-primary-600/25 flex items-center justify-center gap-2">
@@ -146,9 +146,9 @@ const HomePage = () => {
             {[
               { icon: TrendingUp, title: 'High-Yield Returns', description: 'Access frontier market returns with embedded FX hedging through forwards contracts.', color: 'text-blue-600 bg-blue-100' },
               { icon: Shield, title: 'Risk Mitigation', description: 'Advanced FX forwards hedging and diversified portfolio across multiple banks.', color: 'text-green-600 bg-green-100' },
-              { icon: Globe, title: 'Mobile Lending Access', description: 'WhatsApp-based loan origination reaching the largest smartphone audience.', color: 'text-purple-600 bg-purple-100' },
-              { icon: DollarSign, title: 'M2 Money Generation', description: 'Banks leverage prudential reserve ratios to generate lending capacity.', color: 'text-yellow-600 bg-yellow-100' },
-              { icon: Users, title: 'Impact Measurement', description: 'Track real social impact with transparent reporting on borrowers reached.', color: 'text-pink-600 bg-pink-100' },
+              { icon: Globe, title: 'Global Access', description: 'Connect with vetted frontier economy banks across Africa, Asia, and Latin America.', color: 'text-purple-600 bg-purple-100' },
+              { icon: DollarSign, title: 'Competitive Rates', description: 'Ultra-low cost FX hedging enables attractive risk-adjusted returns for investors.', color: 'text-yellow-600 bg-yellow-100' },
+              { icon: Users, title: 'Impact Measurement', description: 'Track real social impact with transparent reporting on capital deployment.', color: 'text-pink-600 bg-pink-100' },
               { icon: CheckCircle, title: 'Regulatory Compliance', description: 'Built-in compliance tools for KYC/AML and regulatory reporting.', color: 'text-indigo-600 bg-indigo-100' },
             ].map((feature, idx) => (
               <div key={idx} className="bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-lg transition-shadow">
@@ -206,13 +206,13 @@ const HomePage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">How ForwardsFlow Works</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">A seamless flow of capital from impact investors to mobile borrowers</p>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">A seamless flow of capital from impact investors to frontier economies</p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { step: '01', title: 'Investors Deploy Capital', description: 'Impact investors provide low-cost Yen/CHF deposits to frontier banks through our platform.' },
-              { step: '02', title: 'Banks Generate Lending Capacity', description: 'Banks leverage deposits with prudential reserve ratios to generate M2 money supply.' },
-              { step: '03', title: 'Mobile Loans Reach Borrowers', description: 'WhatsApp-based loan origination provides frictionless access to underserved borrowers.' },
+              { step: '01', title: 'Investors Deploy Capital', description: 'Impact investors deposit capital through our platform with embedded FX hedging protection.' },
+              { step: '02', title: 'Banks Receive Funding', description: 'Partner banks in frontier economies receive capital to support their lending operations.' },
+              { step: '03', title: 'Returns Flow Back', description: 'Interest payments and principal are returned to investors at maturity with FX protection.' },
             ].map((step, idx) => (
               <div key={idx} className="relative">
                 <div className="text-6xl font-bold text-primary-100 mb-4">{step.step}</div>

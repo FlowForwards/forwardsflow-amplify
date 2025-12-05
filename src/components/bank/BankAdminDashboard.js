@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { DollarSign, Phone, TrendingUp, BarChart3, Plus, RefreshCw, CheckCircle, Clock, ArrowUpRight } from 'lucide-react';
+import { 
+  DollarSign, Phone, TrendingUp, BarChart3, Plus, RefreshCw, CheckCircle, Clock, ArrowUpRight,
+  Lock, Smartphone, MessageSquare, Zap, Globe, Shield, Users, Banknote, PieChart as PieChartIcon,
+  AlertTriangle, Eye, EyeOff, ChevronDown, ChevronUp
+} from 'lucide-react';
 import { Badge, DataTable, Modal } from '../common';
 import { bankAnalytics, demoLoans, demoInstruments } from '../../data/mockData';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
@@ -17,6 +21,197 @@ const BankStatCard = ({ icon: Icon, label, value, iconBg, iconColor }) => (
     </div>
   </div>
 );
+
+// Trade Secret Mobile Lending Section - Internal Only
+const MobileLendingTradeSecret = () => {
+  const [isExpanded, setIsExpanded] = useState(true);
+  const [showDetails, setShowDetails] = useState(false);
+
+  const whatsappBenefits = [
+    { icon: Smartphone, title: '2.7 Billion Users', description: 'WhatsApp is the world\'s most popular messaging app with unparalleled reach in emerging markets.' },
+    { icon: Zap, title: 'Zero App Download', description: 'No app installation required. Customers access loans through their existing WhatsApp - zero friction.' },
+    { icon: Clock, title: '< 3 Minutes', description: 'Average loan application to disbursement time. Instant credit decisions powered by AI.' },
+    { icon: Lock, title: 'End-to-End Encrypted', description: 'WhatsApp\'s built-in encryption ensures secure transmission of sensitive financial data.' },
+    { icon: MessageSquare, title: 'Conversational UX', description: 'Natural language processing enables intuitive, human-like loan application experience.' },
+    { icon: Globe, title: '180+ Countries', description: 'WhatsApp\'s global presence enables expansion across multiple frontier markets.' },
+  ];
+
+  const marketStats = [
+    { icon: Banknote, value: 'KES 600Bn+', label: 'Mobile Lending Market Size' },
+    { icon: TrendingUp, value: '365%', label: 'Maximum APR' },
+    { icon: Users, value: '20M+', label: 'Potential Borrowers' },
+    { icon: PieChartIcon, value: '85%+', label: 'Smartphone Penetration' },
+  ];
+
+  const revenueProjections = [
+    { capital: '$100,000', loans: '~3,300', monthlyRevenue: '$25,000+', annualRevenue: '$300,000+' },
+    { capital: '$500,000', loans: '~16,500', monthlyRevenue: '$125,000+', annualRevenue: '$1,500,000+' },
+    { capital: '$1,000,000', loans: '~33,000', monthlyRevenue: '$250,000+', annualRevenue: '$3,000,000+' },
+  ];
+
+  return (
+    <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl overflow-hidden">
+      {/* Header */}
+      <div 
+        className="p-6 cursor-pointer flex items-center justify-between"
+        onClick={() => setIsExpanded(!isExpanded)}
+      >
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 bg-amber-500/20 rounded-xl flex items-center justify-center">
+            <Lock className="w-6 h-6 text-amber-400" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h3 className="text-xl font-bold text-white">Strategic Capital Deployment</h3>
+              <span className="px-2 py-0.5 bg-amber-500/20 text-amber-400 text-xs font-semibold rounded-full">CONFIDENTIAL</span>
+            </div>
+            <p className="text-gray-400 text-sm">WhatsApp Mobile Lending Infrastructure - Internal Use Only</p>
+          </div>
+        </div>
+        {isExpanded ? <ChevronUp className="w-6 h-6 text-gray-400" /> : <ChevronDown className="w-6 h-6 text-gray-400" />}
+      </div>
+
+      {isExpanded && (
+        <div className="px-6 pb-6 space-y-6">
+          {/* Warning Banner */}
+          <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="text-amber-200 font-medium">Trade Secret Information</p>
+              <p className="text-amber-200/70 text-sm">This information is proprietary to ForwardsFlow and subject to NDA. Do not share externally.</p>
+            </div>
+          </div>
+
+          {/* The Secret Sauce Explanation */}
+          <div className="bg-white/5 rounded-xl p-6">
+            <h4 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+              <Shield className="w-5 h-5 text-green-400" />
+              The Secret Sauce: Why This Works
+            </h4>
+            <div className="space-y-4 text-gray-300 text-sm leading-relaxed">
+              <p>
+                <span className="text-white font-semibold">Step 1: Investor Capital Arrives</span><br />
+                Impact investors deposit USD/EUR/GBP seeking high frontier market yields (15%+ APR).
+              </p>
+              <p>
+                <span className="text-white font-semibold">Step 2: M2 Money Generation via Prudential Reserve Ratio</span><br />
+                Your bank converts foreign currency deposits to local currency (KES). Under prudential regulations, 
+                banks maintain a reserve ratio (typically 5.25% in Kenya). This means for every $1M deposited, 
+                you can generate approximately <span className="text-green-400 font-semibold">KES 2.9Bn in lending capacity</span> (M2 money supply creation).
+              </p>
+              <p>
+                <span className="text-white font-semibold">Step 3: WhatsApp Mobile Lending Deployment</span><br />
+                Deploy the generated M2 into the KES 600Bn+ mobile lending market via WhatsApp. 
+                Average yields of <span className="text-green-400 font-semibold">30%+ monthly</span> on micro-loans (KES 3,000 average, 30-day terms).
+              </p>
+              <p>
+                <span className="text-white font-semibold">Step 4: Ultra-Low Cost FX Hedging</span><br />
+                The massive spread between mobile lending yields (365%+ APR) and investor deposit rates (15% APR) 
+                creates enough margin to <span className="text-green-400 font-semibold">self-fund FX hedging at near-zero cost</span>. 
+                You can offer investors 2% hedging fees while your actual cost approaches zero.
+              </p>
+              <p className="bg-green-500/10 border border-green-500/30 rounded-lg p-4 text-green-300">
+                <span className="font-bold">Result:</span> Investors get 15% USD returns with FX protection. 
+                Banks generate 300%+ returns on deployed capital. Everyone wins - except competitors who don't understand the model.
+              </p>
+            </div>
+          </div>
+
+          {/* Market Opportunity Stats */}
+          <div>
+            <h4 className="text-lg font-semibold text-white mb-4">Kenya Mobile Lending Market</h4>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {marketStats.map((stat, idx) => (
+                <div key={idx} className="bg-white/5 rounded-xl p-4 text-center">
+                  <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center mx-auto mb-2">
+                    <stat.icon className="w-5 h-5 text-blue-400" />
+                  </div>
+                  <p className="text-2xl font-bold text-white">{stat.value}</p>
+                  <p className="text-xs text-gray-400">{stat.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* WhatsApp Benefits */}
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <h4 className="text-lg font-semibold text-white">WhatsApp: The Frictionless Route to Market</h4>
+              <button 
+                onClick={() => setShowDetails(!showDetails)}
+                className="flex items-center gap-2 text-sm text-gray-400 hover:text-white"
+              >
+                {showDetails ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                {showDetails ? 'Hide Details' : 'Show Details'}
+              </button>
+            </div>
+            {showDetails && (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {whatsappBenefits.map((benefit, idx) => (
+                  <div key={idx} className="bg-white/5 rounded-xl p-4 flex gap-3">
+                    <div className="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <benefit.icon className="w-5 h-5 text-green-400" />
+                    </div>
+                    <div>
+                      <h5 className="font-semibold text-white text-sm">{benefit.title}</h5>
+                      <p className="text-xs text-gray-400 mt-1">{benefit.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Revenue Projections */}
+          <div>
+            <h4 className="text-lg font-semibold text-white mb-4">Revenue Potential from Mobile Lending</h4>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-white/10">
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">Capital Deployed</th>
+                    <th className="px-4 py-3 text-center text-sm font-semibold text-gray-300">Est. Loans/Month</th>
+                    <th className="px-4 py-3 text-center text-sm font-semibold text-gray-300">Monthly Revenue</th>
+                    <th className="px-4 py-3 text-center text-sm font-semibold text-gray-300">Annual Revenue</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {revenueProjections.map((row, idx) => (
+                    <tr key={idx} className="border-b border-white/5">
+                      <td className="px-4 py-3 text-sm font-medium text-white">{row.capital}</td>
+                      <td className="px-4 py-3 text-center text-sm text-gray-300">{row.loans}</td>
+                      <td className="px-4 py-3 text-center text-sm font-medium text-green-400">{row.monthlyRevenue}</td>
+                      <td className="px-4 py-3 text-center text-sm font-bold text-green-400">{row.annualRevenue}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="text-xs text-gray-500 mt-3">
+              *Based on average loan size of KES 3,000 (~$30), 30-day terms, and 15% monthly interest. Actual results may vary.
+            </p>
+          </div>
+
+          {/* CTA */}
+          <div className="flex items-center gap-4">
+            <Link 
+              to="/bank/lending" 
+              className="flex-1 py-3 bg-green-600 text-white font-semibold rounded-xl hover:bg-green-700 text-center"
+            >
+              Configure Mobile Lending
+            </Link>
+            <Link 
+              to="/bank/calls" 
+              className="flex-1 py-3 bg-white/10 text-white font-semibold rounded-xl hover:bg-white/20 text-center"
+            >
+              Create Capital Call
+            </Link>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const BankAdminDashboard = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -211,6 +406,9 @@ const BankAdminDashboard = () => {
           <RefreshCw className="w-4 h-4" /> Refresh Data
         </button>
       </div>
+
+      {/* Trade Secret: Mobile Lending Strategy - Bank Admin Only */}
+      <MobileLendingTradeSecret />
 
       {/* Create Modal */}
       <Modal isOpen={showCreateModal} onClose={() => setShowCreateModal(false)} title="Create New Deposit Instrument" size="large">

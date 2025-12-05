@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
-  Building2, Briefcase, Phone, ArrowRight, CheckCircle, TrendingUp, 
-  Globe, Shield, DollarSign, Users, Smartphone, MessageSquare, 
-  Zap, Clock, Lock, BarChart3, Banknote, Star,
-  RefreshCw, PieChart
+  Building2, Briefcase, ArrowRight, CheckCircle, TrendingUp, 
+  Globe, Shield, DollarSign, Users, 
+  BarChart3, RefreshCw
 } from 'lucide-react';
 import { Logo } from '../common';
 import Footer from '../common/Footer';
@@ -135,7 +134,6 @@ const ProductsPage = () => {
   const tabs = [
     { id: 'investors', label: 'For Investors', icon: Briefcase },
     { id: 'banks', label: 'For Banks', icon: Building2 },
-    { id: 'lenders', label: 'For Lenders', icon: Phone },
   ];
 
   // Investor Products
@@ -276,55 +274,6 @@ const ProductsPage = () => {
         'Settlement automation',
       ],
     },
-  ];
-
-  // WhatsApp/Mobile Lending Benefits
-  const whatsappBenefits = [
-    {
-      icon: Smartphone,
-      title: '2.7 Billion Users',
-      description: 'WhatsApp is the world\'s most popular messaging app with unparalleled reach in emerging markets.',
-    },
-    {
-      icon: Zap,
-      title: 'Zero App Download',
-      description: 'No app installation required. Customers access loans through their existing WhatsApp - zero friction.',
-    },
-    {
-      icon: Clock,
-      title: '< 3 Minutes',
-      description: 'Average loan application to disbursement time. Instant credit decisions powered by AI.',
-    },
-    {
-      icon: Lock,
-      title: 'End-to-End Encrypted',
-      description: 'WhatsApp\'s built-in encryption ensures secure transmission of sensitive financial data.',
-    },
-    {
-      icon: MessageSquare,
-      title: 'Conversational UX',
-      description: 'Natural language processing enables intuitive, human-like loan application experience.',
-    },
-    {
-      icon: Globe,
-      title: '180+ Countries',
-      description: 'WhatsApp\'s global presence enables expansion across multiple frontier markets.',
-    },
-  ];
-
-  // Mobile Lending Market Stats
-  const marketStats = [
-    { icon: Banknote, value: 'KES 600Bn+', label: 'Mobile Lending Market Size', iconBg: 'bg-blue-100', iconColor: 'text-blue-600' },
-    { icon: TrendingUp, value: '365%', label: 'Maximum APR', iconBg: 'bg-blue-100', iconColor: 'text-blue-600' },
-    { icon: Users, value: '20M+', label: 'Potential Borrowers', iconBg: 'bg-blue-100', iconColor: 'text-blue-600' },
-    { icon: PieChart, value: '85%+', label: 'Smartphone Penetration', iconBg: 'bg-blue-100', iconColor: 'text-blue-600' },
-  ];
-
-  // Revenue Calculator Data
-  const revenueProjections = [
-    { capital: '$100,000', loans: '~3,300', monthlyRevenue: '$25,000+', annualRevenue: '$300,000+' },
-    { capital: '$500,000', loans: '~16,500', monthlyRevenue: '$125,000+', annualRevenue: '$1,500,000+' },
-    { capital: '$1,000,000', loans: '~33,000', monthlyRevenue: '$250,000+', annualRevenue: '$3,000,000+' },
   ];
 
   return (
@@ -507,125 +456,6 @@ const ProductsPage = () => {
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        )}
-
-        {/* Lenders Tab */}
-        {activeTab === 'lenders' && (
-          <div className="animate-fade-in">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Mobile Lending Solutions</h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Access the KES 600Bn+ mobile lending market through WhatsApp - the world's most frictionless route to market
-              </p>
-            </div>
-
-            {/* Market Opportunity */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-              {marketStats.map((stat, idx) => (
-                <MarketStatCard key={idx} stat={stat} />
-              ))}
-            </div>
-
-            {/* WhatsApp Benefits */}
-            <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden mb-12">
-              <SectionHeader 
-                icon={MessageSquare} 
-                title="WhatsApp: The Frictionless Route to Market" 
-                subtitle="Pre-deployed, secure, and universally accessible" 
-              />
-              <div className="p-8">
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {whatsappBenefits.map((benefit, idx) => (
-                    <div key={idx} className="flex gap-4">
-                      <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                        <benefit.icon className="w-6 h-6 text-blue-600" />
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-gray-900 mb-1">{benefit.title}</h4>
-                        <p className="text-sm text-gray-600">{benefit.description}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Revenue Potential */}
-            <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden mb-12">
-              <SectionHeader 
-                icon={TrendingUp} 
-                title="Revenue Potential" 
-                subtitle="Projected earnings from mobile lending deployment" 
-              />
-              <div className="p-6">
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead>
-                      <tr className="bg-gray-50">
-                        <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Capital Deployed</th>
-                        <th className="px-6 py-4 text-center text-sm font-semibold text-gray-900">Est. Loans/Month</th>
-                        <th className="px-6 py-4 text-center text-sm font-semibold text-gray-900">Monthly Revenue</th>
-                        <th className="px-6 py-4 text-center text-sm font-semibold text-gray-900">Annual Revenue</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100">
-                      {revenueProjections.map((row, idx) => (
-                        <tr key={idx} className={idx % 2 === 1 ? 'bg-gray-50' : ''}>
-                          <td className="px-6 py-4 text-sm font-medium text-gray-900">{row.capital}</td>
-                          <td className="px-6 py-4 text-center text-sm text-gray-700">{row.loans}</td>
-                          <td className="px-6 py-4 text-center text-sm font-medium text-green-600">{row.monthlyRevenue}</td>
-                          <td className="px-6 py-4 text-center text-sm font-bold text-green-600">{row.annualRevenue}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-                <p className="text-xs text-gray-500 mt-4 text-center">
-                  *Based on average loan size of KES 3,000 (~$30), 30-day terms, and 15% monthly interest. Actual results may vary.
-                </p>
-              </div>
-            </div>
-
-            {/* Key Benefits */}
-            <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden mb-12">
-              <SectionHeader 
-                icon={Star} 
-                title="Why Partner with ForwardsFlow?" 
-                subtitle="Comprehensive mobile lending infrastructure" 
-              />
-              <div className="p-8">
-                <div className="grid md:grid-cols-2 gap-6">
-                  {[
-                    { title: 'Zero Development Cost', desc: 'No app development required. Launch in weeks, not months.' },
-                    { title: 'Pre-KYC\'d Customers', desc: 'Access a pre-verified customer base ready to borrow.' },
-                    { title: 'AI-Powered Credit Scoring', desc: 'Advanced machine learning models for instant credit decisions.' },
-                    { title: 'M-PESA Integration', desc: 'Seamless disbursement and collection via mobile money.' },
-                    { title: 'Regulatory Compliance', desc: 'Built-in KYC/AML and regulatory reporting tools.' },
-                    { title: 'Real-Time Analytics', desc: 'Monitor portfolio performance and risk metrics in real-time.' },
-                  ].map((benefit, idx) => (
-                    <div key={idx} className="flex items-start gap-4">
-                      <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0" />
-                      <div>
-                        <h4 className="font-semibold text-gray-900">{benefit.title}</h4>
-                        <p className="text-sm text-gray-600">{benefit.desc}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Lender CTA */}
-            <div className="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl p-8 md:p-12 text-center">
-              <h3 className="text-2xl font-bold text-white mb-4">Ready to Access the Mobile Lending Market?</h3>
-              <p className="text-white/80 mb-8 max-w-2xl mx-auto">
-                Join ForwardsFlow and start generating revenue from Kenya's KES 600Bn+ mobile lending market today.
-              </p>
-              <Link to="/register/bank" className="inline-flex items-center gap-2 px-8 py-4 bg-white text-blue-700 font-semibold rounded-xl hover:bg-gray-100">
-                Get Started <ArrowRight className="w-5 h-5" />
-              </Link>
             </div>
           </div>
         )}
