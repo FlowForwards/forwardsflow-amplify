@@ -1,0 +1,69 @@
+# ---------------------------
+# GraphQL Types
+# ---------------------------
+
+type User {
+  id: ID!
+  email: String!
+  name: String
+  role: UserRole!
+  organizationId: ID
+}
+
+enum UserRole {
+  Admin
+  Tenant
+  Manager
+  Viewer
+}
+
+type Organization {
+  id: ID!
+  name: String!
+  address: String
+}
+
+type Payment {
+  id: ID!
+  amount: Float!
+  userId: ID!
+  createdAt: AWSDateTime!
+}
+
+type MobileLoan {
+  id: ID!
+  userId: ID!
+  amount: Float!
+  status: String!
+  createdAt: AWSDateTime!
+}
+
+type Notification {
+  id: ID!
+  userId: ID!
+  message: String!
+  createdAt: AWSDateTime!
+}
+
+# ---------------------------
+# Root Query
+# ---------------------------
+
+type Query {
+  getUser(id: ID!): User
+  listUsers: [User!]!
+  getOrganization(id: ID!): Organization
+  listOrganizations: [Organization!]!
+}
+
+# ---------------------------
+# Root Mutation
+# ---------------------------
+
+type Mutation {
+  createUser(email: String!, name: String, role: UserRole!): User
+  updateUser(id: ID!, email: String, name: String, role: UserRole): User
+  createOrganization(name: String!): Organization
+  updateOrganization(id: ID!, name: String): Organization
+}
+

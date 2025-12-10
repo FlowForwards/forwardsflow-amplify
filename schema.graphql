@@ -1,0 +1,115 @@
+# ---------------------------
+# GraphQL Types
+# ---------------------------
+
+type User {
+  id: ID!
+  email: String!
+  name: String
+  role: UserRole!
+  organizationId: ID
+}
+
+enum UserRole {
+  Admin
+  Tenant
+  Manager
+  Viewer
+}
+
+type Organization {
+  id: ID!
+  name: String!
+  address: String
+}
+
+type Payment {
+  id: ID!
+  amount: Float!
+  userId: ID!
+  createdAt: AWSDateTime!
+}
+
+type MobileLoan {
+  id: ID!
+  userId: ID!
+  amount: Float!
+  status: String!
+  createdAt: AWSDateTime!
+}
+
+type Investment {
+  id: ID!
+  userId: ID!
+  amount: Float!
+  createdAt: AWSDateTime!
+}
+
+type CapitalCall {
+  id: ID!
+  organizationId: ID!
+  amount: Float!
+  dueDate: AWSDateTime!
+}
+
+type AuditLog {
+  id: ID!
+  action: String!
+  userId: ID!
+  timestamp: AWSDateTime!
+}
+
+type Metric {
+  id: ID!
+  name: String!
+  value: Float!
+  timestamp: AWSDateTime!
+}
+
+type Notification {
+  id: ID!
+  userId: ID!
+  message: String!
+  read: Boolean!
+  createdAt: AWSDateTime!
+}
+
+# ---------------------------
+# Queries
+# ---------------------------
+
+type Query {
+  getUser(id: ID!): User
+  listUsers: [User!]!
+  getOrganization(id: ID!): Organization
+  listOrganizations: [Organization!]!
+  listPayments(userId: ID!): [Payment!]!
+  listMobileLoans(userId: ID!): [MobileLoan!]!
+  listInvestments(userId: ID!): [Investment!]!
+  listCapitalCalls(organizationId: ID!): [CapitalCall!]!
+  listAuditLogs: [AuditLog!]!
+  listMetrics: [Metric!]!
+  listNotifications(userId: ID!): [Notification!]!
+}
+
+# ---------------------------
+# Mutations
+# ---------------------------
+
+type Mutation {
+  createUser(email: String!, name: String, role: UserRole!, organizationId: ID): User
+  createOrganization(name: String!, address: String): Organization
+  createPayment(userId: ID!, amount: Float!): Payment
+  createMobileLoan(userId: ID!, amount: Float!, status: String!): MobileLoan
+  createInvestment(userId: ID!, amount: Float!): Investment
+  createCapitalCall(organizationId: ID!, amount: Float!, dueDate: AWSDateTime!): CapitalCall
+  createAuditLog(action: String!, userId: ID!): AuditLog
+  createMetric(name: String!, value: Float!): Metric
+  createNotification(userId: ID!, message: String!): Notification
+}
+
+# ---------------------------
+# Scalars
+# ---------------------------
+
+scalar AWSDateTime

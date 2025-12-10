@@ -1,0 +1,1184 @@
+{
+ "Description": "ForwardsFlow DynamoDB Tables",
+ "Resources": {
+  "OrganizationsTable01047E98": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "orgId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "orgType",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "createdAt",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "status",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "GlobalSecondaryIndexes": [
+     {
+      "IndexName": "byType",
+      "KeySchema": [
+       {
+        "AttributeName": "orgType",
+        "KeyType": "HASH"
+       },
+       {
+        "AttributeName": "createdAt",
+        "KeyType": "RANGE"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     },
+     {
+      "IndexName": "byStatus",
+      "KeySchema": [
+       {
+        "AttributeName": "status",
+        "KeyType": "HASH"
+       },
+       {
+        "AttributeName": "orgType",
+        "KeyType": "RANGE"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     }
+    ],
+    "KeySchema": [
+     {
+      "AttributeName": "orgId",
+      "KeyType": "HASH"
+     }
+    ],
+    "PointInTimeRecoverySpecification": {
+     "PointInTimeRecoveryEnabled": true
+    },
+    "StreamSpecification": {
+     "StreamViewType": "NEW_AND_OLD_IMAGES"
+    },
+    "TableName": "ForwardsFlow-Organizations",
+    "Tags": [
+     {
+      "Key": "Environment",
+      "Value": "development"
+     },
+     {
+      "Key": "Project",
+      "Value": "ForwardsFlow"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowDatabaseStack/OrganizationsTable/Resource"
+   }
+  },
+  "UsersTable9725E9C8": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "userId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "email",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "orgId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "role",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "createdAt",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "GlobalSecondaryIndexes": [
+     {
+      "IndexName": "byEmail",
+      "KeySchema": [
+       {
+        "AttributeName": "email",
+        "KeyType": "HASH"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     },
+     {
+      "IndexName": "byOrganization",
+      "KeySchema": [
+       {
+        "AttributeName": "orgId",
+        "KeyType": "HASH"
+       },
+       {
+        "AttributeName": "role",
+        "KeyType": "RANGE"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     },
+     {
+      "IndexName": "byRole",
+      "KeySchema": [
+       {
+        "AttributeName": "role",
+        "KeyType": "HASH"
+       },
+       {
+        "AttributeName": "createdAt",
+        "KeyType": "RANGE"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     }
+    ],
+    "KeySchema": [
+     {
+      "AttributeName": "userId",
+      "KeyType": "HASH"
+     }
+    ],
+    "PointInTimeRecoverySpecification": {
+     "PointInTimeRecoveryEnabled": true
+    },
+    "StreamSpecification": {
+     "StreamViewType": "NEW_AND_OLD_IMAGES"
+    },
+    "TableName": "ForwardsFlow-Users",
+    "Tags": [
+     {
+      "Key": "Environment",
+      "Value": "development"
+     },
+     {
+      "Key": "Project",
+      "Value": "ForwardsFlow"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowDatabaseStack/UsersTable/Resource"
+   }
+  },
+  "CapitalCallsTable208B96A9": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "callId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "bankOrgId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "createdAt",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "status",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "txnRef",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "GlobalSecondaryIndexes": [
+     {
+      "IndexName": "byBank",
+      "KeySchema": [
+       {
+        "AttributeName": "bankOrgId",
+        "KeyType": "HASH"
+       },
+       {
+        "AttributeName": "createdAt",
+        "KeyType": "RANGE"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     },
+     {
+      "IndexName": "byStatus",
+      "KeySchema": [
+       {
+        "AttributeName": "status",
+        "KeyType": "HASH"
+       },
+       {
+        "AttributeName": "createdAt",
+        "KeyType": "RANGE"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     },
+     {
+      "IndexName": "byTxnRef",
+      "KeySchema": [
+       {
+        "AttributeName": "txnRef",
+        "KeyType": "HASH"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     }
+    ],
+    "KeySchema": [
+     {
+      "AttributeName": "callId",
+      "KeyType": "HASH"
+     }
+    ],
+    "PointInTimeRecoverySpecification": {
+     "PointInTimeRecoveryEnabled": true
+    },
+    "StreamSpecification": {
+     "StreamViewType": "NEW_AND_OLD_IMAGES"
+    },
+    "TableName": "ForwardsFlow-CapitalCalls",
+    "Tags": [
+     {
+      "Key": "Environment",
+      "Value": "development"
+     },
+     {
+      "Key": "Project",
+      "Value": "ForwardsFlow"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowDatabaseStack/CapitalCallsTable/Resource"
+   }
+  },
+  "InvestmentsTable66692819": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "investmentId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "investorOrgId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "createdAt",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "callId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "status",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "maturityDate",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "GlobalSecondaryIndexes": [
+     {
+      "IndexName": "byInvestor",
+      "KeySchema": [
+       {
+        "AttributeName": "investorOrgId",
+        "KeyType": "HASH"
+       },
+       {
+        "AttributeName": "createdAt",
+        "KeyType": "RANGE"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     },
+     {
+      "IndexName": "byCapitalCall",
+      "KeySchema": [
+       {
+        "AttributeName": "callId",
+        "KeyType": "HASH"
+       },
+       {
+        "AttributeName": "status",
+        "KeyType": "RANGE"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     },
+     {
+      "IndexName": "byStatus",
+      "KeySchema": [
+       {
+        "AttributeName": "status",
+        "KeyType": "HASH"
+       },
+       {
+        "AttributeName": "maturityDate",
+        "KeyType": "RANGE"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     }
+    ],
+    "KeySchema": [
+     {
+      "AttributeName": "investmentId",
+      "KeyType": "HASH"
+     }
+    ],
+    "PointInTimeRecoverySpecification": {
+     "PointInTimeRecoveryEnabled": true
+    },
+    "StreamSpecification": {
+     "StreamViewType": "NEW_AND_OLD_IMAGES"
+    },
+    "TableName": "ForwardsFlow-Investments",
+    "Tags": [
+     {
+      "Key": "Environment",
+      "Value": "development"
+     },
+     {
+      "Key": "Project",
+      "Value": "ForwardsFlow"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowDatabaseStack/InvestmentsTable/Resource"
+   }
+  },
+  "MobileLoansTable246C206C": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "loanId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "bankOrgId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "createdAt",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "borrowerPhone",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "status",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "dueDate",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "GlobalSecondaryIndexes": [
+     {
+      "IndexName": "byBank",
+      "KeySchema": [
+       {
+        "AttributeName": "bankOrgId",
+        "KeyType": "HASH"
+       },
+       {
+        "AttributeName": "createdAt",
+        "KeyType": "RANGE"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     },
+     {
+      "IndexName": "byBorrower",
+      "KeySchema": [
+       {
+        "AttributeName": "borrowerPhone",
+        "KeyType": "HASH"
+       },
+       {
+        "AttributeName": "createdAt",
+        "KeyType": "RANGE"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     },
+     {
+      "IndexName": "byStatus",
+      "KeySchema": [
+       {
+        "AttributeName": "status",
+        "KeyType": "HASH"
+       },
+       {
+        "AttributeName": "dueDate",
+        "KeyType": "RANGE"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     }
+    ],
+    "KeySchema": [
+     {
+      "AttributeName": "loanId",
+      "KeyType": "HASH"
+     }
+    ],
+    "PointInTimeRecoverySpecification": {
+     "PointInTimeRecoveryEnabled": true
+    },
+    "StreamSpecification": {
+     "StreamViewType": "NEW_AND_OLD_IMAGES"
+    },
+    "TableName": "ForwardsFlow-MobileLoans",
+    "Tags": [
+     {
+      "Key": "Environment",
+      "Value": "development"
+     },
+     {
+      "Key": "Project",
+      "Value": "ForwardsFlow"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowDatabaseStack/MobileLoansTable/Resource"
+   }
+  },
+  "PaymentsTable48A42630": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "paymentId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "loanId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "createdAt",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "investmentId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "mpesaRef",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "GlobalSecondaryIndexes": [
+     {
+      "IndexName": "byLoan",
+      "KeySchema": [
+       {
+        "AttributeName": "loanId",
+        "KeyType": "HASH"
+       },
+       {
+        "AttributeName": "createdAt",
+        "KeyType": "RANGE"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     },
+     {
+      "IndexName": "byInvestment",
+      "KeySchema": [
+       {
+        "AttributeName": "investmentId",
+        "KeyType": "HASH"
+       },
+       {
+        "AttributeName": "createdAt",
+        "KeyType": "RANGE"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     },
+     {
+      "IndexName": "byMpesaRef",
+      "KeySchema": [
+       {
+        "AttributeName": "mpesaRef",
+        "KeyType": "HASH"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     }
+    ],
+    "KeySchema": [
+     {
+      "AttributeName": "paymentId",
+      "KeyType": "HASH"
+     }
+    ],
+    "PointInTimeRecoverySpecification": {
+     "PointInTimeRecoveryEnabled": true
+    },
+    "StreamSpecification": {
+     "StreamViewType": "NEW_AND_OLD_IMAGES"
+    },
+    "TableName": "ForwardsFlow-Payments",
+    "Tags": [
+     {
+      "Key": "Environment",
+      "Value": "development"
+     },
+     {
+      "Key": "Project",
+      "Value": "ForwardsFlow"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowDatabaseStack/PaymentsTable/Resource"
+   }
+  },
+  "MetricsTable2972A477": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "metricId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "periodDate",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "orgId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "metricType",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "GlobalSecondaryIndexes": [
+     {
+      "IndexName": "byOrganization",
+      "KeySchema": [
+       {
+        "AttributeName": "orgId",
+        "KeyType": "HASH"
+       },
+       {
+        "AttributeName": "periodDate",
+        "KeyType": "RANGE"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     },
+     {
+      "IndexName": "byMetricType",
+      "KeySchema": [
+       {
+        "AttributeName": "metricType",
+        "KeyType": "HASH"
+       },
+       {
+        "AttributeName": "periodDate",
+        "KeyType": "RANGE"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     }
+    ],
+    "KeySchema": [
+     {
+      "AttributeName": "metricId",
+      "KeyType": "HASH"
+     },
+     {
+      "AttributeName": "periodDate",
+      "KeyType": "RANGE"
+     }
+    ],
+    "TableName": "ForwardsFlow-Metrics",
+    "Tags": [
+     {
+      "Key": "Environment",
+      "Value": "development"
+     },
+     {
+      "Key": "Project",
+      "Value": "ForwardsFlow"
+     }
+    ],
+    "TimeToLiveSpecification": {
+     "AttributeName": "ttl",
+     "Enabled": true
+    }
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowDatabaseStack/MetricsTable/Resource"
+   }
+  },
+  "AuditLogsTable7D096F6F": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "logId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "userId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "timestamp",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "orgId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "action",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "GlobalSecondaryIndexes": [
+     {
+      "IndexName": "byUser",
+      "KeySchema": [
+       {
+        "AttributeName": "userId",
+        "KeyType": "HASH"
+       },
+       {
+        "AttributeName": "timestamp",
+        "KeyType": "RANGE"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     },
+     {
+      "IndexName": "byOrganization",
+      "KeySchema": [
+       {
+        "AttributeName": "orgId",
+        "KeyType": "HASH"
+       },
+       {
+        "AttributeName": "timestamp",
+        "KeyType": "RANGE"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     },
+     {
+      "IndexName": "byAction",
+      "KeySchema": [
+       {
+        "AttributeName": "action",
+        "KeyType": "HASH"
+       },
+       {
+        "AttributeName": "timestamp",
+        "KeyType": "RANGE"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     }
+    ],
+    "KeySchema": [
+     {
+      "AttributeName": "logId",
+      "KeyType": "HASH"
+     }
+    ],
+    "TableName": "ForwardsFlow-AuditLogs",
+    "Tags": [
+     {
+      "Key": "Environment",
+      "Value": "development"
+     },
+     {
+      "Key": "Project",
+      "Value": "ForwardsFlow"
+     }
+    ],
+    "TimeToLiveSpecification": {
+     "AttributeName": "ttl",
+     "Enabled": true
+    }
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowDatabaseStack/AuditLogsTable/Resource"
+   }
+  },
+  "NotificationsTable76DCFC6C": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "notificationId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "userId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "createdAt",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "orgId",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "GlobalSecondaryIndexes": [
+     {
+      "IndexName": "byUser",
+      "KeySchema": [
+       {
+        "AttributeName": "userId",
+        "KeyType": "HASH"
+       },
+       {
+        "AttributeName": "createdAt",
+        "KeyType": "RANGE"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     },
+     {
+      "IndexName": "byOrganization",
+      "KeySchema": [
+       {
+        "AttributeName": "orgId",
+        "KeyType": "HASH"
+       },
+       {
+        "AttributeName": "createdAt",
+        "KeyType": "RANGE"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     }
+    ],
+    "KeySchema": [
+     {
+      "AttributeName": "notificationId",
+      "KeyType": "HASH"
+     }
+    ],
+    "StreamSpecification": {
+     "StreamViewType": "NEW_AND_OLD_IMAGES"
+    },
+    "TableName": "ForwardsFlow-Notifications",
+    "Tags": [
+     {
+      "Key": "Environment",
+      "Value": "development"
+     },
+     {
+      "Key": "Project",
+      "Value": "ForwardsFlow"
+     }
+    ],
+    "TimeToLiveSpecification": {
+     "AttributeName": "ttl",
+     "Enabled": true
+    }
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowDatabaseStack/NotificationsTable/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/yXISwqAIBRA0bU01xdaO2gBQTWP5yewj0ZPk4j2HtToHq4EWUkQBWbi2ix8dQruPqJeGGYazeVxC0bBPaBaLWsm/+FhnaWQDv2tNsU9xYf5YCzMVJ6yBiFAFDM5x4/ko9ssdH9frZU7KXIAAAA="
+   },
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowDatabaseStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "OrganizationsTableName": {
+   "Value": {
+    "Ref": "OrganizationsTable01047E98"
+   },
+   "Export": {
+    "Name": "ForwardsFlow-OrganizationsTable"
+   }
+  },
+  "UsersTableName": {
+   "Value": {
+    "Ref": "UsersTable9725E9C8"
+   },
+   "Export": {
+    "Name": "ForwardsFlow-UsersTable"
+   }
+  },
+  "CapitalCallsTableName": {
+   "Value": {
+    "Ref": "CapitalCallsTable208B96A9"
+   },
+   "Export": {
+    "Name": "ForwardsFlow-CapitalCallsTable"
+   }
+  },
+  "InvestmentsTableName": {
+   "Value": {
+    "Ref": "InvestmentsTable66692819"
+   },
+   "Export": {
+    "Name": "ForwardsFlow-InvestmentsTable"
+   }
+  },
+  "MobileLoansTableName": {
+   "Value": {
+    "Ref": "MobileLoansTable246C206C"
+   },
+   "Export": {
+    "Name": "ForwardsFlow-MobileLoansTable"
+   }
+  },
+  "PaymentsTableName": {
+   "Value": {
+    "Ref": "PaymentsTable48A42630"
+   },
+   "Export": {
+    "Name": "ForwardsFlow-PaymentsTable"
+   }
+  },
+  "MetricsTableName": {
+   "Value": {
+    "Ref": "MetricsTable2972A477"
+   },
+   "Export": {
+    "Name": "ForwardsFlow-MetricsTable"
+   }
+  },
+  "AuditLogsTableName": {
+   "Value": {
+    "Ref": "AuditLogsTable7D096F6F"
+   },
+   "Export": {
+    "Name": "ForwardsFlow-AuditLogsTable"
+   }
+  },
+  "NotificationsTableName": {
+   "Value": {
+    "Ref": "NotificationsTable76DCFC6C"
+   },
+   "Export": {
+    "Name": "ForwardsFlow-NotificationsTable"
+   }
+  },
+  "ExportsOutputFnGetAttOrganizationsTable01047E98ArnEB6BFC2E": {
+   "Value": {
+    "Fn::GetAtt": [
+     "OrganizationsTable01047E98",
+     "Arn"
+    ]
+   },
+   "Export": {
+    "Name": "ForwardsFlowDatabaseStack:ExportsOutputFnGetAttOrganizationsTable01047E98ArnEB6BFC2E"
+   }
+  },
+  "ExportsOutputFnGetAttUsersTable9725E9C8Arn5684EF99": {
+   "Value": {
+    "Fn::GetAtt": [
+     "UsersTable9725E9C8",
+     "Arn"
+    ]
+   },
+   "Export": {
+    "Name": "ForwardsFlowDatabaseStack:ExportsOutputFnGetAttUsersTable9725E9C8Arn5684EF99"
+   }
+  },
+  "ExportsOutputFnGetAttCapitalCallsTable208B96A9Arn413E4F7D": {
+   "Value": {
+    "Fn::GetAtt": [
+     "CapitalCallsTable208B96A9",
+     "Arn"
+    ]
+   },
+   "Export": {
+    "Name": "ForwardsFlowDatabaseStack:ExportsOutputFnGetAttCapitalCallsTable208B96A9Arn413E4F7D"
+   }
+  },
+  "ExportsOutputFnGetAttInvestmentsTable66692819Arn5FB7CD25": {
+   "Value": {
+    "Fn::GetAtt": [
+     "InvestmentsTable66692819",
+     "Arn"
+    ]
+   },
+   "Export": {
+    "Name": "ForwardsFlowDatabaseStack:ExportsOutputFnGetAttInvestmentsTable66692819Arn5FB7CD25"
+   }
+  },
+  "ExportsOutputFnGetAttMobileLoansTable246C206CArnDAF1554B": {
+   "Value": {
+    "Fn::GetAtt": [
+     "MobileLoansTable246C206C",
+     "Arn"
+    ]
+   },
+   "Export": {
+    "Name": "ForwardsFlowDatabaseStack:ExportsOutputFnGetAttMobileLoansTable246C206CArnDAF1554B"
+   }
+  },
+  "ExportsOutputFnGetAttPaymentsTable48A42630Arn6636311E": {
+   "Value": {
+    "Fn::GetAtt": [
+     "PaymentsTable48A42630",
+     "Arn"
+    ]
+   },
+   "Export": {
+    "Name": "ForwardsFlowDatabaseStack:ExportsOutputFnGetAttPaymentsTable48A42630Arn6636311E"
+   }
+  },
+  "ExportsOutputFnGetAttMetricsTable2972A477ArnE69DC4C0": {
+   "Value": {
+    "Fn::GetAtt": [
+     "MetricsTable2972A477",
+     "Arn"
+    ]
+   },
+   "Export": {
+    "Name": "ForwardsFlowDatabaseStack:ExportsOutputFnGetAttMetricsTable2972A477ArnE69DC4C0"
+   }
+  },
+  "ExportsOutputFnGetAttAuditLogsTable7D096F6FArnA930D5BA": {
+   "Value": {
+    "Fn::GetAtt": [
+     "AuditLogsTable7D096F6F",
+     "Arn"
+    ]
+   },
+   "Export": {
+    "Name": "ForwardsFlowDatabaseStack:ExportsOutputFnGetAttAuditLogsTable7D096F6FArnA930D5BA"
+   }
+  },
+  "ExportsOutputFnGetAttNotificationsTable76DCFC6CArn012EC0C4": {
+   "Value": {
+    "Fn::GetAtt": [
+     "NotificationsTable76DCFC6C",
+     "Arn"
+    ]
+   },
+   "Export": {
+    "Name": "ForwardsFlowDatabaseStack:ExportsOutputFnGetAttNotificationsTable76DCFC6CArn012EC0C4"
+   }
+  },
+  "ExportsOutputRefOrganizationsTable01047E982050E92F": {
+   "Value": {
+    "Ref": "OrganizationsTable01047E98"
+   },
+   "Export": {
+    "Name": "ForwardsFlowDatabaseStack:ExportsOutputRefOrganizationsTable01047E982050E92F"
+   }
+  },
+  "ExportsOutputRefUsersTable9725E9C857961836": {
+   "Value": {
+    "Ref": "UsersTable9725E9C8"
+   },
+   "Export": {
+    "Name": "ForwardsFlowDatabaseStack:ExportsOutputRefUsersTable9725E9C857961836"
+   }
+  },
+  "ExportsOutputRefCapitalCallsTable208B96A9B892974B": {
+   "Value": {
+    "Ref": "CapitalCallsTable208B96A9"
+   },
+   "Export": {
+    "Name": "ForwardsFlowDatabaseStack:ExportsOutputRefCapitalCallsTable208B96A9B892974B"
+   }
+  },
+  "ExportsOutputRefInvestmentsTable66692819D7322F7D": {
+   "Value": {
+    "Ref": "InvestmentsTable66692819"
+   },
+   "Export": {
+    "Name": "ForwardsFlowDatabaseStack:ExportsOutputRefInvestmentsTable66692819D7322F7D"
+   }
+  },
+  "ExportsOutputRefMobileLoansTable246C206C453DCEEA": {
+   "Value": {
+    "Ref": "MobileLoansTable246C206C"
+   },
+   "Export": {
+    "Name": "ForwardsFlowDatabaseStack:ExportsOutputRefMobileLoansTable246C206C453DCEEA"
+   }
+  },
+  "ExportsOutputRefPaymentsTable48A42630E9179FB6": {
+   "Value": {
+    "Ref": "PaymentsTable48A42630"
+   },
+   "Export": {
+    "Name": "ForwardsFlowDatabaseStack:ExportsOutputRefPaymentsTable48A42630E9179FB6"
+   }
+  },
+  "ExportsOutputRefMetricsTable2972A4778D6F7F67": {
+   "Value": {
+    "Ref": "MetricsTable2972A477"
+   },
+   "Export": {
+    "Name": "ForwardsFlowDatabaseStack:ExportsOutputRefMetricsTable2972A4778D6F7F67"
+   }
+  },
+  "ExportsOutputRefAuditLogsTable7D096F6FD00CC541": {
+   "Value": {
+    "Ref": "AuditLogsTable7D096F6F"
+   },
+   "Export": {
+    "Name": "ForwardsFlowDatabaseStack:ExportsOutputRefAuditLogsTable7D096F6FD00CC541"
+   }
+  },
+  "ExportsOutputRefNotificationsTable76DCFC6C32DE73EE": {
+   "Value": {
+    "Ref": "NotificationsTable76DCFC6C"
+   },
+   "Export": {
+    "Name": "ForwardsFlowDatabaseStack:ExportsOutputRefNotificationsTable76DCFC6C32DE73EE"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

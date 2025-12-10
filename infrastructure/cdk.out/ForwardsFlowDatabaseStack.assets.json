@@ -1,0 +1,21 @@
+{
+  "version": "48.0.0",
+  "files": {
+    "a297303f1ab7769330e453e512b98c26b6c10ad4dc30a3a29e4c661df4eda96b": {
+      "displayName": "ForwardsFlowDatabaseStack Template",
+      "source": {
+        "path": "ForwardsFlowDatabaseStack.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "503561437485-eu-west-1-7ade18ef": {
+          "bucketName": "cdk-hnb659fds-assets-503561437485-eu-west-1",
+          "objectKey": "a297303f1ab7769330e453e512b98c26b6c10ad4dc30a3a29e4c661df4eda96b.json",
+          "region": "eu-west-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::503561437485:role/cdk-hnb659fds-file-publishing-role-503561437485-eu-west-1"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

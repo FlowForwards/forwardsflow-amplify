@@ -1,0 +1,1925 @@
+{
+ "Description": "ForwardsFlow AppSync API and Cognito",
+ "Resources": {
+  "ForwardsFlowUserPoolDE2BB0ED": {
+   "Type": "AWS::Cognito::UserPool",
+   "Properties": {
+    "AccountRecoverySetting": {
+     "RecoveryMechanisms": [
+      {
+       "Name": "verified_email",
+       "Priority": 1
+      }
+     ]
+    },
+    "AdminCreateUserConfig": {
+     "AllowAdminCreateUserOnly": true
+    },
+    "AutoVerifiedAttributes": [
+     "email"
+    ],
+    "EmailVerificationMessage": "The verification code to your new account is {####}",
+    "EmailVerificationSubject": "Verify your new account",
+    "Policies": {
+     "PasswordPolicy": {
+      "MinimumLength": 8,
+      "RequireLowercase": true,
+      "RequireNumbers": true,
+      "RequireSymbols": false,
+      "RequireUppercase": true
+     }
+    },
+    "Schema": [
+     {
+      "Mutable": true,
+      "Name": "email",
+      "Required": true
+     },
+     {
+      "Mutable": true,
+      "Name": "name",
+      "Required": true
+     },
+     {
+      "AttributeDataType": "String",
+      "Mutable": true,
+      "Name": "orgId"
+     },
+     {
+      "AttributeDataType": "String",
+      "Mutable": true,
+      "Name": "role"
+     },
+     {
+      "AttributeDataType": "String",
+      "Mutable": true,
+      "Name": "orgType"
+     }
+    ],
+    "SmsVerificationMessage": "The verification code to your new account is {####}",
+    "UserPoolName": "ForwardsFlow-Users",
+    "UserPoolTags": {
+     "Environment": "development",
+     "Project": "ForwardsFlow"
+    },
+    "UsernameAttributes": [
+     "email"
+    ],
+    "VerificationMessageTemplate": {
+     "DefaultEmailOption": "CONFIRM_WITH_CODE",
+     "EmailMessage": "The verification code to your new account is {####}",
+     "EmailSubject": "Verify your new account",
+     "SmsMessage": "The verification code to your new account is {####}"
+    }
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowUserPool/Resource"
+   }
+  },
+  "ForwardsFlowUserPoolForwardsFlowWebClient8B6306A6": {
+   "Type": "AWS::Cognito::UserPoolClient",
+   "Properties": {
+    "AllowedOAuthFlows": [
+     "code"
+    ],
+    "AllowedOAuthFlowsUserPoolClient": true,
+    "AllowedOAuthScopes": [
+     "email",
+     "openid",
+     "profile"
+    ],
+    "CallbackURLs": [
+     "https://example.com"
+    ],
+    "ClientName": "ForwardsFlow-WebApp",
+    "ExplicitAuthFlows": [
+     "ALLOW_USER_PASSWORD_AUTH",
+     "ALLOW_USER_SRP_AUTH",
+     "ALLOW_REFRESH_TOKEN_AUTH"
+    ],
+    "SupportedIdentityProviders": [
+     "COGNITO"
+    ],
+    "UserPoolId": {
+     "Ref": "ForwardsFlowUserPoolDE2BB0ED"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowUserPool/ForwardsFlowWebClient/Resource"
+   }
+  },
+  "ForwardsFlowApiApiLogsRole6DF13DE9": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "appsync.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSAppSyncPushToCloudWatchLogs"
+       ]
+      ]
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "Environment",
+      "Value": "development"
+     },
+     {
+      "Key": "Project",
+      "Value": "ForwardsFlow"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/ApiLogsRole/Resource"
+   }
+  },
+  "ForwardsFlowApi1E228389": {
+   "Type": "AWS::AppSync::GraphQLApi",
+   "Properties": {
+    "AdditionalAuthenticationProviders": [
+     {
+      "AuthenticationType": "API_KEY"
+     },
+     {
+      "AuthenticationType": "AWS_IAM"
+     }
+    ],
+    "AuthenticationType": "AMAZON_COGNITO_USER_POOLS",
+    "LogConfig": {
+     "CloudWatchLogsRoleArn": {
+      "Fn::GetAtt": [
+       "ForwardsFlowApiApiLogsRole6DF13DE9",
+       "Arn"
+      ]
+     },
+     "FieldLogLevel": "ERROR"
+    },
+    "Name": "ForwardsFlow-API",
+    "Tags": [
+     {
+      "Key": "Environment",
+      "Value": "development"
+     },
+     {
+      "Key": "Project",
+      "Value": "ForwardsFlow"
+     }
+    ],
+    "UserPoolConfig": {
+     "AwsRegion": "eu-west-1",
+     "DefaultAction": "ALLOW",
+     "UserPoolId": {
+      "Ref": "ForwardsFlowUserPoolDE2BB0ED"
+     }
+    },
+    "XrayEnabled": true
+   },
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/Resource"
+   }
+  },
+  "ForwardsFlowApiSchemaBCD6DAB4": {
+   "Type": "AWS::AppSync::GraphQLSchema",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "Definition": "# ForwardsFlow GraphQL Schema\n# Impact Investment Platform - Real-time API\n\nenum OrganizationType {\n  BANK\n  INVESTOR\n}\n\nenum OrganizationStatus {\n  PENDING\n  ACTIVE\n  SUSPENDED\n  INACTIVE\n}\n\nenum UserRole {\n  FORWARDSFLOW_ADMIN\n  BANK_ADMIN\n  BANK_LENDER\n  BANK_CALLER\n  BANK_COMPLIANCE\n  BANK_RISK\n  INVESTOR_ADMIN\n  INVESTOR_ANALYST\n}\n\nenum UserStatus {\n  PENDING\n  ACTIVE\n  SUSPENDED\n  INACTIVE\n}\n\nenum CapitalCallStatus {\n  DRAFT\n  PUBLISHED\n  ACCEPTED\n  KYC_REVIEW\n  PROCESSING\n  COMPLETED\n  EXPIRED\n  CANCELLED\n}\n\nenum InvestmentStatus {\n  PENDING\n  KYC_SUBMITTED\n  KYC_APPROVED\n  FUNDS_PENDING\n  ACTIVE\n  MATURED\n  SETTLED\n  CANCELLED\n}\n\nenum MobileLoanStatus {\n  PENDING\n  APPROVED\n  DISBURSED\n  CURRENT\n  OVERDUE\n  DEFAULTED\n  SETTLED\n  WRITTEN_OFF\n}\n\nenum PaymentType {\n  MPESA_DISBURSEMENT\n  MPESA_REPAYMENT\n  SWIFT_DEPOSIT\n  SWIFT_SETTLEMENT\n  INTERNAL_TRANSFER\n}\n\nenum PaymentStatus {\n  PENDING\n  PROCESSING\n  COMPLETED\n  FAILED\n  REVERSED\n}\n\nenum NotificationType {\n  INFO\n  SUCCESS\n  WARNING\n  ERROR\n  OPPORTUNITY\n  SYSTEM\n}\n\nenum AuditAction {\n  CREATE\n  UPDATE\n  DELETE\n  LOGIN\n  LOGOUT\n  APPROVE\n  REJECT\n  SUSPEND\n  ACTIVATE\n}\n\ntype Organization {\n  orgId: ID!\n  orgType: OrganizationType!\n  name: String!\n  email: String!\n  country: String!\n  status: OrganizationStatus!\n  institutionType: String\n  moodysRating: String\n  website: String\n  address: String\n  phone: String\n  logo: String\n  swiftCode: String\n  centralBankLicense: String\n  aum: Float\n  investmentFocus: [String]\n  createdAt: AWSDateTime!\n  updatedAt: AWSDateTime!\n  createdBy: ID\n  totalCapital: Float\n  totalInvested: Float\n  activeLoans: Int\n  activeInvestments: Int\n  adminCount: Int\n  userCount: Int\n  users: [User]\n}\n\ntype User {\n  userId: ID!\n  email: String!\n  name: String!\n  role: UserRole!\n  status: UserStatus!\n  orgId: ID\n  organization: Organization\n  jobRole: String\n  phone: String\n  avatar: String\n  lastLogin: AWSDateTime\n  mfaEnabled: Boolean\n  createdAt: AWSDateTime!\n  updatedAt: AWSDateTime!\n  createdBy: ID\n}\n\ntype CapitalCall {\n  callId: ID!\n  txnRef: String!\n  bankOrgId: ID!\n  bank: Organization\n  amount: Float!\n  currency: String!\n  targetCurrency: String!\n  maturityMonths: Int!\n  interestRate: Float!\n  fxSpread: Float\n  hedgingFee: Float\n  currentFxRate: Float\n  hedgedFxRate: Float\n  status: CapitalCallStatus!\n  createdAt: AWSDateTime!\n  updatedAt: AWSDateTime!\n  publishedAt: AWSDateTime\n  expiresAt: AWSDateTime\n  acceptedBy: ID\n  acceptedByOrg: Organization\n  acceptedAt: AWSDateTime\n  completedAt: AWSDateTime\n  investments: [Investment]\n  subscribed: Float\n  subscribedPct: Float\n  projectedYield: Float\n  createdBy: ID\n  intendedUse: String\n  notes: String\n}\n\ntype Investment {\n  investmentId: ID!\n  txnRef: String!\n  callId: ID!\n  capitalCall: CapitalCall\n  investorOrgId: ID!\n  investor: Organization\n  amount: Float!\n  currency: String!\n  interestRate: Float!\n  maturityDate: AWSDateTime!\n  status: InvestmentStatus!\n  createdAt: AWSDateTime!\n  updatedAt: AWSDateTime!\n  kycDocuments: AWSJSON\n  kycSubmittedAt: AWSDateTime\n  kycApprovedAt: AWSDateTime\n  kycApprovedBy: ID\n  bankDetails: AWSJSON\n  settledAt: AWSDateTime\n  settledAmount: Float\n  expectedReturn: Float\n  accruedInterest: Float\n  daysToMaturity: Int\n  createdBy: ID\n}\n\ntype MobileLoan {\n  loanId: ID!\n  loanRef: String!\n  bankOrgId: ID!\n  bank: Organization\n  borrowerPhone: String!\n  borrowerName: String\n  borrowerIdNumber: String\n  amount: Float!\n  currency: String!\n  interestRate: Float!\n  term: Int!\n  status: MobileLoanStatus!\n  createdAt: AWSDateTime!\n  updatedAt: AWSDateTime!\n  approvedAt: AWSDateTime\n  approvedBy: ID\n  disbursedAt: AWSDateTime\n  dueDate: AWSDateTime\n  settledAt: AWSDateTime\n  amountPaid: Float\n  amountOutstanding: Float\n  daysOverdue: Int\n  creditScore: Int\n  creditLimit: Float\n  whatsappSessionId: String\n  lastWhatsappMessage: AWSDateTime\n  payments: [Payment]\n}\n\ntype Payment {\n  paymentId: ID!\n  paymentRef: String!\n  type: PaymentType!\n  status: PaymentStatus!\n  loanId: ID\n  investmentId: ID\n  orgId: ID\n  amount: Float!\n  currency: String!\n  mpesaRef: String\n  mpesaPhone: String\n  swiftRef: String\n  swiftBank: String\n  swiftAccount: String\n  createdAt: AWSDateTime!\n  updatedAt: AWSDateTime!\n  completedAt: AWSDateTime\n  failureReason: String\n}\n\ntype Notification {\n  notificationId: ID!\n  userId: ID!\n  orgId: ID\n  type: NotificationType!\n  title: String!\n  message: String!\n  link: String\n  read: Boolean!\n  readAt: AWSDateTime\n  createdAt: AWSDateTime!\n  expiresAt: AWSDateTime\n}\n\ntype AuditLog {\n  logId: ID!\n  userId: ID!\n  orgId: ID\n  action: AuditAction!\n  entityType: String!\n  entityId: ID!\n  previousValue: AWSJSON\n  newValue: AWSJSON\n  ipAddress: String\n  userAgent: String\n  timestamp: AWSDateTime!\n}\n\ntype PlatformMetrics {\n  totalCapitalDeployed: Float!\n  totalInvestors: Int!\n  totalBanks: Int!\n  totalActiveLoans: Int!\n  totalLoanVolume: Float!\n  avgPlatformYield: Float!\n  monthlyRevenue: Float!\n  monthlyGrowth: Float!\n  capitalByMonth: [MonthlyDataPoint]\n  revenueByMonth: [MonthlyDataPoint]\n  lastUpdated: AWSDateTime!\n}\n\ntype BankMetrics {\n  orgId: ID!\n  totalCapital: Float!\n  activeLoans: Int!\n  loanVolume: Float!\n  monthlyYield: Float!\n  nplRate: Float!\n  avgLoanSize: Float!\n  disbursementsToday: Int!\n  collectionsToday: Int!\n  loanStatusDistribution: [StatusDistribution]\n  weeklyDisbursements: [DailyDataPoint]\n  lastUpdated: AWSDateTime!\n}\n\ntype InvestorMetrics {\n  orgId: ID!\n  totalInvested: Float!\n  activeInstruments: Int!\n  avgYield: Float!\n  portfolioGrowth: Float!\n  pendingMaturity: Int!\n  portfolioByBank: [BankAllocation]\n  yieldHistory: [MonthlyDataPoint]\n  lastUpdated: AWSDateTime!\n}\n\ntype MonthlyDataPoint {\n  month: String!\n  value: Float!\n}\n\ntype DailyDataPoint {\n  day: String!\n  amount: Float!\n}\n\ntype StatusDistribution {\n  status: String!\n  count: Int!\n  pct: Float!\n}\n\ntype BankAllocation {\n  bank: String!\n  bankId: ID!\n  amount: Float!\n}\n\ninput CreateOrganizationInput {\n  orgType: OrganizationType!\n  name: String!\n  email: String!\n  country: String!\n  institutionType: String\n  moodysRating: String\n  website: String\n  address: String\n  phone: String\n  swiftCode: String\n  centralBankLicense: String\n  aum: Float\n  investmentFocus: [String]\n}\n\ninput UpdateOrganizationInput {\n  orgId: ID!\n  name: String\n  email: String\n  institutionType: String\n  moodysRating: String\n  website: String\n  address: String\n  phone: String\n  swiftCode: String\n  centralBankLicense: String\n  aum: Float\n  investmentFocus: [String]\n}\n\ninput CreateUserInput {\n  email: String!\n  name: String!\n  role: UserRole!\n  orgId: ID\n  jobRole: String\n  phone: String\n}\n\ninput UpdateUserInput {\n  userId: ID!\n  name: String\n  role: UserRole\n  jobRole: String\n  phone: String\n}\n\ninput CreateCapitalCallInput {\n  bankOrgId: ID!\n  amount: Float!\n  currency: String!\n  targetCurrency: String!\n  maturityMonths: Int!\n  interestRate: Float!\n  fxSpread: Float\n  hedgingFee: Float\n  currentFxRate: Float\n  intendedUse: String\n  notes: String\n}\n\ninput UpdateCapitalCallInput {\n  callId: ID!\n  amount: Float\n  maturityMonths: Int\n  interestRate: Float\n  fxSpread: Float\n  hedgingFee: Float\n  currentFxRate: Float\n  intendedUse: String\n  notes: String\n}\n\ninput CreateInvestmentInput {\n  callId: ID!\n  investorOrgId: ID!\n  amount: Float!\n}\n\ninput SubmitKycInput {\n  investmentId: ID!\n  kycDocuments: AWSJSON!\n  bankDetails: AWSJSON!\n}\n\ninput CreateMobileLoanInput {\n  bankOrgId: ID!\n  borrowerPhone: String!\n  borrowerName: String\n  borrowerIdNumber: String\n  amount: Float!\n  currency: String!\n  interestRate: Float!\n  term: Int!\n  creditScore: Int\n}\n\ninput RecordPaymentInput {\n  loanId: ID!\n  amount: Float!\n  mpesaRef: String\n  mpesaPhone: String\n}\n\ninput PaginationInput {\n  limit: Int\n  nextToken: String\n}\n\ninput DateRangeInput {\n  startDate: AWSDateTime!\n  endDate: AWSDateTime!\n}\n\ntype OrganizationConnection {\n  items: [Organization]!\n  nextToken: String\n  totalCount: Int\n}\n\ntype UserConnection {\n  items: [User]!\n  nextToken: String\n  totalCount: Int\n}\n\ntype CapitalCallConnection {\n  items: [CapitalCall]!\n  nextToken: String\n  totalCount: Int\n}\n\ntype InvestmentConnection {\n  items: [Investment]!\n  nextToken: String\n  totalCount: Int\n}\n\ntype MobileLoanConnection {\n  items: [MobileLoan]!\n  nextToken: String\n  totalCount: Int\n}\n\ntype NotificationConnection {\n  items: [Notification]!\n  nextToken: String\n  unreadCount: Int\n}\n\ntype AuditLogConnection {\n  items: [AuditLog]!\n  nextToken: String\n  totalCount: Int\n}\n\ntype Query {\n  getOrganization(orgId: ID!): Organization\n  listOrganizations(filter: OrganizationType, pagination: PaginationInput): OrganizationConnection!\n  listBanks(pagination: PaginationInput): OrganizationConnection!\n  listInvestors(pagination: PaginationInput): OrganizationConnection!\n  getUser(userId: ID!): User\n  getUserByEmail(email: String!): User\n  listUsers(pagination: PaginationInput): UserConnection!\n  listUsersByOrganization(orgId: ID!, pagination: PaginationInput): UserConnection!\n  getCapitalCall(callId: ID!): CapitalCall\n  getCapitalCallByTxnRef(txnRef: String!): CapitalCall\n  listCapitalCalls(pagination: PaginationInput): CapitalCallConnection!\n  listCapitalCallsByBank(bankOrgId: ID!, pagination: PaginationInput): CapitalCallConnection!\n  listPublishedCalls(pagination: PaginationInput): CapitalCallConnection!\n  getInvestment(investmentId: ID!): Investment\n  listInvestments(pagination: PaginationInput): InvestmentConnection!\n  listInvestmentsByInvestor(investorOrgId: ID!, pagination: PaginationInput): InvestmentConnection!\n  listInvestmentsByCapitalCall(callId: ID!, pagination: PaginationInput): InvestmentConnection!\n  getMobileLoan(loanId: ID!): MobileLoan\n  listMobileLoansByBank(bankOrgId: ID!, status: MobileLoanStatus, pagination: PaginationInput): MobileLoanConnection!\n  listMobileLoansByBorrower(borrowerPhone: String!, pagination: PaginationInput): MobileLoanConnection!\n  getPlatformMetrics: PlatformMetrics!\n  getBankMetrics(orgId: ID!): BankMetrics!\n  getInvestorMetrics(orgId: ID!): InvestorMetrics!\n  listNotifications(userId: ID!, unreadOnly: Boolean, pagination: PaginationInput): NotificationConnection!\n  listAuditLogs(orgId: ID, userId: ID, action: AuditAction, dateRange: DateRangeInput, pagination: PaginationInput): AuditLogConnection!\n}\n\ntype Mutation {\n  createOrganization(input: CreateOrganizationInput!): Organization!\n  updateOrganization(input: UpdateOrganizationInput!): Organization!\n  suspendOrganization(orgId: ID!, reason: String): Organization!\n  activateOrganization(orgId: ID!): Organization!\n  createUser(input: CreateUserInput!): User!\n  updateUser(input: UpdateUserInput!): User!\n  suspendUser(userId: ID!, reason: String): User!\n  activateUser(userId: ID!): User!\n  createCapitalCall(input: CreateCapitalCallInput!): CapitalCall!\n  updateCapitalCall(input: UpdateCapitalCallInput!): CapitalCall!\n  publishCapitalCall(callId: ID!): CapitalCall!\n  cancelCapitalCall(callId: ID!, reason: String): CapitalCall!\n  createInvestment(input: CreateInvestmentInput!): Investment!\n  updateInvestment(investmentId: ID!, amount: Float): Investment!\n  submitKyc(input: SubmitKycInput!): Investment!\n  cancelInvestment(investmentId: ID!, reason: String): Investment!\n  approveKyc(investmentId: ID!): Investment!\n  rejectKyc(investmentId: ID!, reason: String!): Investment!\n  approveInvestment(investmentId: ID!): Investment!\n  completeInvestment(investmentId: ID!): Investment!\n  createMobileLoan(input: CreateMobileLoanInput!): MobileLoan!\n  approveMobileLoan(loanId: ID!): MobileLoan!\n  rejectMobileLoan(loanId: ID!, reason: String!): MobileLoan!\n  disburseMobileLoan(loanId: ID!): MobileLoan!\n  recordLoanPayment(input: RecordPaymentInput!): MobileLoan!\n  writeOffLoan(loanId: ID!, reason: String!): MobileLoan!\n  markNotificationRead(notificationId: ID!): Notification!\n  markAllNotificationsRead(userId: ID!): Boolean!\n  refreshPlatformMetrics: PlatformMetrics!\n  refreshBankMetrics(orgId: ID!): BankMetrics!\n  seedDemoData: Boolean!\n}\n\ntype Subscription {\n  onCapitalCallCreated: CapitalCall\n    @aws_subscribe(mutations: [\"createCapitalCall\", \"publishCapitalCall\"])\n  onCapitalCallUpdated(callId: ID, bankOrgId: ID): CapitalCall\n    @aws_subscribe(mutations: [\"updateCapitalCall\", \"cancelCapitalCall\"])\n  onInvestmentCreated(bankOrgId: ID): Investment\n    @aws_subscribe(mutations: [\"createInvestment\"])\n  onInvestmentUpdated(investmentId: ID, investorOrgId: ID, bankOrgId: ID): Investment\n    @aws_subscribe(mutations: [\"updateInvestment\", \"submitKyc\", \"approveKyc\", \"rejectKyc\", \"approveInvestment\", \"completeInvestment\"])\n  onNotificationCreated(userId: ID!, orgId: ID): Notification\n    @aws_subscribe(mutations: [\"markNotificationRead\"])\n  onMobileLoanUpdated(bankOrgId: ID!): MobileLoan\n    @aws_subscribe(mutations: [\"createMobileLoan\", \"approveMobileLoan\", \"disburseMobileLoan\", \"recordLoanPayment\"])\n}\n\nschema {\n  query: Query\n  mutation: Mutation\n  subscription: Subscription\n}\n"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/Schema"
+   }
+  },
+  "ForwardsFlowApiDefaultApiKey3F4572A5": {
+   "Type": "AWS::AppSync::ApiKey",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "Description": "API Key for public endpoints",
+    "Expires": 1796884819
+   },
+   "DependsOn": [
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/DefaultApiKey"
+   }
+  },
+  "ForwardsFlowApiLogRetention74946E73": {
+   "Type": "Custom::LogRetention",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+      "Arn"
+     ]
+    },
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/appsync/apis/",
+       {
+        "Fn::GetAtt": [
+         "ForwardsFlowApi1E228389",
+         "ApiId"
+        ]
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/LogRetention/Resource"
+   }
+  },
+  "ForwardsFlowApiLambdaDataSourceServiceRole3F262333": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "appsync.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "Tags": [
+     {
+      "Key": "Environment",
+      "Value": "development"
+     },
+     {
+      "Key": "Project",
+      "Value": "ForwardsFlow"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/LambdaDataSource/ServiceRole/Resource"
+   }
+  },
+  "ForwardsFlowApiLambdaDataSourceServiceRoleDefaultPolicyCC03140B": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "lambda:InvokeFunction",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "ResolverLambdaEC7302D3",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "ResolverLambdaEC7302D3",
+             "Arn"
+            ]
+           },
+           ":*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "ForwardsFlowApiLambdaDataSourceServiceRoleDefaultPolicyCC03140B",
+    "Roles": [
+     {
+      "Ref": "ForwardsFlowApiLambdaDataSourceServiceRole3F262333"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/LambdaDataSource/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "ForwardsFlowApiLambdaDataSource80267E49": {
+   "Type": "AWS::AppSync::DataSource",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "LambdaConfig": {
+     "LambdaFunctionArn": {
+      "Fn::GetAtt": [
+       "ResolverLambdaEC7302D3",
+       "Arn"
+      ]
+     }
+    },
+    "Name": "LambdaDataSource",
+    "ServiceRoleArn": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApiLambdaDataSourceServiceRole3F262333",
+      "Arn"
+     ]
+    },
+    "Type": "AWS_LAMBDA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/LambdaDataSource/Resource"
+   }
+  },
+  "ForwardsFlowApiGetOrganizationResolver458A2068": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "getOrganization",
+    "Kind": "UNIT",
+    "TypeName": "Query"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/GetOrganizationResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiListOrganizationsResolverB8CC85E8": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "listOrganizations",
+    "Kind": "UNIT",
+    "TypeName": "Query"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/ListOrganizationsResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiListBanksResolver10FA8FD6": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "listBanks",
+    "Kind": "UNIT",
+    "TypeName": "Query"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/ListBanksResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiListInvestorsResolverB2957AC1": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "listInvestors",
+    "Kind": "UNIT",
+    "TypeName": "Query"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/ListInvestorsResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiGetUserResolver3E00BCDB": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "getUser",
+    "Kind": "UNIT",
+    "TypeName": "Query"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/GetUserResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiListUsersResolver0A2C137E": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "listUsers",
+    "Kind": "UNIT",
+    "TypeName": "Query"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/ListUsersResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiListUsersByOrgResolver7C73BF1B": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "listUsersByOrganization",
+    "Kind": "UNIT",
+    "TypeName": "Query"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/ListUsersByOrgResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiGetCapitalCallResolver4459B775": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "getCapitalCall",
+    "Kind": "UNIT",
+    "TypeName": "Query"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/GetCapitalCallResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiListCapitalCallsResolver56298D57": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "listCapitalCalls",
+    "Kind": "UNIT",
+    "TypeName": "Query"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/ListCapitalCallsResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiListCapitalCallsByBankResolver0C6C9D98": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "listCapitalCallsByBank",
+    "Kind": "UNIT",
+    "TypeName": "Query"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/ListCapitalCallsByBankResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiListPublishedCallsResolver10C18140": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "listPublishedCalls",
+    "Kind": "UNIT",
+    "TypeName": "Query"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/ListPublishedCallsResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiGetInvestmentResolver2C4A78BB": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "getInvestment",
+    "Kind": "UNIT",
+    "TypeName": "Query"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/GetInvestmentResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiListInvestmentsResolver11ED2471": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "listInvestments",
+    "Kind": "UNIT",
+    "TypeName": "Query"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/ListInvestmentsResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiListInvestmentsByInvestorResolver6AF20046": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "listInvestmentsByInvestor",
+    "Kind": "UNIT",
+    "TypeName": "Query"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/ListInvestmentsByInvestorResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiGetMobileLoanResolverC25E27B8": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "getMobileLoan",
+    "Kind": "UNIT",
+    "TypeName": "Query"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/GetMobileLoanResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiListMobileLoansByBankResolverFABBDFA4": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "listMobileLoansByBank",
+    "Kind": "UNIT",
+    "TypeName": "Query"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/ListMobileLoansByBankResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiGetPlatformMetricsResolverF9504AC1": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "getPlatformMetrics",
+    "Kind": "UNIT",
+    "TypeName": "Query"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/GetPlatformMetricsResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiGetBankMetricsResolver506CF634": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "getBankMetrics",
+    "Kind": "UNIT",
+    "TypeName": "Query"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/GetBankMetricsResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiGetInvestorMetricsResolver345333E3": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "getInvestorMetrics",
+    "Kind": "UNIT",
+    "TypeName": "Query"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/GetInvestorMetricsResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiListNotificationsResolver5B6BF69B": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "listNotifications",
+    "Kind": "UNIT",
+    "TypeName": "Query"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/ListNotificationsResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiListAuditLogsResolverE20CF574": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "listAuditLogs",
+    "Kind": "UNIT",
+    "TypeName": "Query"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/ListAuditLogsResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiCreateOrganizationResolver866D0496": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "createOrganization",
+    "Kind": "UNIT",
+    "TypeName": "Mutation"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/CreateOrganizationResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiUpdateOrganizationResolver87811E44": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "updateOrganization",
+    "Kind": "UNIT",
+    "TypeName": "Mutation"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/UpdateOrganizationResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiSuspendOrganizationResolver0BB63610": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "suspendOrganization",
+    "Kind": "UNIT",
+    "TypeName": "Mutation"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/SuspendOrganizationResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiCreateUserResolver79F8213A": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "createUser",
+    "Kind": "UNIT",
+    "TypeName": "Mutation"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/CreateUserResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiUpdateUserResolverEA12C102": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "updateUser",
+    "Kind": "UNIT",
+    "TypeName": "Mutation"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/UpdateUserResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiSuspendUserResolverEE55E2E1": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "suspendUser",
+    "Kind": "UNIT",
+    "TypeName": "Mutation"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/SuspendUserResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiCreateCapitalCallResolver41C61C50": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "createCapitalCall",
+    "Kind": "UNIT",
+    "TypeName": "Mutation"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/CreateCapitalCallResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiUpdateCapitalCallResolverE88E82B8": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "updateCapitalCall",
+    "Kind": "UNIT",
+    "TypeName": "Mutation"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/UpdateCapitalCallResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiPublishCapitalCallResolver3DDFD74F": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "publishCapitalCall",
+    "Kind": "UNIT",
+    "TypeName": "Mutation"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/PublishCapitalCallResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiCancelCapitalCallResolver05A573D1": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "cancelCapitalCall",
+    "Kind": "UNIT",
+    "TypeName": "Mutation"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/CancelCapitalCallResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiCreateInvestmentResolverD84B7F38": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "createInvestment",
+    "Kind": "UNIT",
+    "TypeName": "Mutation"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/CreateInvestmentResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiUpdateInvestmentResolver855FB207": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "updateInvestment",
+    "Kind": "UNIT",
+    "TypeName": "Mutation"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/UpdateInvestmentResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiSubmitKycResolver196CDE9A": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "submitKyc",
+    "Kind": "UNIT",
+    "TypeName": "Mutation"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/SubmitKycResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiApproveInvestmentResolverDAFC4777": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "approveInvestment",
+    "Kind": "UNIT",
+    "TypeName": "Mutation"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/ApproveInvestmentResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiCompleteInvestmentResolver8E748E41": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "completeInvestment",
+    "Kind": "UNIT",
+    "TypeName": "Mutation"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/CompleteInvestmentResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiCreateMobileLoanResolver6131640D": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "createMobileLoan",
+    "Kind": "UNIT",
+    "TypeName": "Mutation"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/CreateMobileLoanResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiApproveMobileLoanResolverBECE9A2C": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "approveMobileLoan",
+    "Kind": "UNIT",
+    "TypeName": "Mutation"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/ApproveMobileLoanResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiDisburseMobileLoanResolver7E109228": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "disburseMobileLoan",
+    "Kind": "UNIT",
+    "TypeName": "Mutation"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/DisburseMobileLoanResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiRecordLoanPaymentResolver521AE421": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "recordLoanPayment",
+    "Kind": "UNIT",
+    "TypeName": "Mutation"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/RecordLoanPaymentResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiMarkNotificationReadResolver6637174E": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "markNotificationRead",
+    "Kind": "UNIT",
+    "TypeName": "Mutation"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/MarkNotificationReadResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiMarkAllNotificationsReadResolver75FB9541": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "LambdaDataSource",
+    "FieldName": "markAllNotificationsRead",
+    "Kind": "UNIT",
+    "TypeName": "Mutation"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiLambdaDataSource80267E49",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/MarkAllNotificationsReadResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiNoneDataSourceA4832E0E": {
+   "Type": "AWS::AppSync::DataSource",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "Name": "NoneDataSource",
+    "Type": "NONE"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/NoneDataSource/Resource"
+   }
+  },
+  "ForwardsFlowApiOnCapitalCallCreatedResolver5E95FEE8": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "NoneDataSource",
+    "FieldName": "onCapitalCallCreated",
+    "Kind": "UNIT",
+    "RequestMappingTemplate": "{\n        \"version\": \"2017-02-28\",\n        \"payload\": $util.toJson($context.arguments)\n      }",
+    "ResponseMappingTemplate": "$util.toJson($context.result)",
+    "TypeName": "Subscription"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiNoneDataSourceA4832E0E",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/OnCapitalCallCreatedResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiOnCapitalCallUpdatedResolver347C2075": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "NoneDataSource",
+    "FieldName": "onCapitalCallUpdated",
+    "Kind": "UNIT",
+    "RequestMappingTemplate": "{\n        \"version\": \"2017-02-28\",\n        \"payload\": $util.toJson($context.arguments)\n      }",
+    "ResponseMappingTemplate": "$util.toJson($context.result)",
+    "TypeName": "Subscription"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiNoneDataSourceA4832E0E",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/OnCapitalCallUpdatedResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiOnInvestmentCreatedResolverFB9A5B44": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "NoneDataSource",
+    "FieldName": "onInvestmentCreated",
+    "Kind": "UNIT",
+    "RequestMappingTemplate": "{\n        \"version\": \"2017-02-28\",\n        \"payload\": $util.toJson($context.arguments)\n      }",
+    "ResponseMappingTemplate": "$util.toJson($context.result)",
+    "TypeName": "Subscription"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiNoneDataSourceA4832E0E",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/OnInvestmentCreatedResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiOnInvestmentUpdatedResolver33DFB237": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "NoneDataSource",
+    "FieldName": "onInvestmentUpdated",
+    "Kind": "UNIT",
+    "RequestMappingTemplate": "{\n        \"version\": \"2017-02-28\",\n        \"payload\": $util.toJson($context.arguments)\n      }",
+    "ResponseMappingTemplate": "$util.toJson($context.result)",
+    "TypeName": "Subscription"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiNoneDataSourceA4832E0E",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/OnInvestmentUpdatedResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiOnNotificationCreatedResolverE70E0993": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "NoneDataSource",
+    "FieldName": "onNotificationCreated",
+    "Kind": "UNIT",
+    "RequestMappingTemplate": "{\n        \"version\": \"2017-02-28\",\n        \"payload\": $util.toJson($context.arguments)\n      }",
+    "ResponseMappingTemplate": "$util.toJson($context.result)",
+    "TypeName": "Subscription"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiNoneDataSourceA4832E0E",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/OnNotificationCreatedResolver/Resource"
+   }
+  },
+  "ForwardsFlowApiOnMobileLoanUpdatedResolver132ECA50": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "ForwardsFlowApi1E228389",
+      "ApiId"
+     ]
+    },
+    "DataSourceName": "NoneDataSource",
+    "FieldName": "onMobileLoanUpdated",
+    "Kind": "UNIT",
+    "RequestMappingTemplate": "{\n        \"version\": \"2017-02-28\",\n        \"payload\": $util.toJson($context.arguments)\n      }",
+    "ResponseMappingTemplate": "$util.toJson($context.result)",
+    "TypeName": "Subscription"
+   },
+   "DependsOn": [
+    "ForwardsFlowApiNoneDataSourceA4832E0E",
+    "ForwardsFlowApiSchemaBCD6DAB4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ForwardsFlowApi/OnMobileLoanUpdatedResolver/Resource"
+   }
+  },
+  "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "Environment",
+      "Value": "development"
+     },
+     {
+      "Key": "Project",
+      "Value": "ForwardsFlow"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource"
+   }
+  },
+  "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "logs:DeleteRetentionPolicy",
+        "logs:PutRetentionPolicy"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+    "Roles": [
+     {
+      "Ref": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Handler": "index.handler",
+    "Runtime": "nodejs22.x",
+    "Timeout": 900,
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-503561437485-eu-west-1",
+     "S3Key": "2819175352ad1ce0dae768e83fc328fb70fb5f10b4a8ff0ccbcb791f02b0716d.zip"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+      "Arn"
+     ]
+    },
+    "Tags": [
+     {
+      "Key": "Environment",
+      "Value": "development"
+     },
+     {
+      "Key": "Project",
+      "Value": "ForwardsFlow"
+     }
+    ]
+   },
+   "DependsOn": [
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource",
+    "aws:asset:path": "asset.2819175352ad1ce0dae768e83fc328fb70fb5f10b4a8ff0ccbcb791f02b0716d",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "ResolverLambdaServiceRoleDF11267D": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "Environment",
+      "Value": "development"
+     },
+     {
+      "Key": "Project",
+      "Value": "ForwardsFlow"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ResolverLambda/ServiceRole/Resource"
+   }
+  },
+  "ResolverLambdaServiceRoleDefaultPolicyA9E6A3D6": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::ImportValue": "ForwardsFlowDatabaseStack:ExportsOutputFnGetAttAuditLogsTable7D096F6FArnA930D5BA"
+        },
+        {
+         "Fn::ImportValue": "ForwardsFlowDatabaseStack:ExportsOutputFnGetAttCapitalCallsTable208B96A9Arn413E4F7D"
+        },
+        {
+         "Fn::ImportValue": "ForwardsFlowDatabaseStack:ExportsOutputFnGetAttInvestmentsTable66692819Arn5FB7CD25"
+        },
+        {
+         "Fn::ImportValue": "ForwardsFlowDatabaseStack:ExportsOutputFnGetAttMetricsTable2972A477ArnE69DC4C0"
+        },
+        {
+         "Fn::ImportValue": "ForwardsFlowDatabaseStack:ExportsOutputFnGetAttMobileLoansTable246C206CArnDAF1554B"
+        },
+        {
+         "Fn::ImportValue": "ForwardsFlowDatabaseStack:ExportsOutputFnGetAttNotificationsTable76DCFC6CArn012EC0C4"
+        },
+        {
+         "Fn::ImportValue": "ForwardsFlowDatabaseStack:ExportsOutputFnGetAttOrganizationsTable01047E98ArnEB6BFC2E"
+        },
+        {
+         "Fn::ImportValue": "ForwardsFlowDatabaseStack:ExportsOutputFnGetAttPaymentsTable48A42630Arn6636311E"
+        },
+        {
+         "Fn::ImportValue": "ForwardsFlowDatabaseStack:ExportsOutputFnGetAttUsersTable9725E9C8Arn5684EF99"
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::ImportValue": "ForwardsFlowDatabaseStack:ExportsOutputFnGetAttAuditLogsTable7D096F6FArnA930D5BA"
+           },
+           "/index/*"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::ImportValue": "ForwardsFlowDatabaseStack:ExportsOutputFnGetAttCapitalCallsTable208B96A9Arn413E4F7D"
+           },
+           "/index/*"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::ImportValue": "ForwardsFlowDatabaseStack:ExportsOutputFnGetAttInvestmentsTable66692819Arn5FB7CD25"
+           },
+           "/index/*"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::ImportValue": "ForwardsFlowDatabaseStack:ExportsOutputFnGetAttMetricsTable2972A477ArnE69DC4C0"
+           },
+           "/index/*"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::ImportValue": "ForwardsFlowDatabaseStack:ExportsOutputFnGetAttMobileLoansTable246C206CArnDAF1554B"
+           },
+           "/index/*"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::ImportValue": "ForwardsFlowDatabaseStack:ExportsOutputFnGetAttNotificationsTable76DCFC6CArn012EC0C4"
+           },
+           "/index/*"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::ImportValue": "ForwardsFlowDatabaseStack:ExportsOutputFnGetAttOrganizationsTable01047E98ArnEB6BFC2E"
+           },
+           "/index/*"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::ImportValue": "ForwardsFlowDatabaseStack:ExportsOutputFnGetAttPaymentsTable48A42630Arn6636311E"
+           },
+           "/index/*"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::ImportValue": "ForwardsFlowDatabaseStack:ExportsOutputFnGetAttUsersTable9725E9C8Arn5684EF99"
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "ResolverLambdaServiceRoleDefaultPolicyA9E6A3D6",
+    "Roles": [
+     {
+      "Ref": "ResolverLambdaServiceRoleDF11267D"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ResolverLambda/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "ResolverLambdaEC7302D3": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-503561437485-eu-west-1",
+     "S3Key": "92186f097357daa30699ed4c4599ad0e3bb2572996c52e363ce765c22a0c89fa.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "ORGANIZATIONS_TABLE": {
+       "Fn::ImportValue": "ForwardsFlowDatabaseStack:ExportsOutputRefOrganizationsTable01047E982050E92F"
+      },
+      "USERS_TABLE": {
+       "Fn::ImportValue": "ForwardsFlowDatabaseStack:ExportsOutputRefUsersTable9725E9C857961836"
+      },
+      "CAPITAL_CALLS_TABLE": {
+       "Fn::ImportValue": "ForwardsFlowDatabaseStack:ExportsOutputRefCapitalCallsTable208B96A9B892974B"
+      },
+      "INVESTMENTS_TABLE": {
+       "Fn::ImportValue": "ForwardsFlowDatabaseStack:ExportsOutputRefInvestmentsTable66692819D7322F7D"
+      },
+      "MOBILE_LOANS_TABLE": {
+       "Fn::ImportValue": "ForwardsFlowDatabaseStack:ExportsOutputRefMobileLoansTable246C206C453DCEEA"
+      },
+      "PAYMENTS_TABLE": {
+       "Fn::ImportValue": "ForwardsFlowDatabaseStack:ExportsOutputRefPaymentsTable48A42630E9179FB6"
+      },
+      "METRICS_TABLE": {
+       "Fn::ImportValue": "ForwardsFlowDatabaseStack:ExportsOutputRefMetricsTable2972A4778D6F7F67"
+      },
+      "AUDIT_LOGS_TABLE": {
+       "Fn::ImportValue": "ForwardsFlowDatabaseStack:ExportsOutputRefAuditLogsTable7D096F6FD00CC541"
+      },
+      "NOTIFICATIONS_TABLE": {
+       "Fn::ImportValue": "ForwardsFlowDatabaseStack:ExportsOutputRefNotificationsTable76DCFC6C32DE73EE"
+      }
+     }
+    },
+    "FunctionName": "ForwardsFlow-GraphQL-Resolver",
+    "Handler": "index.handler",
+    "MemorySize": 512,
+    "Role": {
+     "Fn::GetAtt": [
+      "ResolverLambdaServiceRoleDF11267D",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x",
+    "Tags": [
+     {
+      "Key": "Environment",
+      "Value": "development"
+     },
+     {
+      "Key": "Project",
+      "Value": "ForwardsFlow"
+     }
+    ],
+    "Timeout": 30
+   },
+   "DependsOn": [
+    "ResolverLambdaServiceRoleDefaultPolicyA9E6A3D6",
+    "ResolverLambdaServiceRoleDF11267D"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/ResolverLambda/Resource",
+    "aws:asset:path": "asset.92186f097357daa30699ed4c4599ad0e3bb2572996c52e363ce765c22a0c89fa",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/1WOwW7CMBBEv4W7s1WS/gBQtYdGLU3UM1rMEkwcb5p1QCjKv1c2IqWnebMztiaDLM8gXeBFEr1vEmt2MFYedaPwIttRc+2MZxi/hfoNs1Xrg5v5DmtryPnH6HaZFHadXJ2G8a3H7vhjl50Jtei+iv+u0kdqMRyWnXmnqyqw3e3xBT1WPPSaQvTgShK2Z+rDeeYPdvTXmZTBFsaSbXwcdcPW6GuwN5qU5Vqg4LokT84bdkryLYqQF1gGUZLDatAN+RUKKRt3wfg6OB3r64O78zTFXfe5M8d/Ko+1cXUIPgffDX5SjvcEJ3k6Z8+QppAuTmJM0g/Om5agvOkvEZZ40aYBAAA="
+   },
+   "Metadata": {
+    "aws:cdk:path": "ForwardsFlowApiStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "GraphQLApiUrl": {
+   "Value": {
+    "Fn::GetAtt": [
+     "ForwardsFlowApi1E228389",
+     "GraphQLUrl"
+    ]
+   },
+   "Export": {
+    "Name": "ForwardsFlow-GraphQLUrl"
+   }
+  },
+  "GraphQLApiId": {
+   "Value": {
+    "Fn::GetAtt": [
+     "ForwardsFlowApi1E228389",
+     "ApiId"
+    ]
+   },
+   "Export": {
+    "Name": "ForwardsFlow-GraphQLApiId"
+   }
+  },
+  "UserPoolId": {
+   "Value": {
+    "Ref": "ForwardsFlowUserPoolDE2BB0ED"
+   },
+   "Export": {
+    "Name": "ForwardsFlow-UserPoolId"
+   }
+  },
+  "UserPoolClientId": {
+   "Value": {
+    "Ref": "ForwardsFlowUserPoolForwardsFlowWebClient8B6306A6"
+   },
+   "Export": {
+    "Name": "ForwardsFlow-UserPoolClientId"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

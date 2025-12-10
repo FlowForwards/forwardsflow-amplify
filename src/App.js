@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate, Link } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { DemoProvider } from './context/DemoContext';
+import { ROLES, getDashboardPath } from './config/roleConfig';
 
 // Layouts
 import { SuperAdminLayout, BankAdminLayout, InvestorAdminLayout, BankUserLayout, InvestorUserLayout } from './components/layouts/DashboardLayouts';
@@ -18,10 +19,22 @@ import ConfirmSubscriptionPage from './components/pages/ConfirmSubscriptionPage'
 import PrivacyPolicyPage from './components/pages/PrivacyPolicyPage';
 import DisclaimerPage from './components/pages/DisclaimerPage';
 
-// Dashboard Pages
-import SuperAdminDashboard from './components/super-admin/SuperAdminDashboard';
-import BankAdminDashboard from './components/bank/BankAdminDashboard';
-import InvestorUserDashboard from './components/investor/InvestorUserDashboard';
+// New Role-Specific Dashboard Pages
+import {
+  ForwardsFlowAdminDashboard,
+  BankAdminDashboard,
+  BankLenderDashboard,
+  BankCallerDashboard,
+  BankComplianceDashboard,
+  BankRiskDashboard,
+  InvestorAdminDashboard,
+  InvestorAnalystDashboard,
+} from './components/dashboards';
+
+// Legacy Dashboard Pages (for backward compatibility)
+import LegacySuperAdminDashboard from './components/super-admin/SuperAdminDashboard';
+import LegacyBankAdminDashboard from './components/bank/BankAdminDashboard';
+import LegacyInvestorUserDashboard from './components/investor/InvestorUserDashboard';
 import InvestmentOpportunitiesPage from './components/investor/InvestmentOpportunitiesPage';
 
 // Demo MVP Components
@@ -96,19 +109,25 @@ const UnauthorizedPage = () => (
   </div>
 );
 
-// Smart Redirect
+// Smart Redirect - Updated for new role system
 const SmartRedirect = () => {
   const { user, isAuthenticated, loading } = useAuth();
-  
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin w-8 h-8 border-2 border-primary-600 border-t-transparent rounded-full"></div></div>;
-  if (!isAuthenticated) return <Navigate to="/login" replace />;
-  
-  switch (user.role) {
-    case 'super_admin': return <Navigate to="/admin" replace />;
-    case 'tenant_admin': return user.tenantType === 'investor' ? <Navigate to="/investor/admin" replace /> : <Navigate to="/bank/admin" replace />;
-    case 'tenant_user': return user.tenantType === 'investor' ? <Navigate to="/investor" replace /> : <Navigate to="/bank" replace />;
-    default: return <Navigate to="/login" replace />;
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin w-8 h-8 border-2 border-primary-600 border-t-transparent rounded-full"></div>
+      </div>
+    );
   }
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+
+  // New role-based routing
+  const dashboardPath = getDashboardPath(user.role);
+  return <Navigate to={dashboardPath} replace />;
 };
 
 function App() {
@@ -124,90 +143,157 @@ function App() {
             <Route path="/register/investor" element={<InvestorRegistrationPage />} />
             <Route path="/register/bank" element={<BankRegistrationPage />} />
             <Route path="/unauthorized" element={<UnauthorizedPage />} />
-          <Route path="/products" element={<ProductsPage />} />
-          <Route path="/confirm-subscription" element={<ConfirmSubscriptionPage />} />
-          <Route path="/privacy" element={<PrivacyPolicyPage />} />
-          <Route path="/disclaimer" element={<DisclaimerPage />} />
-          <Route path="/dashboard" element={<SmartRedirect />} />
-          
-          {/* Super Admin Routes */}
-          <Route path="/admin" element={<SuperAdminLayout />}>
-            <Route index element={<SuperAdminDashboard />} />
-            <Route path="analytics" element={<PlaceholderPage title="Platform Analytics" />} />
-            <Route path="investors" element={<PlaceholderPage title="Investor Management" />} />
-            <Route path="banks" element={<PlaceholderPage title="Bank Management" />} />
-            <Route path="users" element={<PlaceholderPage title="User Management" />} />
-            <Route path="instruments" element={<PlaceholderPage title="All Instruments" />} />
-            <Route path="transactions" element={<PlaceholderPage title="Transactions" />} />
-            <Route path="pnl" element={<PlaceholderPage title="Platform P&L" />} />
-            <Route path="compliance" element={<PlaceholderPage title="Compliance" />} />
-            <Route path="risk" element={<PlaceholderPage title="Risk Management" />} />
-            <Route path="notifications" element={<PlaceholderPage title="Notifications" />} />
-            <Route path="settings" element={<PlaceholderPage title="Settings" />} />
-          </Route>
-          
-          {/* Bank Admin Routes */}
-          <Route path="/bank/admin" element={<BankAdminLayout />}>
-            <Route index element={<BankAdminDashboard />} />
-            <Route path="users" element={<PlaceholderPage title="User Management" />} />
-            <Route path="instruments" element={<PlaceholderPage title="Deposit Instruments" />} />
-            <Route path="settlement" element={<PlaceholderPage title="Settlement" />} />
-            <Route path="compliance" element={<PlaceholderPage title="Compliance" />} />
-            <Route path="lending" element={<PlaceholderPage title="Mobile Lending" />} />
-            <Route path="analytics" element={<PlaceholderPage title="Analytics" />} />
-            <Route path="reports" element={<PlaceholderPage title="Reports" />} />
-            <Route path="pnl" element={<PlaceholderPage title="P&L" />} />
-            <Route path="notifications" element={<PlaceholderPage title="Notifications" />} />
-            <Route path="settings" element={<PlaceholderPage title="Settings" />} />
-          </Route>
-          
-          {/* Bank User Routes */}
-          <Route path="/bank" element={<BankUserLayout />}>
-            <Route index element={<BankAdminDashboard />} />
-            <Route path="calls" element={<BankCapitalCallsPage />} />
-            <Route path="calls/create" element={<CreateCapitalCallPage />} />
-            <Route path="instruments" element={<PlaceholderPage title="Instruments" />} />
-            <Route path="lending" element={<PlaceholderPage title="Mobile Lending" />} />
-            <Route path="settlements" element={<PlaceholderPage title="Settlements" />} />
-            <Route path="analytics" element={<PlaceholderPage title="Analytics" />} />
-            <Route path="reports" element={<PlaceholderPage title="Reports" />} />
-            <Route path="notifications" element={<PlaceholderPage title="Notifications" />} />
-            <Route path="settings" element={<PlaceholderPage title="Settings" />} />
-          </Route>
-          
-          {/* Investor Admin Routes */}
-          <Route path="/investor/admin" element={<InvestorAdminLayout />}>
-            <Route index element={<InvestorUserDashboard />} />
-            <Route path="analytics" element={<PlaceholderPage title="Portfolio Analytics" />} />
-            <Route path="users" element={<PlaceholderPage title="User Management" />} />
-            <Route path="roles" element={<PlaceholderPage title="Roles & Permissions" />} />
-            <Route path="investments" element={<PlaceholderPage title="Active Investments" />} />
-            <Route path="opportunities" element={<InvestmentOpportunitiesPage />} />
-            <Route path="reports" element={<PlaceholderPage title="Reports" />} />
-            <Route path="performance" element={<PlaceholderPage title="Performance" />} />
-            <Route path="notifications" element={<PlaceholderPage title="Notifications" />} />
-            <Route path="settings" element={<PlaceholderPage title="Settings" />} />
-          </Route>
-          
-          {/* Investor User Routes */}
-          <Route path="/investor" element={<InvestorUserLayout />}>
-            <Route index element={<InvestorUserDashboard />} />
-            <Route path="opportunities" element={<InvestorOpportunitiesPage />} />
-            <Route path="investments" element={<InvestorInvestmentsPage />} />
-            <Route path="calls" element={<InvestorOpportunitiesPage />} />
-            <Route path="puts" element={<PlaceholderPage title="Create Investment Request" />} />
-            <Route path="portfolio" element={<InvestorInvestmentsPage />} />
-            <Route path="analytics" element={<PlaceholderPage title="Analytics" />} />
-            <Route path="reports" element={<PlaceholderPage title="Reports" />} />
-            <Route path="impact" element={<PlaceholderPage title="Impact Reports" />} />
-            <Route path="messages" element={<PlaceholderPage title="Messages" />} />
-            <Route path="settings" element={<PlaceholderPage title="Settings" />} />
-          </Route>
-          
-          {/* Catch all */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </BrowserRouter>
+            <Route path="/products" element={<ProductsPage />} />
+            <Route path="/confirm-subscription" element={<ConfirmSubscriptionPage />} />
+            <Route path="/privacy" element={<PrivacyPolicyPage />} />
+            <Route path="/disclaimer" element={<DisclaimerPage />} />
+            <Route path="/dashboard" element={<SmartRedirect />} />
+
+            {/* ================================================== */}
+            {/* FORWARDSFLOW ADMIN (Platform Super Admin) Routes   */}
+            {/* Role: forwardsflow_admin                           */}
+            {/* ================================================== */}
+            <Route path="/admin" element={<SuperAdminLayout />}>
+              <Route index element={<ForwardsFlowAdminDashboard />} />
+              <Route path="analytics" element={<PlaceholderPage title="Platform Analytics" />} />
+              <Route path="investors" element={<PlaceholderPage title="Investor Management" />} />
+              <Route path="banks" element={<PlaceholderPage title="Bank Management" />} />
+              <Route path="users" element={<PlaceholderPage title="User Management" />} />
+              <Route path="instruments" element={<PlaceholderPage title="All Instruments" />} />
+              <Route path="transactions" element={<PlaceholderPage title="Transactions" />} />
+              <Route path="pnl" element={<PlaceholderPage title="Platform P&L" />} />
+              <Route path="compliance" element={<PlaceholderPage title="Compliance" />} />
+              <Route path="risk" element={<PlaceholderPage title="Risk Management" />} />
+              <Route path="notifications" element={<PlaceholderPage title="Notifications" />} />
+              <Route path="settings" element={<PlaceholderPage title="Settings" />} />
+            </Route>
+
+            {/* ================================================== */}
+            {/* BANK ADMIN Routes                                  */}
+            {/* Role: bank_admin                                   */}
+            {/* ================================================== */}
+            <Route path="/bank/admin" element={<BankAdminLayout />}>
+              <Route index element={<BankAdminDashboard />} />
+              <Route path="users" element={<PlaceholderPage title="Staff Management" />} />
+              <Route path="instruments" element={<PlaceholderPage title="Deposit Instruments" />} />
+              <Route path="settlement" element={<PlaceholderPage title="Settlement" />} />
+              <Route path="compliance" element={<BankComplianceDashboard />} />
+              <Route path="lending" element={<BankLenderDashboard />} />
+              <Route path="analytics" element={<PlaceholderPage title="Analytics" />} />
+              <Route path="reports" element={<PlaceholderPage title="Reports" />} />
+              <Route path="pnl" element={<PlaceholderPage title="P&L" />} />
+              <Route path="notifications" element={<PlaceholderPage title="Notifications" />} />
+              <Route path="settings" element={<PlaceholderPage title="Settings" />} />
+            </Route>
+
+            {/* ================================================== */}
+            {/* BANK LENDER Routes                                 */}
+            {/* Role: bank_lender                                  */}
+            {/* ================================================== */}
+            <Route path="/bank/lending" element={<BankUserLayout />}>
+              <Route index element={<BankLenderDashboard />} />
+              <Route path="applications" element={<PlaceholderPage title="Loan Applications" />} />
+              <Route path="portfolio" element={<PlaceholderPage title="Loan Portfolio" />} />
+              <Route path="disbursements" element={<PlaceholderPage title="Disbursements" />} />
+              <Route path="collections" element={<PlaceholderPage title="Collections" />} />
+              <Route path="whatsapp" element={<PlaceholderPage title="WhatsApp Bot" />} />
+              <Route path="reports" element={<PlaceholderPage title="Lending Reports" />} />
+            </Route>
+
+            {/* ================================================== */}
+            {/* BANK CALLER (Capital Markets) Routes               */}
+            {/* Role: bank_caller                                  */}
+            {/* ================================================== */}
+            <Route path="/bank/capital" element={<BankUserLayout />}>
+              <Route index element={<BankCallerDashboard />} />
+              <Route path="calls" element={<BankCapitalCallsPage />} />
+              <Route path="calls/create" element={<CreateCapitalCallPage />} />
+              <Route path="investors" element={<PlaceholderPage title="Investor Relations" />} />
+              <Route path="settlements" element={<PlaceholderPage title="Settlement Instructions" />} />
+              <Route path="reports" element={<PlaceholderPage title="Capital Reports" />} />
+            </Route>
+
+            {/* ================================================== */}
+            {/* BANK COMPLIANCE Routes                             */}
+            {/* Role: bank_compliance                              */}
+            {/* ================================================== */}
+            <Route path="/bank/compliance" element={<BankUserLayout />}>
+              <Route index element={<BankComplianceDashboard />} />
+              <Route path="aml" element={<PlaceholderPage title="AML Monitoring" />} />
+              <Route path="kyc" element={<PlaceholderPage title="KYC Management" />} />
+              <Route path="alerts" element={<PlaceholderPage title="Compliance Alerts" />} />
+              <Route path="reports" element={<PlaceholderPage title="Compliance Reports" />} />
+              <Route path="blacklist" element={<PlaceholderPage title="Blacklist Management" />} />
+            </Route>
+
+            {/* ================================================== */}
+            {/* BANK RISK Routes                                   */}
+            {/* Role: bank_risk                                    */}
+            {/* ================================================== */}
+            <Route path="/bank/risk" element={<BankUserLayout />}>
+              <Route index element={<BankRiskDashboard />} />
+              <Route path="portfolio" element={<PlaceholderPage title="Portfolio Risk" />} />
+              <Route path="credit-scores" element={<PlaceholderPage title="Credit Scores" />} />
+              <Route path="vintage" element={<PlaceholderPage title="Vintage Analysis" />} />
+              <Route path="stress-test" element={<PlaceholderPage title="Stress Testing" />} />
+              <Route path="reports" element={<PlaceholderPage title="Risk Reports" />} />
+            </Route>
+
+            {/* ================================================== */}
+            {/* BANK GENERIC Routes (backward compatibility)       */}
+            {/* ================================================== */}
+            <Route path="/bank" element={<BankUserLayout />}>
+              <Route index element={<BankAdminDashboard />} />
+              <Route path="calls" element={<BankCapitalCallsPage />} />
+              <Route path="calls/create" element={<CreateCapitalCallPage />} />
+              <Route path="instruments" element={<PlaceholderPage title="Instruments" />} />
+              <Route path="lending" element={<BankLenderDashboard />} />
+              <Route path="settlements" element={<PlaceholderPage title="Settlements" />} />
+              <Route path="analytics" element={<PlaceholderPage title="Analytics" />} />
+              <Route path="reports" element={<PlaceholderPage title="Reports" />} />
+              <Route path="notifications" element={<PlaceholderPage title="Notifications" />} />
+              <Route path="settings" element={<PlaceholderPage title="Settings" />} />
+            </Route>
+
+            {/* ================================================== */}
+            {/* INVESTOR ADMIN Routes                              */}
+            {/* Role: investor_admin                               */}
+            {/* ================================================== */}
+            <Route path="/investor/admin" element={<InvestorAdminLayout />}>
+              <Route index element={<InvestorAdminDashboard />} />
+              <Route path="analytics" element={<PlaceholderPage title="Portfolio Analytics" />} />
+              <Route path="users" element={<PlaceholderPage title="Team Management" />} />
+              <Route path="roles" element={<PlaceholderPage title="Roles & Permissions" />} />
+              <Route path="investments" element={<InvestorInvestmentsPage />} />
+              <Route path="opportunities" element={<InvestmentOpportunitiesPage />} />
+              <Route path="reports" element={<PlaceholderPage title="Reports" />} />
+              <Route path="performance" element={<PlaceholderPage title="Performance" />} />
+              <Route path="notifications" element={<PlaceholderPage title="Notifications" />} />
+              <Route path="settings" element={<PlaceholderPage title="Settings" />} />
+            </Route>
+
+            {/* ================================================== */}
+            {/* INVESTOR ANALYST Routes                            */}
+            {/* Role: investor_analyst                             */}
+            {/* ================================================== */}
+            <Route path="/investor" element={<InvestorUserLayout />}>
+              <Route index element={<InvestorAnalystDashboard />} />
+              <Route path="opportunities" element={<InvestorOpportunitiesPage />} />
+              <Route path="investments" element={<InvestorInvestmentsPage />} />
+              <Route path="calls" element={<InvestorOpportunitiesPage />} />
+              <Route path="puts" element={<PlaceholderPage title="Create Investment Request" />} />
+              <Route path="portfolio" element={<InvestorInvestmentsPage />} />
+              <Route path="analytics" element={<PlaceholderPage title="Analytics" />} />
+              <Route path="reports" element={<PlaceholderPage title="Reports" />} />
+              <Route path="impact" element={<PlaceholderPage title="Impact Reports" />} />
+              <Route path="messages" element={<PlaceholderPage title="Messages" />} />
+              <Route path="settings" element={<PlaceholderPage title="Settings" />} />
+            </Route>
+
+            {/* Catch all */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </BrowserRouter>
       </DemoProvider>
     </AuthProvider>
   );

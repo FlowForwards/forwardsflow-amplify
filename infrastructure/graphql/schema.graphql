@@ -1,0 +1,590 @@
+# ForwardsFlow GraphQL Schema
+# Impact Investment Platform - Real-time API
+
+enum OrganizationType {
+  BANK
+  INVESTOR
+}
+
+enum OrganizationStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+  INACTIVE
+}
+
+enum UserRole {
+  FORWARDSFLOW_ADMIN
+  BANK_ADMIN
+  BANK_LENDER
+  BANK_CALLER
+  BANK_COMPLIANCE
+  BANK_RISK
+  INVESTOR_ADMIN
+  INVESTOR_ANALYST
+}
+
+enum UserStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+  INACTIVE
+}
+
+enum CapitalCallStatus {
+  DRAFT
+  PUBLISHED
+  ACCEPTED
+  KYC_REVIEW
+  PROCESSING
+  COMPLETED
+  EXPIRED
+  CANCELLED
+}
+
+enum InvestmentStatus {
+  PENDING
+  KYC_SUBMITTED
+  KYC_APPROVED
+  FUNDS_PENDING
+  ACTIVE
+  MATURED
+  SETTLED
+  CANCELLED
+}
+
+enum MobileLoanStatus {
+  PENDING
+  APPROVED
+  DISBURSED
+  CURRENT
+  OVERDUE
+  DEFAULTED
+  SETTLED
+  WRITTEN_OFF
+}
+
+enum PaymentType {
+  MPESA_DISBURSEMENT
+  MPESA_REPAYMENT
+  SWIFT_DEPOSIT
+  SWIFT_SETTLEMENT
+  INTERNAL_TRANSFER
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  REVERSED
+}
+
+enum NotificationType {
+  INFO
+  SUCCESS
+  WARNING
+  ERROR
+  OPPORTUNITY
+  SYSTEM
+}
+
+enum AuditAction {
+  CREATE
+  UPDATE
+  DELETE
+  LOGIN
+  LOGOUT
+  APPROVE
+  REJECT
+  SUSPEND
+  ACTIVATE
+}
+
+type Organization {
+  orgId: ID!
+  orgType: OrganizationType!
+  name: String!
+  email: String!
+  country: String!
+  status: OrganizationStatus!
+  institutionType: String
+  moodysRating: String
+  website: String
+  address: String
+  phone: String
+  logo: String
+  swiftCode: String
+  centralBankLicense: String
+  aum: Float
+  investmentFocus: [String]
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  createdBy: ID
+  totalCapital: Float
+  totalInvested: Float
+  activeLoans: Int
+  activeInvestments: Int
+  adminCount: Int
+  userCount: Int
+  users: [User]
+}
+
+type User {
+  userId: ID!
+  email: String!
+  name: String!
+  role: UserRole!
+  status: UserStatus!
+  orgId: ID
+  organization: Organization
+  jobRole: String
+  phone: String
+  avatar: String
+  lastLogin: AWSDateTime
+  mfaEnabled: Boolean
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  createdBy: ID
+}
+
+type CapitalCall {
+  callId: ID!
+  txnRef: String!
+  bankOrgId: ID!
+  bank: Organization
+  amount: Float!
+  currency: String!
+  targetCurrency: String!
+  maturityMonths: Int!
+  interestRate: Float!
+  fxSpread: Float
+  hedgingFee: Float
+  currentFxRate: Float
+  hedgedFxRate: Float
+  status: CapitalCallStatus!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  publishedAt: AWSDateTime
+  expiresAt: AWSDateTime
+  acceptedBy: ID
+  acceptedByOrg: Organization
+  acceptedAt: AWSDateTime
+  completedAt: AWSDateTime
+  investments: [Investment]
+  subscribed: Float
+  subscribedPct: Float
+  projectedYield: Float
+  createdBy: ID
+  intendedUse: String
+  notes: String
+}
+
+type Investment {
+  investmentId: ID!
+  txnRef: String!
+  callId: ID!
+  capitalCall: CapitalCall
+  investorOrgId: ID!
+  investor: Organization
+  amount: Float!
+  currency: String!
+  interestRate: Float!
+  maturityDate: AWSDateTime!
+  status: InvestmentStatus!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  kycDocuments: AWSJSON
+  kycSubmittedAt: AWSDateTime
+  kycApprovedAt: AWSDateTime
+  kycApprovedBy: ID
+  bankDetails: AWSJSON
+  settledAt: AWSDateTime
+  settledAmount: Float
+  expectedReturn: Float
+  accruedInterest: Float
+  daysToMaturity: Int
+  createdBy: ID
+}
+
+type MobileLoan {
+  loanId: ID!
+  loanRef: String!
+  bankOrgId: ID!
+  bank: Organization
+  borrowerPhone: String!
+  borrowerName: String
+  borrowerIdNumber: String
+  amount: Float!
+  currency: String!
+  interestRate: Float!
+  term: Int!
+  status: MobileLoanStatus!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  approvedAt: AWSDateTime
+  approvedBy: ID
+  disbursedAt: AWSDateTime
+  dueDate: AWSDateTime
+  settledAt: AWSDateTime
+  amountPaid: Float
+  amountOutstanding: Float
+  daysOverdue: Int
+  creditScore: Int
+  creditLimit: Float
+  whatsappSessionId: String
+  lastWhatsappMessage: AWSDateTime
+  payments: [Payment]
+}
+
+type Payment {
+  paymentId: ID!
+  paymentRef: String!
+  type: PaymentType!
+  status: PaymentStatus!
+  loanId: ID
+  investmentId: ID
+  orgId: ID
+  amount: Float!
+  currency: String!
+  mpesaRef: String
+  mpesaPhone: String
+  swiftRef: String
+  swiftBank: String
+  swiftAccount: String
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  completedAt: AWSDateTime
+  failureReason: String
+}
+
+type Notification {
+  notificationId: ID!
+  userId: ID!
+  orgId: ID
+  type: NotificationType!
+  title: String!
+  message: String!
+  link: String
+  read: Boolean!
+  readAt: AWSDateTime
+  createdAt: AWSDateTime!
+  expiresAt: AWSDateTime
+}
+
+type AuditLog {
+  logId: ID!
+  userId: ID!
+  orgId: ID
+  action: AuditAction!
+  entityType: String!
+  entityId: ID!
+  previousValue: AWSJSON
+  newValue: AWSJSON
+  ipAddress: String
+  userAgent: String
+  timestamp: AWSDateTime!
+}
+
+type PlatformMetrics {
+  totalCapitalDeployed: Float!
+  totalInvestors: Int!
+  totalBanks: Int!
+  totalActiveLoans: Int!
+  totalLoanVolume: Float!
+  avgPlatformYield: Float!
+  monthlyRevenue: Float!
+  monthlyGrowth: Float!
+  capitalByMonth: [MonthlyDataPoint]
+  revenueByMonth: [MonthlyDataPoint]
+  lastUpdated: AWSDateTime!
+}
+
+type BankMetrics {
+  orgId: ID!
+  totalCapital: Float!
+  activeLoans: Int!
+  loanVolume: Float!
+  monthlyYield: Float!
+  nplRate: Float!
+  avgLoanSize: Float!
+  disbursementsToday: Int!
+  collectionsToday: Int!
+  loanStatusDistribution: [StatusDistribution]
+  weeklyDisbursements: [DailyDataPoint]
+  lastUpdated: AWSDateTime!
+}
+
+type InvestorMetrics {
+  orgId: ID!
+  totalInvested: Float!
+  activeInstruments: Int!
+  avgYield: Float!
+  portfolioGrowth: Float!
+  pendingMaturity: Int!
+  portfolioByBank: [BankAllocation]
+  yieldHistory: [MonthlyDataPoint]
+  lastUpdated: AWSDateTime!
+}
+
+type MonthlyDataPoint {
+  month: String!
+  value: Float!
+}
+
+type DailyDataPoint {
+  day: String!
+  amount: Float!
+}
+
+type StatusDistribution {
+  status: String!
+  count: Int!
+  pct: Float!
+}
+
+type BankAllocation {
+  bank: String!
+  bankId: ID!
+  amount: Float!
+}
+
+input CreateOrganizationInput {
+  orgType: OrganizationType!
+  name: String!
+  email: String!
+  country: String!
+  institutionType: String
+  moodysRating: String
+  website: String
+  address: String
+  phone: String
+  swiftCode: String
+  centralBankLicense: String
+  aum: Float
+  investmentFocus: [String]
+}
+
+input UpdateOrganizationInput {
+  orgId: ID!
+  name: String
+  email: String
+  institutionType: String
+  moodysRating: String
+  website: String
+  address: String
+  phone: String
+  swiftCode: String
+  centralBankLicense: String
+  aum: Float
+  investmentFocus: [String]
+}
+
+input CreateUserInput {
+  email: String!
+  name: String!
+  role: UserRole!
+  orgId: ID
+  jobRole: String
+  phone: String
+}
+
+input UpdateUserInput {
+  userId: ID!
+  name: String
+  role: UserRole
+  jobRole: String
+  phone: String
+}
+
+input CreateCapitalCallInput {
+  bankOrgId: ID!
+  amount: Float!
+  currency: String!
+  targetCurrency: String!
+  maturityMonths: Int!
+  interestRate: Float!
+  fxSpread: Float
+  hedgingFee: Float
+  currentFxRate: Float
+  intendedUse: String
+  notes: String
+}
+
+input UpdateCapitalCallInput {
+  callId: ID!
+  amount: Float
+  maturityMonths: Int
+  interestRate: Float
+  fxSpread: Float
+  hedgingFee: Float
+  currentFxRate: Float
+  intendedUse: String
+  notes: String
+}
+
+input CreateInvestmentInput {
+  callId: ID!
+  investorOrgId: ID!
+  amount: Float!
+}
+
+input SubmitKycInput {
+  investmentId: ID!
+  kycDocuments: AWSJSON!
+  bankDetails: AWSJSON!
+}
+
+input CreateMobileLoanInput {
+  bankOrgId: ID!
+  borrowerPhone: String!
+  borrowerName: String
+  borrowerIdNumber: String
+  amount: Float!
+  currency: String!
+  interestRate: Float!
+  term: Int!
+  creditScore: Int
+}
+
+input RecordPaymentInput {
+  loanId: ID!
+  amount: Float!
+  mpesaRef: String
+  mpesaPhone: String
+}
+
+input PaginationInput {
+  limit: Int
+  nextToken: String
+}
+
+input DateRangeInput {
+  startDate: AWSDateTime!
+  endDate: AWSDateTime!
+}
+
+type OrganizationConnection {
+  items: [Organization]!
+  nextToken: String
+  totalCount: Int
+}
+
+type UserConnection {
+  items: [User]!
+  nextToken: String
+  totalCount: Int
+}
+
+type CapitalCallConnection {
+  items: [CapitalCall]!
+  nextToken: String
+  totalCount: Int
+}
+
+type InvestmentConnection {
+  items: [Investment]!
+  nextToken: String
+  totalCount: Int
+}
+
+type MobileLoanConnection {
+  items: [MobileLoan]!
+  nextToken: String
+  totalCount: Int
+}
+
+type NotificationConnection {
+  items: [Notification]!
+  nextToken: String
+  unreadCount: Int
+}
+
+type AuditLogConnection {
+  items: [AuditLog]!
+  nextToken: String
+  totalCount: Int
+}
+
+type Query {
+  getOrganization(orgId: ID!): Organization
+  listOrganizations(filter: OrganizationType, pagination: PaginationInput): OrganizationConnection!
+  listBanks(pagination: PaginationInput): OrganizationConnection!
+  listInvestors(pagination: PaginationInput): OrganizationConnection!
+  getUser(userId: ID!): User
+  getUserByEmail(email: String!): User
+  listUsers(pagination: PaginationInput): UserConnection!
+  listUsersByOrganization(orgId: ID!, pagination: PaginationInput): UserConnection!
+  getCapitalCall(callId: ID!): CapitalCall
+  getCapitalCallByTxnRef(txnRef: String!): CapitalCall
+  listCapitalCalls(pagination: PaginationInput): CapitalCallConnection!
+  listCapitalCallsByBank(bankOrgId: ID!, pagination: PaginationInput): CapitalCallConnection!
+  listPublishedCalls(pagination: PaginationInput): CapitalCallConnection!
+  getInvestment(investmentId: ID!): Investment
+  listInvestments(pagination: PaginationInput): InvestmentConnection!
+  listInvestmentsByInvestor(investorOrgId: ID!, pagination: PaginationInput): InvestmentConnection!
+  listInvestmentsByCapitalCall(callId: ID!, pagination: PaginationInput): InvestmentConnection!
+  getMobileLoan(loanId: ID!): MobileLoan
+  listMobileLoansByBank(bankOrgId: ID!, status: MobileLoanStatus, pagination: PaginationInput): MobileLoanConnection!
+  listMobileLoansByBorrower(borrowerPhone: String!, pagination: PaginationInput): MobileLoanConnection!
+  getPlatformMetrics: PlatformMetrics!
+  getBankMetrics(orgId: ID!): BankMetrics!
+  getInvestorMetrics(orgId: ID!): InvestorMetrics!
+  listNotifications(userId: ID!, unreadOnly: Boolean, pagination: PaginationInput): NotificationConnection!
+  listAuditLogs(orgId: ID, userId: ID, action: AuditAction, dateRange: DateRangeInput, pagination: PaginationInput): AuditLogConnection!
+}
+
+type Mutation {
+  createOrganization(input: CreateOrganizationInput!): Organization!
+  updateOrganization(input: UpdateOrganizationInput!): Organization!
+  suspendOrganization(orgId: ID!, reason: String): Organization!
+  activateOrganization(orgId: ID!): Organization!
+  createUser(input: CreateUserInput!): User!
+  updateUser(input: UpdateUserInput!): User!
+  suspendUser(userId: ID!, reason: String): User!
+  activateUser(userId: ID!): User!
+  createCapitalCall(input: CreateCapitalCallInput!): CapitalCall!
+  updateCapitalCall(input: UpdateCapitalCallInput!): CapitalCall!
+  publishCapitalCall(callId: ID!): CapitalCall!
+  cancelCapitalCall(callId: ID!, reason: String): CapitalCall!
+  createInvestment(input: CreateInvestmentInput!): Investment!
+  updateInvestment(investmentId: ID!, amount: Float): Investment!
+  submitKyc(input: SubmitKycInput!): Investment!
+  cancelInvestment(investmentId: ID!, reason: String): Investment!
+  approveKyc(investmentId: ID!): Investment!
+  rejectKyc(investmentId: ID!, reason: String!): Investment!
+  approveInvestment(investmentId: ID!): Investment!
+  completeInvestment(investmentId: ID!): Investment!
+  createMobileLoan(input: CreateMobileLoanInput!): MobileLoan!
+  approveMobileLoan(loanId: ID!): MobileLoan!
+  rejectMobileLoan(loanId: ID!, reason: String!): MobileLoan!
+  disburseMobileLoan(loanId: ID!): MobileLoan!
+  recordLoanPayment(input: RecordPaymentInput!): MobileLoan!
+  writeOffLoan(loanId: ID!, reason: String!): MobileLoan!
+  markNotificationRead(notificationId: ID!): Notification!
+  markAllNotificationsRead(userId: ID!): Boolean!
+  refreshPlatformMetrics: PlatformMetrics!
+  refreshBankMetrics(orgId: ID!): BankMetrics!
+  seedDemoData: Boolean!
+}
+
+type Subscription {
+  onCapitalCallCreated: CapitalCall
+    @aws_subscribe(mutations: ["createCapitalCall", "publishCapitalCall"])
+  onCapitalCallUpdated(callId: ID, bankOrgId: ID): CapitalCall
+    @aws_subscribe(mutations: ["updateCapitalCall", "cancelCapitalCall"])
+  onInvestmentCreated(bankOrgId: ID): Investment
+    @aws_subscribe(mutations: ["createInvestment"])
+  onInvestmentUpdated(investmentId: ID, investorOrgId: ID, bankOrgId: ID): Investment
+    @aws_subscribe(mutations: ["updateInvestment", "submitKyc", "approveKyc", "rejectKyc", "approveInvestment", "completeInvestment"])
+  onNotificationCreated(userId: ID!, orgId: ID): Notification
+    @aws_subscribe(mutations: ["markNotificationRead"])
+  onMobileLoanUpdated(bankOrgId: ID!): MobileLoan
+    @aws_subscribe(mutations: ["createMobileLoan", "approveMobileLoan", "disburseMobileLoan", "recordLoanPayment"])
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
