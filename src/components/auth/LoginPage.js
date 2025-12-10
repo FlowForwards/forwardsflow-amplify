@@ -9,8 +9,14 @@ const LoginPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [localError, setLocalError] = useState('');
   
-  const { login, isAuthenticated, user, error: authError, clearError } = useAuth();
+  const { login, isAuthenticated, user, error: authError, clearError, logout } = useAuth();
   const navigate = useNavigate();
+
+  // Clear any stale state on mount
+  useEffect(() => {
+    if (clearError) clearError();
+    setLocalError('');
+  }, [clearError]);
 
   // Redirect if already authenticated
   useEffect(() => {
@@ -30,13 +36,8 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Prevent double submission
-    if (isSubmitting) {
-      console.log('Already submitting, ignoring');
-      return;
-    }
+    if (isSubmitting) return;
     
-    // Basic validation
     if (!email.trim()) {
       setLocalError('Please enter your email address');
       return;
@@ -54,10 +55,7 @@ const LoginPage = () => {
       console.log('Attempting login for:', email);
       const result = await login(email, password);
       
-      console.log('Login result:', result);
-      
       if (result.success) {
-        // Navigate to the appropriate dashboard
         const dashboardPath = getDashboardPath(result.user.role);
         console.log('Login successful, navigating to:', dashboardPath);
         navigate(dashboardPath, { replace: true });
@@ -72,12 +70,21 @@ const LoginPage = () => {
     }
   };
 
+  const handleClearAndRetry = () => {
+    localStorage.clear();
+    if (logout) logout();
+    setLocalError('');
+    setEmail('');
+    setPassword('');
+    window.location.href = '/login';
+  };
+
   const displayError = localError || authError;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full">
-        {/* Logo */}
+        {/* ForwardsFlow Logo - Original */}
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-2">
             <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-600 rounded-xl flex items-center justify-center shadow-lg">
@@ -89,7 +96,7 @@ const LoginPage = () => {
           </Link>
         </div>
 
-        {/* Card */}
+        {/* Login Card */}
         <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
           <div className="text-center mb-6">
             <h2 className="text-2xl font-bold text-gray-900">Welcome back</h2>
@@ -98,11 +105,20 @@ const LoginPage = () => {
 
           {/* Error Message */}
           {displayError && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2">
-              <svg className="w-5 h-5 text-red-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span className="text-sm text-red-700">{displayError}</span>
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+              <div className="flex items-center gap-2">
+                <svg className="w-5 h-5 text-red-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span className="text-sm text-red-700">{displayError}</span>
+              </div>
+              <button
+                type="button"
+                onClick={handleClearAndRetry}
+                className="mt-2 text-xs text-red-600 hover:text-red-800 underline"
+              >
+                Clear session & Retry
+              </button>
             </div>
           )}
 
@@ -199,21 +215,35 @@ const LoginPage = () => {
           <div className="space-y-2 text-xs">
             <div className="flex justify-between p-2 bg-red-50 rounded-lg">
               <span className="font-medium text-red-700">Super Admin</span>
-              <span className="text-red-600">admin@forwardsflow.com / Admin123!</span>
+              <span className="text-red-600 font-mono">admin@forwardsflow.com / Admin123!</span>
             </div>
             <div className="flex justify-between p-2 bg-green-50 rounded-lg">
               <span className="font-medium text-green-700">Bank Admin</span>
-              <span className="text-green-600">admin@equityafrica.com / Demo123!</span>
+              <span className="text-green-600 font-mono">admin@equityafrica.com / Demo123!</span>
             </div>
             <div className="flex justify-between p-2 bg-blue-50 rounded-lg">
               <span className="font-medium text-blue-700">Bank Lender</span>
-              <span className="text-blue-600">lending@equityafrica.com / Demo123!</span>
+              <span className="text-blue-600 font-mono">lending@equityafrica.com / Demo123!</span>
             </div>
             <div className="flex justify-between p-2 bg-indigo-50 rounded-lg">
               <span className="font-medium text-indigo-700">Investor Admin</span>
-              <span className="text-indigo-600">admin@shellfoundation.org / Demo123!</span>
+              <span className="text-indigo-600 font-mono">admin@shellfoundation.org / Demo123!</span>
+            </div>
+            <div className="flex justify-between p-2 bg-cyan-50 rounded-lg">
+              <span className="font-medium text-cyan-700">Investor Analyst</span>
+              <span className="text-cyan-600 font-mono">analyst@shellfoundation.org / Demo123!</span>
             </div>
           </div>
+        </div>
+
+        {/* Troubleshooting */}
+        <div className="mt-4 text-center">
+          <button
+            onClick={handleClearAndRetry}
+            className="text-xs text-gray-400 hover:text-gray-600 underline"
+          >
+            Having trouble? Click here to reset
+          </button>
         </div>
       </div>
     </div>

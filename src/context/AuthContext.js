@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
-  // Ref to prevent double-submission - this fixes the double-click bug
+  // Ref to prevent double-submission
   const loginInProgress = useRef(false);
 
   // Load user from localStorage on mount
@@ -27,15 +27,22 @@ export const AuthProvider = ({ children }) => {
         const savedUser = localStorage.getItem('forwardsflow_user');
         if (savedUser) {
           const parsedUser = JSON.parse(savedUser);
-          setUser(parsedUser);
           
-          // Set tenant from user data
-          if (parsedUser.tenantId) {
-            setTenant({
-              id: parsedUser.tenantId,
-              name: parsedUser.tenantName,
-              type: parsedUser.tenantType,
-            });
+          // Validate the saved user has required fields
+          if (parsedUser && parsedUser.email && parsedUser.role) {
+            setUser(parsedUser);
+            
+            // Set tenant from user data
+            if (parsedUser.tenantId) {
+              setTenant({
+                id: parsedUser.tenantId,
+                name: parsedUser.tenantName,
+                type: parsedUser.tenantType,
+              });
+            }
+          } else {
+            // Invalid saved user, clear it
+            localStorage.removeItem('forwardsflow_user');
           }
         }
       } catch (e) {
@@ -50,7 +57,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = useCallback(async (email, password) => {
-    // CRITICAL FIX: Prevent double-submission
+    // Prevent double-submission
     if (loginInProgress.current) {
       console.log('Login already in progress, ignoring duplicate request');
       return { success: false, error: 'Login in progress' };
@@ -74,9 +81,9 @@ export const AuthProvider = ({ children }) => {
         return { success: false, error: errorMsg };
       }
       
-      // CRITICAL FIX: Case-sensitive password comparison
+      // Case-sensitive password comparison
       if (demoUser.password !== password) {
-        console.log('Password mismatch. Expected:', demoUser.password, 'Got:', password);
+        console.log('Password mismatch');
         const errorMsg = 'Invalid password. Please try again.';
         setError(errorMsg);
         loginInProgress.current = false;
@@ -101,15 +108,13 @@ export const AuthProvider = ({ children }) => {
       // Save to localStorage
       localStorage.setItem('forwardsflow_user', JSON.stringify(authenticatedUser));
       
-      // Update state synchronously - this ensures immediate redirect
+      // Update state
       setUser(authenticatedUser);
       setTenant(tenantData);
       setError(null);
 
       console.log('Login successful:', authenticatedUser.email, 'Role:', authenticatedUser.role);
-      console.log('Dashboard path:', getDashboardPath(authenticatedUser.role));
 
-      // Reset login flag after successful login
       loginInProgress.current = false;
       
       return { success: true, user: authenticatedUser, tenant: tenantData };
@@ -130,6 +135,16 @@ export const AuthProvider = ({ children }) => {
     loginInProgress.current = false;
   }, []);
 
+  // Force reset function
+  const forceReset = useCallback(() => {
+    localStorage.removeItem('forwardsflow_user');
+    localStorage.removeItem('forwardsflow_tenant');
+    setUser(null);
+    setTenant(null);
+    setError(null);
+    loginInProgress.current = false;
+  }, []);
+
   const register = useCallback(async (registrationData) => {
     return {
       success: true,
@@ -137,36 +152,30 @@ export const AuthProvider = ({ children }) => {
     };
   }, []);
 
-  // Clear error
   const clearError = useCallback(() => {
     setError(null);
   }, []);
 
-  // Permission checking
   const can = useCallback((permission) => {
     if (!user) return false;
     return hasPermission(user.role, permission);
   }, [user]);
 
-  // Get dashboard path for current user
   const getDefaultDashboard = useCallback(() => {
     if (!user) return '/login';
     return getDashboardPath(user.role);
   }, [user]);
 
-  // Check if user belongs to a specific tenant
   const belongsToTenant = useCallback((tenantId) => {
     if (!user) return false;
     return user.tenantId === tenantId;
   }, [user]);
 
-  // Get user's tenant type
   const getUserTenantType = useCallback(() => {
     if (!user) return null;
     return getTenantType(user.role);
   }, [user]);
 
-  // Check role
   const hasRole = useCallback((role) => {
     if (!user) return false;
     return user.role === role;
@@ -193,31 +202,23 @@ export const AuthProvider = ({ children }) => {
   }, [user]);
 
   const value = {
-    // State
     user,
     tenant,
     loading,
     error,
     isAuthenticated: !!user,
-    
-    // Auth methods
     login,
     logout,
     register,
     clearError,
-    
-    // Permission methods
+    forceReset,
     can,
     hasRole,
-    
-    // Role checks
     isForwardsFlowAdmin,
     isBankAdmin,
     isInvestorAdmin,
     isBankUser,
     isInvestorUser,
-    
-    // Utility methods
     getDefaultDashboard,
     belongsToTenant,
     getUserTenantType,

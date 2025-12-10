@@ -2,17 +2,12 @@
 // Defines all roles, permissions, and access control
 
 export const ROLES = {
-  // Platform Level
   FORWARDSFLOW_ADMIN: 'forwardsflow_admin',
-  
-  // Bank Tenant Level
   BANK_ADMIN: 'bank_admin',
   BANK_LENDER: 'bank_lender',
   BANK_CALLER: 'bank_caller',
   BANK_COMPLIANCE: 'bank_compliance',
   BANK_RISK: 'bank_risk',
-  
-  // Investor Tenant Level
   INVESTOR_ADMIN: 'investor_admin',
   INVESTOR_ANALYST: 'investor_analyst',
 };
@@ -41,8 +36,6 @@ export const ROLE_CONFIG = {
       createTenantAdmins: true,
       editTenantAdmins: true,
       suspendTenantAdmins: true,
-      viewTenantStaff: false,
-      manageTenantStaff: false,
       viewAllTransactions: true,
       viewComplianceData: true,
       viewAMLData: true,
@@ -75,19 +68,13 @@ export const ROLE_CONFIG = {
       viewAllBankData: true,
       viewTransactions: true,
       viewComplianceData: true,
-      viewAMLData: true,
-      viewKYCData: true,
       createCapitalCalls: true,
       editCapitalCalls: true,
       deleteCapitalCalls: true,
       viewCapitalCalls: true,
       viewLendingOperations: true,
       approveLoanApplications: true,
-      configureAutoApproval: true,
       viewLoanPortfolio: true,
-      manageLendingSettings: true,
-      submitComplianceReports: true,
-      manageKYCSettings: true,
       viewAllAnalytics: true,
       viewPnL: true,
       generateReports: true,
@@ -115,7 +102,6 @@ export const ROLE_CONFIG = {
       manageDisbursements: true,
       manageCollections: true,
       viewCapitalCalls: true,
-      createCapitalCalls: false,
       viewLendingAnalytics: true,
       viewPortfolioMetrics: true,
       generateLendingReports: true,
@@ -139,7 +125,6 @@ export const ROLE_CONFIG = {
       viewInvestorBids: true,
       respondToBids: true,
       manageSettlements: true,
-      viewLendingOperations: false,
       viewLoanPortfolio: true,
       viewCapitalAnalytics: true,
       viewFXAnalytics: true,
@@ -261,10 +246,10 @@ export const ROLE_CONFIG = {
 };
 
 // ============================================================
-// DEMO USERS - PASSWORDS MATCH COGNITO EXACTLY
+// DEMO USERS - ALL 8 CREDENTIALS VERIFIED
 // ============================================================
 export const DEMO_USERS = {
-  // Platform Admin - Password: Admin123!
+  // 1. Super Admin - Password: Admin123!
   'admin@forwardsflow.com': {
     id: 'ff-admin-001',
     email: 'admin@forwardsflow.com',
@@ -279,7 +264,7 @@ export const DEMO_USERS = {
     createdAt: '2024-01-01T00:00:00Z',
   },
   
-  // Bank Admin - Password: Demo123!
+  // 2. Bank Admin - Password: Demo123!
   'admin@equityafrica.com': {
     id: 'ea-admin-001',
     email: 'admin@equityafrica.com',
@@ -295,7 +280,7 @@ export const DEMO_USERS = {
     createdAt: '2024-02-01T00:00:00Z',
   },
   
-  // Bank Lender - Password: Demo123!
+  // 3. Bank Lender - Password: Demo123!
   'lending@equityafrica.com': {
     id: 'ea-lender-001',
     email: 'lending@equityafrica.com',
@@ -311,7 +296,7 @@ export const DEMO_USERS = {
     createdAt: '2024-03-01T00:00:00Z',
   },
   
-  // Bank Caller - Password: Demo123!
+  // 4. Bank Caller - Password: Demo123!
   'calling@equityafrica.com': {
     id: 'ea-caller-001',
     email: 'calling@equityafrica.com',
@@ -327,7 +312,7 @@ export const DEMO_USERS = {
     createdAt: '2024-03-15T00:00:00Z',
   },
   
-  // Bank Compliance - Password: Demo123!
+  // 5. Bank Compliance - Password: Demo123!
   'compliance@equityafrica.com': {
     id: 'ea-compliance-001',
     email: 'compliance@equityafrica.com',
@@ -343,7 +328,7 @@ export const DEMO_USERS = {
     createdAt: '2024-03-20T00:00:00Z',
   },
   
-  // Bank Risk - Password: Demo123!
+  // 6. Bank Risk - Password: Demo123!
   'risk@equityafrica.com': {
     id: 'ea-risk-001',
     email: 'risk@equityafrica.com',
@@ -359,7 +344,7 @@ export const DEMO_USERS = {
     createdAt: '2024-04-01T00:00:00Z',
   },
   
-  // Investor Admin - Password: Demo123!
+  // 7. Investor Admin - Password: Demo123!
   'admin@shellfoundation.org': {
     id: 'sf-admin-001',
     email: 'admin@shellfoundation.org',
@@ -375,7 +360,7 @@ export const DEMO_USERS = {
     createdAt: '2024-02-15T00:00:00Z',
   },
   
-  // Investor Analyst - Password: Demo123!
+  // 8. Investor Analyst - Password: Demo123!
   'analyst@shellfoundation.org': {
     id: 'sf-analyst-001',
     email: 'analyst@shellfoundation.org',
@@ -405,17 +390,9 @@ export const getTenantType = (role) => {
   return config?.tenantType || null;
 };
 
-export const isPlatformRole = (role) => {
-  return getTenantType(role) === TENANT_TYPES.PLATFORM;
-};
-
-export const isBankRole = (role) => {
-  return getTenantType(role) === TENANT_TYPES.BANK;
-};
-
-export const isInvestorRole = (role) => {
-  return getTenantType(role) === TENANT_TYPES.INVESTOR;
-};
+export const isPlatformRole = (role) => getTenantType(role) === TENANT_TYPES.PLATFORM;
+export const isBankRole = (role) => getTenantType(role) === TENANT_TYPES.BANK;
+export const isInvestorRole = (role) => getTenantType(role) === TENANT_TYPES.INVESTOR;
 
 export const isAdminRole = (role) => {
   return [ROLES.FORWARDSFLOW_ADMIN, ROLES.BANK_ADMIN, ROLES.INVESTOR_ADMIN].includes(role);

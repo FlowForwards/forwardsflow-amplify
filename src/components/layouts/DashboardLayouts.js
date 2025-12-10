@@ -2,29 +2,34 @@ import React, { useState } from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Header, PageLoading } from '../common';
-import { 
-  SuperAdminSidebar, 
-  BankAdminSidebar, 
-  BankUserSidebar, 
-  InvestorAdminSidebar, 
-  InvestorUserSidebar 
+import {
+  SuperAdminSidebar,
+  BankAdminSidebar,
+  BankUserSidebar,
+  InvestorAdminSidebar,
+  InvestorUserSidebar
 } from '../common/Sidebars';
 
 // Base Dashboard Layout
-const DashboardLayout = ({ sidebar: Sidebar, requiredRole, requiredTenantType }) => {
+const DashboardLayout = ({ sidebar: Sidebar, allowedRoles, requiredTenantType }) => {
   const { user, loading, isAuthenticated } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   if (loading) return <PageLoading />;
+  
   if (!isAuthenticated) return <Navigate to="/login" replace />;
 
-  // Check role access
-  if (requiredRole && user.role !== requiredRole) {
-    return <Navigate to="/unauthorized" replace />;
+  // Check role access - if allowedRoles is specified, user must have one of them
+  if (allowedRoles && allowedRoles.length > 0) {
+    if (!allowedRoles.includes(user.role)) {
+      console.log('Access denied - user role:', user.role, 'allowed roles:', allowedRoles);
+      return <Navigate to="/unauthorized" replace />;
+    }
   }
-  
+
   // Check tenant type for tenant users/admins
   if (requiredTenantType && user.tenantType !== requiredTenantType) {
+    console.log('Access denied - user tenantType:', user.tenantType, 'required:', requiredTenantType);
     return <Navigate to="/unauthorized" replace />;
   }
 
@@ -56,44 +61,46 @@ const DashboardLayout = ({ sidebar: Sidebar, requiredRole, requiredTenantType })
   );
 };
 
-// Super Admin Layout
+// Super Admin Layout - ForwardsFlow Platform Admin
 export const SuperAdminLayout = () => (
-  <DashboardLayout 
-    sidebar={SuperAdminSidebar} 
-    requiredRole="super_admin" 
+  <DashboardLayout
+    sidebar={SuperAdminSidebar}
+    allowedRoles={['forwardsflow_admin']}
   />
 );
 
-// Bank Admin Layout
+// Bank Admin Layout - Bank Administrator
 export const BankAdminLayout = () => (
-  <DashboardLayout 
-    sidebar={BankAdminSidebar} 
-    requiredRole="tenant_admin"
+  <DashboardLayout
+    sidebar={BankAdminSidebar}
+    allowedRoles={['bank_admin']}
     requiredTenantType="bank"
   />
 );
 
-// Bank User Layout
+// Bank User Layout - All bank roles
 export const BankUserLayout = () => (
-  <DashboardLayout 
-    sidebar={BankUserSidebar} 
+  <DashboardLayout
+    sidebar={BankUserSidebar}
+    allowedRoles={['bank_admin', 'bank_lender', 'bank_caller', 'bank_compliance', 'bank_risk']}
     requiredTenantType="bank"
   />
 );
 
-// Investor Admin Layout
+// Investor Admin Layout - Investor Administrator
 export const InvestorAdminLayout = () => (
-  <DashboardLayout 
-    sidebar={InvestorAdminSidebar} 
-    requiredRole="tenant_admin"
+  <DashboardLayout
+    sidebar={InvestorAdminSidebar}
+    allowedRoles={['investor_admin']}
     requiredTenantType="investor"
   />
 );
 
-// Investor User Layout
+// Investor User Layout - All investor roles
 export const InvestorUserLayout = () => (
-  <DashboardLayout 
-    sidebar={InvestorUserSidebar} 
+  <DashboardLayout
+    sidebar={InvestorUserSidebar}
+    allowedRoles={['investor_admin', 'investor_analyst']}
     requiredTenantType="investor"
   />
 );
