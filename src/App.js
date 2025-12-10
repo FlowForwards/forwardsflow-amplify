@@ -80,17 +80,28 @@ const RegisterRouter = () => (
   </div>
 );
 
-// Placeholder Page
-const PlaceholderPage = ({ title, description }) => (
-  <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
-    <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-6">
-      <svg className="w-10 h-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+// Under Construction Page - For features not yet implemented
+const UnderConstructionPage = ({ title, description }) => (
+  <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
+    <div className="w-24 h-24 bg-primary-50 rounded-full flex items-center justify-center mb-6">
+      <svg className="w-12 h-12 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
       </svg>
     </div>
-    <h2 className="text-2xl font-bold text-gray-900 mb-2">{title}</h2>
-    <p className="text-gray-500 max-w-md">{description || 'This page is under development.'}</p>
+    <h2 className="text-2xl font-bold text-gray-900 mb-3">{title}</h2>
+    <p className="text-gray-500 max-w-md mb-6">{description || 'This feature is currently under development and will be available soon.'}</p>
+    <div className="flex items-center gap-2 text-sm text-primary-600">
+      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span>Check back soon for updates</span>
+    </div>
   </div>
+);
+
+// Placeholder Page - Simpler version
+const PlaceholderPage = ({ title, description }) => (
+  <UnderConstructionPage title={title} description={description} />
 );
 
 // Unauthorized Page
@@ -155,17 +166,17 @@ function App() {
             {/* ================================================== */}
             <Route path="/admin" element={<SuperAdminLayout />}>
               <Route index element={<ForwardsFlowAdminDashboard />} />
-              <Route path="analytics" element={<PlaceholderPage title="Platform Analytics" />} />
-              <Route path="investors" element={<PlaceholderPage title="Investor Management" />} />
-              <Route path="banks" element={<PlaceholderPage title="Bank Management" />} />
-              <Route path="users" element={<PlaceholderPage title="User Management" />} />
-              <Route path="instruments" element={<PlaceholderPage title="All Instruments" />} />
-              <Route path="transactions" element={<PlaceholderPage title="Transactions" />} />
-              <Route path="pnl" element={<PlaceholderPage title="Platform P&L" />} />
-              <Route path="compliance" element={<PlaceholderPage title="Compliance" />} />
-              <Route path="risk" element={<PlaceholderPage title="Risk Management" />} />
-              <Route path="notifications" element={<PlaceholderPage title="Notifications" />} />
-              <Route path="settings" element={<PlaceholderPage title="Settings" />} />
+              <Route path="analytics" element={<PlaceholderPage title="Platform Analytics" description="View comprehensive analytics across all tenants, transactions, and platform performance." />} />
+              <Route path="investors" element={<PlaceholderPage title="Investor Management" description="Manage investor organizations, approvals, and compliance status." />} />
+              <Route path="banks" element={<PlaceholderPage title="Bank Management" description="Manage partner banks, onboarding, and integration status." />} />
+              <Route path="users" element={<PlaceholderPage title="User Management" description="Manage all platform users across tenants." />} />
+              <Route path="instruments" element={<PlaceholderPage title="All Instruments" description="View and manage all deposit instruments across the platform." />} />
+              <Route path="transactions" element={<PlaceholderPage title="Transaction Oversight" description="Monitor and audit all platform transactions." />} />
+              <Route path="pnl" element={<PlaceholderPage title="Platform P&L" description="View platform-wide profit and loss statements." />} />
+              <Route path="compliance" element={<PlaceholderPage title="Compliance" description="Platform-wide compliance monitoring and reporting." />} />
+              <Route path="risk" element={<PlaceholderPage title="Risk Management" description="Platform risk assessment and monitoring dashboard." />} />
+              <Route path="notifications" element={<PlaceholderPage title="Notifications" description="Platform notifications and alerts." />} />
+              <Route path="settings" element={<PlaceholderPage title="Settings" description="Platform configuration and settings." />} />
             </Route>
 
             {/* ================================================== */}
@@ -174,16 +185,16 @@ function App() {
             {/* ================================================== */}
             <Route path="/bank/admin" element={<BankAdminLayout />}>
               <Route index element={<BankAdminDashboard />} />
-              <Route path="users" element={<PlaceholderPage title="Staff Management" />} />
-              <Route path="instruments" element={<PlaceholderPage title="Deposit Instruments" />} />
-              <Route path="settlement" element={<PlaceholderPage title="Settlement" />} />
+              <Route path="users" element={<PlaceholderPage title="Staff Management" description="Manage your bank's staff accounts and permissions." />} />
+              <Route path="instruments" element={<PlaceholderPage title="Deposit Instruments" description="Configure and manage deposit instruments offered to investors." />} />
+              <Route path="settlement" element={<PlaceholderPage title="Settlement Management" description="Manage settlement instructions and processes." />} />
               <Route path="compliance" element={<BankComplianceDashboard />} />
               <Route path="lending" element={<BankLenderDashboard />} />
-              <Route path="analytics" element={<PlaceholderPage title="Analytics" />} />
-              <Route path="reports" element={<PlaceholderPage title="Reports" />} />
-              <Route path="pnl" element={<PlaceholderPage title="P&L" />} />
-              <Route path="notifications" element={<PlaceholderPage title="Notifications" />} />
-              <Route path="settings" element={<PlaceholderPage title="Settings" />} />
+              <Route path="analytics" element={<PlaceholderPage title="Analytics Dashboard" description="View analytics and insights for your bank operations." />} />
+              <Route path="reports" element={<PlaceholderPage title="Reports" description="Generate and download operational reports." />} />
+              <Route path="pnl" element={<PlaceholderPage title="P&L" description="View profit and loss statements for your operations." />} />
+              <Route path="notifications" element={<PlaceholderPage title="Notifications" description="View and manage notifications." />} />
+              <Route path="settings" element={<PlaceholderPage title="Settings" description="Configure bank settings and preferences." />} />
             </Route>
 
             {/* ================================================== */}
@@ -192,12 +203,12 @@ function App() {
             {/* ================================================== */}
             <Route path="/bank/lending" element={<BankUserLayout />}>
               <Route index element={<BankLenderDashboard />} />
-              <Route path="applications" element={<PlaceholderPage title="Loan Applications" />} />
-              <Route path="portfolio" element={<PlaceholderPage title="Loan Portfolio" />} />
-              <Route path="disbursements" element={<PlaceholderPage title="Disbursements" />} />
-              <Route path="collections" element={<PlaceholderPage title="Collections" />} />
-              <Route path="whatsapp" element={<PlaceholderPage title="WhatsApp Bot" />} />
-              <Route path="reports" element={<PlaceholderPage title="Lending Reports" />} />
+              <Route path="applications" element={<PlaceholderPage title="Loan Applications" description="Review and process loan applications." />} />
+              <Route path="portfolio" element={<PlaceholderPage title="Loan Portfolio" description="View and manage active loans." />} />
+              <Route path="disbursements" element={<PlaceholderPage title="Disbursements" description="Track and manage loan disbursements." />} />
+              <Route path="collections" element={<PlaceholderPage title="Collections" description="Manage loan collections and repayments." />} />
+              <Route path="whatsapp" element={<PlaceholderPage title="WhatsApp Bot" description="Configure and monitor WhatsApp lending bot." />} />
+              <Route path="reports" element={<PlaceholderPage title="Lending Reports" description="Generate lending performance reports." />} />
             </Route>
 
             {/* ================================================== */}
@@ -208,9 +219,9 @@ function App() {
               <Route index element={<BankCallerDashboard />} />
               <Route path="calls" element={<BankCapitalCallsPage />} />
               <Route path="calls/create" element={<CreateCapitalCallPage />} />
-              <Route path="investors" element={<PlaceholderPage title="Investor Relations" />} />
-              <Route path="settlements" element={<PlaceholderPage title="Settlement Instructions" />} />
-              <Route path="reports" element={<PlaceholderPage title="Capital Reports" />} />
+              <Route path="investors" element={<PlaceholderPage title="Investor Relations" description="Manage investor relationships and communications." />} />
+              <Route path="settlements" element={<PlaceholderPage title="Settlement Instructions" description="Manage settlement processes." />} />
+              <Route path="reports" element={<PlaceholderPage title="Capital Reports" description="Generate capital markets reports." />} />
             </Route>
 
             {/* ================================================== */}
@@ -219,11 +230,11 @@ function App() {
             {/* ================================================== */}
             <Route path="/bank/compliance" element={<BankUserLayout />}>
               <Route index element={<BankComplianceDashboard />} />
-              <Route path="aml" element={<PlaceholderPage title="AML Monitoring" />} />
-              <Route path="kyc" element={<PlaceholderPage title="KYC Management" />} />
-              <Route path="alerts" element={<PlaceholderPage title="Compliance Alerts" />} />
-              <Route path="reports" element={<PlaceholderPage title="Compliance Reports" />} />
-              <Route path="blacklist" element={<PlaceholderPage title="Blacklist Management" />} />
+              <Route path="aml" element={<PlaceholderPage title="AML Monitoring" description="Anti-money laundering monitoring and alerts." />} />
+              <Route path="kyc" element={<PlaceholderPage title="KYC Management" description="Know Your Customer verification management." />} />
+              <Route path="alerts" element={<PlaceholderPage title="Compliance Alerts" description="View and manage compliance alerts." />} />
+              <Route path="reports" element={<PlaceholderPage title="Compliance Reports" description="Generate compliance reports." />} />
+              <Route path="blacklist" element={<PlaceholderPage title="Blacklist Management" description="Manage blacklisted entities." />} />
             </Route>
 
             {/* ================================================== */}
@@ -232,11 +243,11 @@ function App() {
             {/* ================================================== */}
             <Route path="/bank/risk" element={<BankUserLayout />}>
               <Route index element={<BankRiskDashboard />} />
-              <Route path="portfolio" element={<PlaceholderPage title="Portfolio Risk" />} />
-              <Route path="credit-scores" element={<PlaceholderPage title="Credit Scores" />} />
-              <Route path="vintage" element={<PlaceholderPage title="Vintage Analysis" />} />
-              <Route path="stress-test" element={<PlaceholderPage title="Stress Testing" />} />
-              <Route path="reports" element={<PlaceholderPage title="Risk Reports" />} />
+              <Route path="portfolio" element={<PlaceholderPage title="Portfolio Risk" description="Analyze portfolio risk metrics." />} />
+              <Route path="credit-scores" element={<PlaceholderPage title="Credit Scores" description="View and analyze credit scoring data." />} />
+              <Route path="vintage" element={<PlaceholderPage title="Vintage Analysis" description="Loan vintage performance analysis." />} />
+              <Route path="stress-test" element={<PlaceholderPage title="Stress Testing" description="Run portfolio stress tests." />} />
+              <Route path="reports" element={<PlaceholderPage title="Risk Reports" description="Generate risk assessment reports." />} />
             </Route>
 
             {/* ================================================== */}
@@ -246,13 +257,13 @@ function App() {
               <Route index element={<BankAdminDashboard />} />
               <Route path="calls" element={<BankCapitalCallsPage />} />
               <Route path="calls/create" element={<CreateCapitalCallPage />} />
-              <Route path="instruments" element={<PlaceholderPage title="Instruments" />} />
+              <Route path="instruments" element={<PlaceholderPage title="Instruments" description="View deposit instruments." />} />
               <Route path="lending" element={<BankLenderDashboard />} />
-              <Route path="settlements" element={<PlaceholderPage title="Settlements" />} />
-              <Route path="analytics" element={<PlaceholderPage title="Analytics" />} />
-              <Route path="reports" element={<PlaceholderPage title="Reports" />} />
-              <Route path="notifications" element={<PlaceholderPage title="Notifications" />} />
-              <Route path="settings" element={<PlaceholderPage title="Settings" />} />
+              <Route path="settlements" element={<PlaceholderPage title="Settlements" description="View settlement status." />} />
+              <Route path="analytics" element={<PlaceholderPage title="Analytics" description="View analytics dashboard." />} />
+              <Route path="reports" element={<PlaceholderPage title="Reports" description="Generate reports." />} />
+              <Route path="notifications" element={<PlaceholderPage title="Notifications" description="View notifications." />} />
+              <Route path="settings" element={<PlaceholderPage title="Settings" description="Manage settings." />} />
             </Route>
 
             {/* ================================================== */}
@@ -261,15 +272,16 @@ function App() {
             {/* ================================================== */}
             <Route path="/investor/admin" element={<InvestorAdminLayout />}>
               <Route index element={<InvestorAdminDashboard />} />
-              <Route path="analytics" element={<PlaceholderPage title="Portfolio Analytics" />} />
-              <Route path="users" element={<PlaceholderPage title="Team Management" />} />
-              <Route path="roles" element={<PlaceholderPage title="Roles & Permissions" />} />
+              <Route path="analytics" element={<PlaceholderPage title="Portfolio Analytics" description="Comprehensive analytics for your investment portfolio." />} />
+              <Route path="users" element={<PlaceholderPage title="Team Management" description="Manage your organization's team members and permissions." />} />
+              <Route path="roles" element={<PlaceholderPage title="Roles & Permissions" description="Configure roles and access permissions." />} />
               <Route path="investments" element={<InvestorInvestmentsPage />} />
               <Route path="opportunities" element={<InvestmentOpportunitiesPage />} />
-              <Route path="reports" element={<PlaceholderPage title="Reports" />} />
-              <Route path="performance" element={<PlaceholderPage title="Performance" />} />
-              <Route path="notifications" element={<PlaceholderPage title="Notifications" />} />
-              <Route path="settings" element={<PlaceholderPage title="Settings" />} />
+              <Route path="reports" element={<PlaceholderPage title="Reports" description="Generate investment and performance reports." />} />
+              <Route path="performance" element={<PlaceholderPage title="Performance" description="Track investment performance metrics." />} />
+              <Route path="impact" element={<PlaceholderPage title="Impact Reports" description="View social impact metrics and reporting." />} />
+              <Route path="notifications" element={<PlaceholderPage title="Notifications" description="View and manage notifications." />} />
+              <Route path="settings" element={<PlaceholderPage title="Settings" description="Configure organization settings." />} />
             </Route>
 
             {/* ================================================== */}
@@ -281,13 +293,13 @@ function App() {
               <Route path="opportunities" element={<InvestorOpportunitiesPage />} />
               <Route path="investments" element={<InvestorInvestmentsPage />} />
               <Route path="calls" element={<InvestorOpportunitiesPage />} />
-              <Route path="puts" element={<PlaceholderPage title="Create Investment Request" />} />
+              <Route path="puts" element={<PlaceholderPage title="Create Investment Request" description="Submit a new investment request." />} />
               <Route path="portfolio" element={<InvestorInvestmentsPage />} />
-              <Route path="analytics" element={<PlaceholderPage title="Analytics" />} />
-              <Route path="reports" element={<PlaceholderPage title="Reports" />} />
-              <Route path="impact" element={<PlaceholderPage title="Impact Reports" />} />
-              <Route path="messages" element={<PlaceholderPage title="Messages" />} />
-              <Route path="settings" element={<PlaceholderPage title="Settings" />} />
+              <Route path="analytics" element={<PlaceholderPage title="Analytics" description="View investment analytics." />} />
+              <Route path="reports" element={<PlaceholderPage title="Reports" description="Generate and download reports." />} />
+              <Route path="impact" element={<PlaceholderPage title="Impact Reports" description="View social impact metrics." />} />
+              <Route path="messages" element={<PlaceholderPage title="Messages" description="View messages and communications." />} />
+              <Route path="settings" element={<PlaceholderPage title="Settings" description="Manage your settings." />} />
             </Route>
 
             {/* Catch all */}
