@@ -32,36 +32,25 @@ export const ROLE_CONFIG = {
     icon: 'Shield',
     description: 'System super admin - manages all tenants',
     permissions: {
-      // Tenant Management
       viewAllTenants: true,
       createTenants: true,
       editTenants: true,
       suspendTenants: true,
       deleteTenants: true,
-      
-      // User Management (Tenant Admins only)
       viewTenantAdmins: true,
       createTenantAdmins: true,
       editTenantAdmins: true,
       suspendTenantAdmins: true,
-      
-      // Cannot manage tenant staff (that's tenant admin's job)
       viewTenantStaff: false,
       manageTenantStaff: false,
-      
-      // Compliance & Oversight
       viewAllTransactions: true,
       viewComplianceData: true,
       viewAMLData: true,
       viewKYCData: true,
-      
-      // Platform Analytics
       viewPlatformPnL: true,
       viewPlatformRevenue: true,
       viewTenantUsage: true,
       viewSystemHealth: true,
-      
-      // System Settings
       manageSystemSettings: true,
       manageBilling: true,
       manageIntegrations: true,
@@ -78,44 +67,31 @@ export const ROLE_CONFIG = {
     icon: 'Building2',
     description: 'Bank administrator - full access within own bank',
     permissions: {
-      // Staff Management
       viewOwnStaff: true,
       createStaff: true,
       editStaff: true,
       suspendStaff: true,
       deleteStaff: true,
-      
-      // All Bank Operations
       viewAllBankData: true,
       viewTransactions: true,
       viewComplianceData: true,
       viewAMLData: true,
       viewKYCData: true,
-      
-      // Capital Calls
       createCapitalCalls: true,
       editCapitalCalls: true,
       deleteCapitalCalls: true,
       viewCapitalCalls: true,
-      
-      // Mobile Lending
       viewLendingOperations: true,
       approveLoanApplications: true,
       configureAutoApproval: true,
       viewLoanPortfolio: true,
       manageLendingSettings: true,
-      
-      // Compliance
       submitComplianceReports: true,
       manageKYCSettings: true,
-      
-      // Analytics & Reports
       viewAllAnalytics: true,
       viewPnL: true,
       generateReports: true,
       exportData: true,
-      
-      // Settings
       manageBankSettings: true,
       manageIntegrations: true,
     },
@@ -131,7 +107,6 @@ export const ROLE_CONFIG = {
     icon: 'Smartphone',
     description: 'Mobile lending operations specialist',
     permissions: {
-      // Lending Operations
       viewLendingOperations: true,
       viewLoanApplications: true,
       approveLoanApplications: true,
@@ -139,16 +114,10 @@ export const ROLE_CONFIG = {
       viewLoanPortfolio: true,
       manageDisbursements: true,
       manageCollections: true,
-      
-      // Limited Capital Call Access
       viewCapitalCalls: true,
       createCapitalCalls: false,
-      
-      // Analytics
       viewLendingAnalytics: true,
       viewPortfolioMetrics: true,
-      
-      // Reports
       generateLendingReports: true,
     },
     dashboardPath: '/bank/lending',
@@ -163,26 +132,17 @@ export const ROLE_CONFIG = {
     icon: 'TrendingUp',
     description: 'Capital call and investor relations',
     permissions: {
-      // Capital Calls
       viewCapitalCalls: true,
       createCapitalCalls: true,
       editCapitalCalls: true,
       negotiateTerms: true,
-      
-      // Investor Relations
       viewInvestorBids: true,
       respondToBids: true,
       manageSettlements: true,
-      
-      // Limited Lending Access
       viewLendingOperations: false,
-      viewLoanPortfolio: true, // Can see deployment stats
-      
-      // Analytics
+      viewLoanPortfolio: true,
       viewCapitalAnalytics: true,
       viewFXAnalytics: true,
-      
-      // Reports
       generateCapitalReports: true,
     },
     dashboardPath: '/bank/capital',
@@ -197,24 +157,17 @@ export const ROLE_CONFIG = {
     icon: 'Shield',
     description: 'AML, KYC and regulatory compliance',
     permissions: {
-      // Compliance
       viewComplianceData: true,
       viewAMLData: true,
       viewKYCData: true,
       flagSuspiciousActivity: true,
       submitComplianceReports: true,
       manageBlacklist: true,
-      
-      // Transaction Monitoring
       viewAllTransactions: true,
       flagTransactions: true,
-      
-      // View Only Access to Operations
       viewCapitalCalls: true,
       viewLendingOperations: true,
       viewLoanPortfolio: true,
-      
-      // Reports
       generateComplianceReports: true,
       exportComplianceData: true,
     },
@@ -230,24 +183,17 @@ export const ROLE_CONFIG = {
     icon: 'AlertTriangle',
     description: 'Credit risk assessment and portfolio monitoring',
     permissions: {
-      // Risk Management
       viewRiskMetrics: true,
       viewCreditScores: true,
       viewNPLData: true,
       viewDefaultAnalysis: true,
       configureRiskModels: true,
       setExposureLimits: true,
-      
-      // Portfolio Analysis
       viewLoanPortfolio: true,
       viewPortfolioConcentration: true,
       viewVintageAnalysis: true,
-      
-      // View Access
       viewCapitalCalls: true,
       viewLendingOperations: true,
-      
-      // Reports
       generateRiskReports: true,
       performStressTesting: true,
     },
@@ -263,37 +209,26 @@ export const ROLE_CONFIG = {
     icon: 'Briefcase',
     description: 'Investor administrator - full access within own organization',
     permissions: {
-      // Staff Management
       viewOwnStaff: true,
       createStaff: true,
       editStaff: true,
       suspendStaff: true,
       deleteStaff: true,
-      
-      // Investment Operations
       viewAllInvestments: true,
       createInvestments: true,
       approveInvestments: true,
       viewOpportunities: true,
       submitBids: true,
-      
-      // Portfolio
       viewPortfolio: true,
       managePortfolio: true,
-      
-      // Compliance
       viewComplianceData: true,
       submitKYCDocuments: true,
       viewTransactionHistory: true,
-      
-      // Analytics & Reports
       viewAllAnalytics: true,
       viewPnL: true,
       viewImpactMetrics: true,
       generateReports: true,
       exportData: true,
-      
-      // Settings
       manageOrgSettings: true,
       managePaymentMethods: true,
     },
@@ -309,21 +244,14 @@ export const ROLE_CONFIG = {
     icon: 'LineChart',
     description: 'Investment analysis and research',
     permissions: {
-      // Investment Operations (View/Recommend)
       viewOpportunities: true,
       viewAllInvestments: true,
       recommendInvestments: true,
-      submitBids: false, // Needs admin approval
-      
-      // Portfolio
+      submitBids: false,
       viewPortfolio: true,
-      
-      // Analytics
       viewAnalytics: true,
       viewImpactMetrics: true,
       performDueDiligence: true,
-      
-      // Reports
       generateAnalysisReports: true,
       createInvestmentMemos: true,
     },
@@ -332,112 +260,132 @@ export const ROLE_CONFIG = {
   },
 };
 
-// Demo Users Configuration
+// ============================================================
+// DEMO USERS - PASSWORDS MATCH COGNITO EXACTLY
+// ============================================================
 export const DEMO_USERS = {
-  // Platform Admin
+  // Platform Admin - Password: Admin123!
   'admin@forwardsflow.com': {
     id: 'ff-admin-001',
     email: 'admin@forwardsflow.com',
-    password: 'admin123',
+    password: 'Admin123!',
     name: 'System Administrator',
     role: ROLES.FORWARDSFLOW_ADMIN,
-    tenantId: 'forwardsflow',
+    tenantId: 'forwardsflow-platform',
     tenantName: 'ForwardsFlow',
     tenantType: TENANT_TYPES.PLATFORM,
+    orgId: 'forwardsflow-platform',
     avatar: null,
     createdAt: '2024-01-01T00:00:00Z',
   },
   
-  // Bank - Equity Africa
+  // Bank Admin - Password: Demo123!
   'admin@equityafrica.com': {
     id: 'ea-admin-001',
     email: 'admin@equityafrica.com',
-    password: 'demo123',
+    password: 'Demo123!',
     name: 'Amoroso Gombe',
     role: ROLES.BANK_ADMIN,
-    tenantId: 'equity-africa',
+    tenantId: 'bank-equity-africa',
     tenantName: 'Equity Africa Bank',
     tenantType: TENANT_TYPES.BANK,
+    orgId: 'bank-equity-africa',
     jobTitle: 'Treasury Director',
     avatar: null,
     createdAt: '2024-02-01T00:00:00Z',
   },
+  
+  // Bank Lender - Password: Demo123!
   'lending@equityafrica.com': {
     id: 'ea-lender-001',
     email: 'lending@equityafrica.com',
-    password: 'demo123',
+    password: 'Demo123!',
     name: 'Grace Mwangi',
     role: ROLES.BANK_LENDER,
-    tenantId: 'equity-africa',
+    tenantId: 'bank-equity-africa',
     tenantName: 'Equity Africa Bank',
     tenantType: TENANT_TYPES.BANK,
+    orgId: 'bank-equity-africa',
     jobTitle: 'Mobile Lending Manager',
     avatar: null,
     createdAt: '2024-03-01T00:00:00Z',
   },
+  
+  // Bank Caller - Password: Demo123!
   'calling@equityafrica.com': {
     id: 'ea-caller-001',
     email: 'calling@equityafrica.com',
-    password: 'demo123',
-    name: 'James Oduor',
+    password: 'Demo123!',
+    name: 'James Ochieng',
     role: ROLES.BANK_CALLER,
-    tenantId: 'equity-africa',
+    tenantId: 'bank-equity-africa',
     tenantName: 'Equity Africa Bank',
     tenantType: TENANT_TYPES.BANK,
+    orgId: 'bank-equity-africa',
     jobTitle: 'Capital Markets Officer',
     avatar: null,
     createdAt: '2024-03-15T00:00:00Z',
   },
+  
+  // Bank Compliance - Password: Demo123!
   'compliance@equityafrica.com': {
     id: 'ea-compliance-001',
     email: 'compliance@equityafrica.com',
-    password: 'demo123',
-    name: 'Faith Wambui',
+    password: 'Demo123!',
+    name: 'Sarah Kimani',
     role: ROLES.BANK_COMPLIANCE,
-    tenantId: 'equity-africa',
+    tenantId: 'bank-equity-africa',
     tenantName: 'Equity Africa Bank',
     tenantType: TENANT_TYPES.BANK,
+    orgId: 'bank-equity-africa',
     jobTitle: 'Compliance Officer',
     avatar: null,
     createdAt: '2024-03-20T00:00:00Z',
   },
+  
+  // Bank Risk - Password: Demo123!
   'risk@equityafrica.com': {
     id: 'ea-risk-001',
     email: 'risk@equityafrica.com',
-    password: 'demo123',
-    name: 'David Kimani',
+    password: 'Demo123!',
+    name: 'Peter Njoroge',
     role: ROLES.BANK_RISK,
-    tenantId: 'equity-africa',
+    tenantId: 'bank-equity-africa',
     tenantName: 'Equity Africa Bank',
     tenantType: TENANT_TYPES.BANK,
+    orgId: 'bank-equity-africa',
     jobTitle: 'Credit Risk Analyst',
     avatar: null,
     createdAt: '2024-04-01T00:00:00Z',
   },
   
-  // Investor - Impact Capital
-  'admin@impactcapital.com': {
-    id: 'ic-admin-001',
-    email: 'admin@impactcapital.com',
-    password: 'demo123',
-    name: 'Sarah Chen',
+  // Investor Admin - Password: Demo123!
+  'admin@shellfoundation.org': {
+    id: 'sf-admin-001',
+    email: 'admin@shellfoundation.org',
+    password: 'Demo123!',
+    name: 'Mathieu Fournier',
     role: ROLES.INVESTOR_ADMIN,
-    tenantId: 'impact-capital',
-    tenantName: 'Impact Capital Partners',
+    tenantId: 'inv-shell-foundation',
+    tenantName: 'Shell Foundation',
     tenantType: TENANT_TYPES.INVESTOR,
+    orgId: 'inv-shell-foundation',
     jobTitle: 'Managing Director',
     avatar: null,
     createdAt: '2024-02-15T00:00:00Z',
   },
-  'analyst@impactcapital.com': {
-    id: 'ic-analyst-001',
-    email: 'analyst@impactcapital.com',
-    password: 'demo123',
-    name: 'Michael Torres',
+  
+  // Investor Analyst - Password: Demo123!
+  'analyst@shellfoundation.org': {
+    id: 'sf-analyst-001',
+    email: 'analyst@shellfoundation.org',
+    password: 'Demo123!',
+    name: 'Emily Chen',
     role: ROLES.INVESTOR_ANALYST,
-    tenantId: 'impact-capital',
-    tenantName: 'Impact Capital Partners',
+    tenantId: 'inv-shell-foundation',
+    tenantName: 'Shell Foundation',
     tenantType: TENANT_TYPES.INVESTOR,
+    orgId: 'inv-shell-foundation',
     jobTitle: 'Investment Analyst',
     avatar: null,
     createdAt: '2024-05-01T00:00:00Z',
