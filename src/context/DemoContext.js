@@ -112,7 +112,7 @@ export const DemoProvider = ({ children }) => {
 
     // Send email notification to investor
     sendEmail(
-      'Mathieu.Fourn@shellfoundation.org',
+      'investments@horizonimpact.com',
       `New Investment Opportunity: $${(newCall.amount / 1000000).toFixed(0)}M at ${newCall.interestRate}% APR`,
       `
 Dear Investment Manager,
@@ -164,15 +164,15 @@ ForwardsFlow Platform
     // Notify bank
     addNotification(
       'bank-user',
-      `Shell Foundation has accepted your $10M capital call`,
+      `Horizon Impact Partners has accepted your $10M capital call`,
       'success',
       '/bank/calls'
     );
 
     sendEmail(
       'lending@dtbafrica.com',
-      'Capital Call Accepted - Shell Foundation',
-      `Your capital call TXN-2024-00001 has been accepted by Shell Foundation. KYC documents pending.`,
+      'Capital Call Accepted - Horizon Impact Partners',
+      `Your capital call TXN-2024-00001 has been accepted by Horizon Impact Partners. KYC documents pending.`,
       'acceptance'
     );
   }, [addNotification, sendEmail]);
@@ -236,7 +236,7 @@ ForwardsFlow Platform
 
         // Send completion emails
         sendEmail(
-          'Mathieu.Fourn@shellfoundation.org',
+          'investments@horizonimpact.com',
           `Investment Confirmed - ${call.txnRef}`,
           `
 Dear Investment Manager,
