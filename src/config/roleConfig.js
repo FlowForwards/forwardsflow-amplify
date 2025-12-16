@@ -51,7 +51,7 @@ export const ROLE_CONFIG = {
     dashboardPath: '/admin',
     defaultRoute: '/admin',
   },
-  
+
   [ROLES.BANK_ADMIN]: {
     label: 'Bank Admin',
     tenantType: TENANT_TYPES.BANK,
@@ -85,7 +85,7 @@ export const ROLE_CONFIG = {
     dashboardPath: '/bank/admin',
     defaultRoute: '/bank/admin',
   },
-  
+
   [ROLES.BANK_LENDER]: {
     label: 'Lending Officer',
     tenantType: TENANT_TYPES.BANK,
@@ -109,7 +109,7 @@ export const ROLE_CONFIG = {
     dashboardPath: '/bank/lending',
     defaultRoute: '/bank/lending',
   },
-  
+
   [ROLES.BANK_CALLER]: {
     label: 'Capital Markets Officer',
     tenantType: TENANT_TYPES.BANK,
@@ -133,7 +133,7 @@ export const ROLE_CONFIG = {
     dashboardPath: '/bank/capital',
     defaultRoute: '/bank/capital',
   },
-  
+
   [ROLES.BANK_COMPLIANCE]: {
     label: 'Compliance Officer',
     tenantType: TENANT_TYPES.BANK,
@@ -159,7 +159,7 @@ export const ROLE_CONFIG = {
     dashboardPath: '/bank/compliance',
     defaultRoute: '/bank/compliance',
   },
-  
+
   [ROLES.BANK_RISK]: {
     label: 'Credit Risk Analyst',
     tenantType: TENANT_TYPES.BANK,
@@ -185,7 +185,7 @@ export const ROLE_CONFIG = {
     dashboardPath: '/bank/risk',
     defaultRoute: '/bank/risk',
   },
-  
+
   [ROLES.INVESTOR_ADMIN]: {
     label: 'Impact Investor Admin',
     tenantType: TENANT_TYPES.INVESTOR,
@@ -220,7 +220,7 @@ export const ROLE_CONFIG = {
     dashboardPath: '/investor/admin',
     defaultRoute: '/investor/admin',
   },
-  
+
   [ROLES.INVESTOR_ANALYST]: {
     label: 'Investment Analyst',
     tenantType: TENANT_TYPES.INVESTOR,
@@ -263,7 +263,7 @@ export const DEMO_USERS = {
     avatar: null,
     createdAt: '2024-01-01T00:00:00Z',
   },
-  
+
   // 2. Bank Admin - Password: Demo123!
   'admin@equityafrica.com': {
     id: 'ea-admin-001',
@@ -279,7 +279,7 @@ export const DEMO_USERS = {
     avatar: null,
     createdAt: '2024-02-01T00:00:00Z',
   },
-  
+
   // 3. Bank Lender - Password: Demo123!
   'lending@equityafrica.com': {
     id: 'ea-lender-001',
@@ -295,7 +295,7 @@ export const DEMO_USERS = {
     avatar: null,
     createdAt: '2024-03-01T00:00:00Z',
   },
-  
+
   // 4. Bank Caller - Password: Demo123!
   'calling@equityafrica.com': {
     id: 'ea-caller-001',
@@ -311,7 +311,7 @@ export const DEMO_USERS = {
     avatar: null,
     createdAt: '2024-03-15T00:00:00Z',
   },
-  
+
   // 5. Bank Compliance - Password: Demo123!
   'compliance@equityafrica.com': {
     id: 'ea-compliance-001',
@@ -327,7 +327,7 @@ export const DEMO_USERS = {
     avatar: null,
     createdAt: '2024-03-20T00:00:00Z',
   },
-  
+
   // 6. Bank Risk - Password: Demo123!
   'risk@equityafrica.com': {
     id: 'ea-risk-001',
@@ -343,34 +343,34 @@ export const DEMO_USERS = {
     avatar: null,
     createdAt: '2024-04-01T00:00:00Z',
   },
-  
+
   // 7. Investor Admin - Password: Demo123!
-  'admin@shellfoundation.org': {
-    id: 'sf-admin-001',
-    email: 'admin@shellfoundation.org',
+  'admin@horizonimpact.com': {
+    id: 'hi-admin-001',
+    email: 'admin@horizonimpact.com',
     password: 'Demo123!',
-    name: 'Mathieu Fournier',
+    name: 'Victoria Chen',
     role: ROLES.INVESTOR_ADMIN,
-    tenantId: 'inv-shell-foundation',
-    tenantName: 'Shell Foundation',
+    tenantId: 'inv-horizon-impact',
+    tenantName: 'Horizon Impact Partners',
     tenantType: TENANT_TYPES.INVESTOR,
-    orgId: 'inv-shell-foundation',
+    orgId: 'inv-horizon-impact',
     jobTitle: 'Managing Director',
     avatar: null,
     createdAt: '2024-02-15T00:00:00Z',
   },
-  
+
   // 8. Investor Analyst - Password: Demo123!
-  'analyst@shellfoundation.org': {
-    id: 'sf-analyst-001',
-    email: 'analyst@shellfoundation.org',
+  'analyst@horizonimpact.com': {
+    id: 'hi-analyst-001',
+    email: 'analyst@horizonimpact.com',
     password: 'Demo123!',
-    name: 'Emily Chen',
+    name: 'James Okonkwo',
     role: ROLES.INVESTOR_ANALYST,
-    tenantId: 'inv-shell-foundation',
-    tenantName: 'Shell Foundation',
+    tenantId: 'inv-horizon-impact',
+    tenantName: 'Horizon Impact Partners',
     tenantType: TENANT_TYPES.INVESTOR,
-    orgId: 'inv-shell-foundation',
+    orgId: 'inv-horizon-impact',
     jobTitle: 'Investment Analyst',
     avatar: null,
     createdAt: '2024-05-01T00:00:00Z',
