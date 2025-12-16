@@ -217,3 +217,36 @@ export const demoInstruments = [
   { id: 'inst-002', type: 'Time Deposit', currencyPair: 'KES:CHF', principal: 30000000, interestRate: 10.0, subscribedPct: 100, status: 'fully_subscribed' },
   { id: 'inst-003', type: 'Certificate of Deposit', currencyPair: 'KES:JPY', principal: 75000000, interestRate: 14.0, subscribedPct: 45, status: 'open' },
 ];
+
+// Investor Analytics Data
+export const investorAnalytics = {
+  'inv-001': {
+    totalInvested: 25000000,
+    activeInvestments: 4,
+    expectedReturns: 28750000,
+    avgYield: 15.0,
+    portfolioByBank: [
+      { bank: 'Equity Africa Bank', amount: 10000000, pct: 40 },
+      { bank: 'Diamond Trust Bank', amount: 8000000, pct: 32 },
+      { bank: 'KCB Group', amount: 7000000, pct: 28 },
+    ],
+    portfolioByMaturity: [
+      { term: '3 months', amount: 5000000, pct: 20 },
+      { term: '6 months', amount: 8000000, pct: 32 },
+      { term: '12 months', amount: 12000000, pct: 48 },
+    ],
+    monthlyReturns: [
+      { month: 'Jul', returns: 312500 },
+      { month: 'Aug', returns: 312500 },
+      { month: 'Sep', returns: 312500 },
+      { month: 'Oct', returns: 312500 },
+      { month: 'Nov', returns: 312500 },
+      { month: 'Dec', returns: 312500 },
+    ],
+    recentTransactions: [
+      { id: 'txn-001', type: 'Investment', bank: 'Equity Africa Bank', amount: 5000000, date: '2024-11-15', status: 'active' },
+      { id: 'txn-002', type: 'Interest', bank: 'Diamond Trust Bank', amount: 100000, date: '2024-11-30', status: 'completed' },
+      { id: 'txn-003', type: 'Investment', bank: 'KCB Group', amount: 3000000, date: '2024-10-20', status: 'active' },
+    ],
+  },
+};
