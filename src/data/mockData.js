@@ -250,3 +250,40 @@ export const investorAnalytics = {
     ],
   },
 };
+
+// Platform Analytics Data (Super Admin)
+export const platformAnalytics = {
+  totalAUM: 168500000,
+  totalInvestors: 24,
+  totalBanks: 8,
+  activeInstruments: 32,
+  monthlyVolume: 45000000,
+  platformRevenue: 2850000,
+  avgYield: 14.2,
+  totalLoansOriginated: 4200,
+  aumTrend: [
+    { month: 'Jul', aum: 120000000 },
+    { month: 'Aug', aum: 135000000 },
+    { month: 'Sep', aum: 142000000 },
+    { month: 'Oct', aum: 155000000 },
+    { month: 'Nov', aum: 162000000 },
+    { month: 'Dec', aum: 168500000 },
+  ],
+  investorsByType: [
+    { type: 'Family Office', count: 8, pct: 33 },
+    { type: 'Foundation', count: 6, pct: 25 },
+    { type: 'Pension Fund', count: 5, pct: 21 },
+    { type: 'Private Equity', count: 3, pct: 13 },
+    { type: 'Other', count: 2, pct: 8 },
+  ],
+  banksByRegion: [
+    { region: 'East Africa', count: 4, volume: 85000000 },
+    { region: 'West Africa', count: 2, volume: 45000000 },
+    { region: 'Southern Africa', count: 2, volume: 38500000 },
+  ],
+  recentActivity: [
+    { id: 'act-001', type: 'New Investment', description: 'Horizon Impact Partners invested $5M in Equity Africa Bank', timestamp: '2024-12-15T10:30:00Z' },
+    { id: 'act-002', type: 'New Bank', description: 'First National Bank (Nigeria) onboarded', timestamp: '2024-12-14T14:00:00Z' },
+    { id: 'act-003', type: 'Maturity', description: '$3M instrument matured at Diamond Trust Bank', timestamp: '2024-12-13T09:00:00Z' },
+  ],
+};
