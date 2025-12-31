@@ -8,6 +8,7 @@ import {
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { db } from '../../services/DatabaseService';
 import { useAuth } from '../../context/AuthContext';
+import AmazonQChat from '../shared/AmazonQChat';
 
 // Stat Card
 const StatCard = ({ icon: Icon, label, value, trend, subValue, color = 'blue' }) => {
@@ -367,6 +368,9 @@ const BankCallerDashboard = () => {
           </div>
         </div>
       </div>
+
+      {/* AI Chat Assistant */}
+      <AmazonQChat userRole="bank_caller" userName={user?.name || 'User'} />
     </div>
   );
 };

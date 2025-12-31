@@ -43,6 +43,21 @@ import BankCapitalCallsPage from './components/bank/BankCapitalCallsPage';
 import InvestorOpportunitiesPage from './components/investor/InvestorOpportunitiesPageNew';
 import InvestorInvestmentsPage from './components/investor/InvestorInvestmentsPage';
 
+// ================================================== 
+// SUPER ADMIN PAGE COMPONENTS - NEW IMPORTS
+// ==================================================
+import BankManagement from './components/pages/super-admin/BankManagement';
+import InvestorManagement from './components/pages/super-admin/InvestorManagement';
+import UserManagement from './components/pages/super-admin/UserManagement';
+import TransactionOversight from './components/pages/super-admin/TransactionOversight';
+import PlatformPL from './components/pages/super-admin/PlatformPL';
+import AllInstruments from './components/pages/super-admin/AllInstruments';
+import Compliance from './components/pages/super-admin/Compliance';
+import RiskManagement from './components/pages/super-admin/RiskManagement';
+import AnalyticsDashboard from './components/pages/super-admin/AnalyticsDashboard';
+import Notifications from './components/pages/super-admin/Notifications';
+import Settings from './components/pages/super-admin/Settings';
+
 // Registration Router
 const RegisterRouter = () => (
   <div className="min-h-screen bg-gray-50 py-8 px-4">
@@ -163,20 +178,21 @@ function App() {
             {/* ================================================== */}
             {/* FORWARDSFLOW ADMIN (Platform Super Admin) Routes   */}
             {/* Role: forwardsflow_admin                           */}
+            {/* NOW USING ACTUAL COMPONENTS INSTEAD OF PLACEHOLDERS */}
             {/* ================================================== */}
             <Route path="/admin" element={<SuperAdminLayout />}>
               <Route index element={<ForwardsFlowAdminDashboard />} />
-              <Route path="analytics" element={<PlaceholderPage title="Platform Analytics" description="View comprehensive analytics across all tenants, transactions, and platform performance." />} />
-              <Route path="investors" element={<PlaceholderPage title="Investor Management" description="Manage investor organizations, approvals, and compliance status." />} />
-              <Route path="banks" element={<PlaceholderPage title="Bank Management" description="Manage partner banks, onboarding, and integration status." />} />
-              <Route path="users" element={<PlaceholderPage title="User Management" description="Manage all platform users across tenants." />} />
-              <Route path="instruments" element={<PlaceholderPage title="All Instruments" description="View and manage all deposit instruments across the platform." />} />
-              <Route path="transactions" element={<PlaceholderPage title="Transaction Oversight" description="Monitor and audit all platform transactions." />} />
-              <Route path="pnl" element={<PlaceholderPage title="Platform P&L" description="View platform-wide profit and loss statements." />} />
-              <Route path="compliance" element={<PlaceholderPage title="Compliance" description="Platform-wide compliance monitoring and reporting." />} />
-              <Route path="risk" element={<PlaceholderPage title="Risk Management" description="Platform risk assessment and monitoring dashboard." />} />
-              <Route path="notifications" element={<PlaceholderPage title="Notifications" description="Platform notifications and alerts." />} />
-              <Route path="settings" element={<PlaceholderPage title="Settings" description="Platform configuration and settings." />} />
+              <Route path="analytics" element={<AnalyticsDashboard />} />
+              <Route path="investors" element={<InvestorManagement />} />
+              <Route path="banks" element={<BankManagement />} />
+              <Route path="users" element={<UserManagement />} />
+              <Route path="instruments" element={<AllInstruments />} />
+              <Route path="transactions" element={<TransactionOversight />} />
+              <Route path="pnl" element={<PlatformPL />} />
+              <Route path="compliance" element={<Compliance />} />
+              <Route path="risk" element={<RiskManagement />} />
+              <Route path="notifications" element={<Notifications />} />
+              <Route path="settings" element={<Settings />} />
             </Route>
 
             {/* ================================================== */}
