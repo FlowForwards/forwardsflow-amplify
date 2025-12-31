@@ -19,10 +19,14 @@ import ConfirmSubscriptionPage from './components/pages/ConfirmSubscriptionPage'
 import PrivacyPolicyPage from './components/pages/PrivacyPolicyPage';
 import DisclaimerPage from './components/pages/DisclaimerPage';
 
-// New Role-Specific Dashboard Pages
+// ==================================================
+// DASHBOARD IMPORTS
+// BankAdminDashboard imported directly (not from barrel)
+// to use the new enhanced version with full CRUD
+// ==================================================
 import {
   ForwardsFlowAdminDashboard,
-  BankAdminDashboard,
+  // BankAdminDashboard - REMOVED from barrel, using direct import below
   BankLenderDashboard,
   BankCallerDashboard,
   BankComplianceDashboard,
@@ -30,6 +34,10 @@ import {
   InvestorAdminDashboard,
   InvestorAnalystDashboard,
 } from './components/dashboards';
+
+// NEW: Direct import for enhanced BankAdminDashboard with full CRUD
+// This dashboard reads URL path to show the correct tab
+import BankAdminDashboard from './components/dashboards/BankAdminDashboard';
 
 // Legacy Dashboard Pages (for backward compatibility)
 import LegacySuperAdminDashboard from './components/super-admin/SuperAdminDashboard';
@@ -43,8 +51,8 @@ import BankCapitalCallsPage from './components/bank/BankCapitalCallsPage';
 import InvestorOpportunitiesPage from './components/investor/InvestorOpportunitiesPageNew';
 import InvestorInvestmentsPage from './components/investor/InvestorInvestmentsPage';
 
-// ================================================== 
-// SUPER ADMIN PAGE COMPONENTS - NEW IMPORTS
+// ==================================================
+// SUPER ADMIN PAGE COMPONENTS
 // ==================================================
 import BankManagement from './components/pages/super-admin/BankManagement';
 import InvestorManagement from './components/pages/super-admin/InvestorManagement';
@@ -178,7 +186,6 @@ function App() {
             {/* ================================================== */}
             {/* FORWARDSFLOW ADMIN (Platform Super Admin) Routes   */}
             {/* Role: forwardsflow_admin                           */}
-            {/* NOW USING ACTUAL COMPONENTS INSTEAD OF PLACEHOLDERS */}
             {/* ================================================== */}
             <Route path="/admin" element={<SuperAdminLayout />}>
               <Route index element={<ForwardsFlowAdminDashboard />} />
@@ -198,19 +205,22 @@ function App() {
             {/* ================================================== */}
             {/* BANK ADMIN Routes                                  */}
             {/* Role: bank_admin                                   */}
+            {/* ALL routes go to BankAdminDashboard which reads    */}
+            {/* the URL path to determine which tab to show        */}
             {/* ================================================== */}
             <Route path="/bank/admin" element={<BankAdminLayout />}>
               <Route index element={<BankAdminDashboard />} />
-              <Route path="users" element={<PlaceholderPage title="Staff Management" description="Manage your bank's staff accounts and permissions." />} />
-              <Route path="instruments" element={<PlaceholderPage title="Deposit Instruments" description="Configure and manage deposit instruments offered to investors." />} />
-              <Route path="settlement" element={<PlaceholderPage title="Settlement Management" description="Manage settlement instructions and processes." />} />
-              <Route path="compliance" element={<BankComplianceDashboard />} />
-              <Route path="lending" element={<BankLenderDashboard />} />
-              <Route path="analytics" element={<PlaceholderPage title="Analytics Dashboard" description="View analytics and insights for your bank operations." />} />
-              <Route path="reports" element={<PlaceholderPage title="Reports" description="Generate and download operational reports." />} />
-              <Route path="pnl" element={<PlaceholderPage title="P&L" description="View profit and loss statements for your operations." />} />
-              <Route path="notifications" element={<PlaceholderPage title="Notifications" description="View and manage notifications." />} />
-              <Route path="settings" element={<PlaceholderPage title="Settings" description="Configure bank settings and preferences." />} />
+              <Route path="users" element={<BankAdminDashboard />} />
+              <Route path="staff" element={<BankAdminDashboard />} />
+              <Route path="instruments" element={<BankAdminDashboard />} />
+              <Route path="settlement" element={<BankAdminDashboard />} />
+              <Route path="compliance" element={<BankAdminDashboard />} />
+              <Route path="lending" element={<BankAdminDashboard />} />
+              <Route path="analytics" element={<BankAdminDashboard />} />
+              <Route path="reports" element={<BankAdminDashboard />} />
+              <Route path="pnl" element={<BankAdminDashboard />} />
+              <Route path="notifications" element={<BankAdminDashboard />} />
+              <Route path="settings" element={<BankAdminDashboard />} />
             </Route>
 
             {/* ================================================== */}
