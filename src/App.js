@@ -27,7 +27,7 @@ import DisclaimerPage from './components/pages/DisclaimerPage';
 import {
   ForwardsFlowAdminDashboard,
   // BankAdminDashboard - REMOVED from barrel, using direct import below
-  BankLenderDashboard,
+  // BankLenderDashboard - REMOVED from barrel, using direct import below
   BankCallerDashboard,
   BankComplianceDashboard,
   BankRiskDashboard,
@@ -39,6 +39,7 @@ import {
 // These dashboards read URL path to show the correct tab
 import BankAdminDashboard from './components/dashboards/BankAdminDashboard';
 import InvestorAdminDashboard from './components/dashboards/InvestorAdminDashboard';
+import BankLenderDashboard from './components/dashboards/BankLenderDashboard';
 
 // Legacy Dashboard Pages (for backward compatibility)
 import LegacySuperAdminDashboard from './components/super-admin/SuperAdminDashboard';
@@ -227,15 +228,46 @@ function App() {
             {/* ================================================== */}
             {/* BANK LENDER Routes                                 */}
             {/* Role: bank_lender                                  */}
+            {/* ALL routes go to BankLenderDashboard which reads   */}
+            {/* the URL path to determine which tab to show        */}
             {/* ================================================== */}
             <Route path="/bank/lending" element={<BankUserLayout />}>
               <Route index element={<BankLenderDashboard />} />
-              <Route path="applications" element={<PlaceholderPage title="Loan Applications" description="Review and process loan applications." />} />
-              <Route path="portfolio" element={<PlaceholderPage title="Loan Portfolio" description="View and manage active loans." />} />
-              <Route path="disbursements" element={<PlaceholderPage title="Disbursements" description="Track and manage loan disbursements." />} />
-              <Route path="collections" element={<PlaceholderPage title="Collections" description="Manage loan collections and repayments." />} />
-              <Route path="whatsapp" element={<PlaceholderPage title="WhatsApp Bot" description="Configure and monitor WhatsApp lending bot." />} />
-              <Route path="reports" element={<PlaceholderPage title="Lending Reports" description="Generate lending performance reports." />} />
+              <Route path="applications" element={<BankLenderDashboard />} />
+              <Route path="queue" element={<BankLenderDashboard />} />
+              <Route path="loans" element={<BankLenderDashboard />} />
+              <Route path="active" element={<BankLenderDashboard />} />
+              <Route path="portfolio" element={<BankLenderDashboard />} />
+              <Route path="disbursements" element={<BankLenderDashboard />} />
+              <Route path="collections" element={<BankLenderDashboard />} />
+              <Route path="instruments" element={<BankLenderDashboard />} />
+              <Route path="deposits" element={<BankLenderDashboard />} />
+              <Route path="settlement" element={<BankLenderDashboard />} />
+              <Route path="analytics" element={<BankLenderDashboard />} />
+              <Route path="reports" element={<BankLenderDashboard />} />
+              <Route path="notifications" element={<BankLenderDashboard />} />
+              <Route path="settings" element={<BankLenderDashboard />} />
+              <Route path="whatsapp" element={<BankLenderDashboard />} />
+            </Route>
+            
+            {/* Also support /bank/lender path */}
+            <Route path="/bank/lender" element={<BankUserLayout />}>
+              <Route index element={<BankLenderDashboard />} />
+              <Route path="applications" element={<BankLenderDashboard />} />
+              <Route path="queue" element={<BankLenderDashboard />} />
+              <Route path="loans" element={<BankLenderDashboard />} />
+              <Route path="active" element={<BankLenderDashboard />} />
+              <Route path="portfolio" element={<BankLenderDashboard />} />
+              <Route path="disbursements" element={<BankLenderDashboard />} />
+              <Route path="collections" element={<BankLenderDashboard />} />
+              <Route path="instruments" element={<BankLenderDashboard />} />
+              <Route path="deposits" element={<BankLenderDashboard />} />
+              <Route path="settlement" element={<BankLenderDashboard />} />
+              <Route path="analytics" element={<BankLenderDashboard />} />
+              <Route path="reports" element={<BankLenderDashboard />} />
+              <Route path="notifications" element={<BankLenderDashboard />} />
+              <Route path="settings" element={<BankLenderDashboard />} />
+              <Route path="whatsapp" element={<BankLenderDashboard />} />
             </Route>
 
             {/* ================================================== */}
@@ -279,18 +311,26 @@ function App() {
 
             {/* ================================================== */}
             {/* BANK GENERIC Routes (backward compatibility)       */}
+            {/* All sidebar routes render BankLenderDashboard      */}
+            {/* which reads URL path to show the correct tab       */}
             {/* ================================================== */}
             <Route path="/bank" element={<BankUserLayout />}>
-              <Route index element={<BankAdminDashboard />} />
+              <Route index element={<BankLenderDashboard />} />
               <Route path="calls" element={<BankCapitalCallsPage />} />
               <Route path="calls/create" element={<CreateCapitalCallPage />} />
-              <Route path="instruments" element={<PlaceholderPage title="Instruments" description="View deposit instruments." />} />
+              <Route path="instruments" element={<BankLenderDashboard />} />
+              <Route path="deposits" element={<BankLenderDashboard />} />
               <Route path="lending" element={<BankLenderDashboard />} />
-              <Route path="settlements" element={<PlaceholderPage title="Settlements" description="View settlement status." />} />
-              <Route path="analytics" element={<PlaceholderPage title="Analytics" description="View analytics dashboard." />} />
-              <Route path="reports" element={<PlaceholderPage title="Reports" description="Generate reports." />} />
-              <Route path="notifications" element={<PlaceholderPage title="Notifications" description="View notifications." />} />
-              <Route path="settings" element={<PlaceholderPage title="Settings" description="Manage settings." />} />
+              <Route path="settlements" element={<BankLenderDashboard />} />
+              <Route path="settlement" element={<BankLenderDashboard />} />
+              <Route path="analytics" element={<BankLenderDashboard />} />
+              <Route path="reports" element={<BankLenderDashboard />} />
+              <Route path="notifications" element={<BankLenderDashboard />} />
+              <Route path="settings" element={<BankLenderDashboard />} />
+              <Route path="applications" element={<BankLenderDashboard />} />
+              <Route path="loans" element={<BankLenderDashboard />} />
+              <Route path="collections" element={<BankLenderDashboard />} />
+              <Route path="portfolio" element={<BankLenderDashboard />} />
             </Route>
 
             {/* ================================================== */}
