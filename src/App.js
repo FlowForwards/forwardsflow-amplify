@@ -21,8 +21,8 @@ import DisclaimerPage from './components/pages/DisclaimerPage';
 
 // ==================================================
 // DASHBOARD IMPORTS
-// BankAdminDashboard imported directly (not from barrel)
-// to use the new enhanced version with full CRUD
+// BankAdminDashboard & InvestorAdminDashboard imported directly
+// (not from barrel) to use enhanced versions with full CRUD
 // ==================================================
 import {
   ForwardsFlowAdminDashboard,
@@ -31,13 +31,14 @@ import {
   BankCallerDashboard,
   BankComplianceDashboard,
   BankRiskDashboard,
-  InvestorAdminDashboard,
+  // InvestorAdminDashboard - REMOVED from barrel, using direct import below
   InvestorAnalystDashboard,
 } from './components/dashboards';
 
-// NEW: Direct import for enhanced BankAdminDashboard with full CRUD
-// This dashboard reads URL path to show the correct tab
+// NEW: Direct imports for enhanced dashboards with full CRUD
+// These dashboards read URL path to show the correct tab
 import BankAdminDashboard from './components/dashboards/BankAdminDashboard';
+import InvestorAdminDashboard from './components/dashboards/InvestorAdminDashboard';
 
 // Legacy Dashboard Pages (for backward compatibility)
 import LegacySuperAdminDashboard from './components/super-admin/SuperAdminDashboard';
@@ -295,19 +296,24 @@ function App() {
             {/* ================================================== */}
             {/* INVESTOR ADMIN Routes                              */}
             {/* Role: investor_admin                               */}
+            {/* ALL routes go to InvestorAdminDashboard which reads*/}
+            {/* the URL path to determine which tab to show        */}
             {/* ================================================== */}
             <Route path="/investor/admin" element={<InvestorAdminLayout />}>
               <Route index element={<InvestorAdminDashboard />} />
-              <Route path="analytics" element={<PlaceholderPage title="Portfolio Analytics" description="Comprehensive analytics for your investment portfolio." />} />
-              <Route path="users" element={<PlaceholderPage title="Team Management" description="Manage your organization's team members and permissions." />} />
-              <Route path="roles" element={<PlaceholderPage title="Roles & Permissions" description="Configure roles and access permissions." />} />
-              <Route path="investments" element={<InvestorInvestmentsPage />} />
-              <Route path="opportunities" element={<InvestmentOpportunitiesPage />} />
-              <Route path="reports" element={<PlaceholderPage title="Reports" description="Generate investment and performance reports." />} />
-              <Route path="performance" element={<PlaceholderPage title="Performance" description="Track investment performance metrics." />} />
-              <Route path="impact" element={<PlaceholderPage title="Impact Reports" description="View social impact metrics and reporting." />} />
-              <Route path="notifications" element={<PlaceholderPage title="Notifications" description="View and manage notifications." />} />
-              <Route path="settings" element={<PlaceholderPage title="Settings" description="Configure organization settings." />} />
+              <Route path="analytics" element={<InvestorAdminDashboard />} />
+              <Route path="users" element={<InvestorAdminDashboard />} />
+              <Route path="team" element={<InvestorAdminDashboard />} />
+              <Route path="roles" element={<InvestorAdminDashboard />} />
+              <Route path="investments" element={<InvestorAdminDashboard />} />
+              <Route path="portfolio" element={<InvestorAdminDashboard />} />
+              <Route path="opportunities" element={<InvestorAdminDashboard />} />
+              <Route path="compliance" element={<InvestorAdminDashboard />} />
+              <Route path="reports" element={<InvestorAdminDashboard />} />
+              <Route path="performance" element={<InvestorAdminDashboard />} />
+              <Route path="impact" element={<InvestorAdminDashboard />} />
+              <Route path="notifications" element={<InvestorAdminDashboard />} />
+              <Route path="settings" element={<InvestorAdminDashboard />} />
             </Route>
 
             {/* ================================================== */}
