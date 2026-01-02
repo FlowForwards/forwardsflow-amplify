@@ -273,14 +273,22 @@ function App() {
             {/* ================================================== */}
             {/* BANK CALLER (Capital Markets) Routes               */}
             {/* Role: bank_caller                                  */}
+            {/* ALL routes go to BankCallerDashboard which reads   */}
+            {/* the URL path to determine which tab to show        */}
             {/* ================================================== */}
             <Route path="/bank/capital" element={<BankUserLayout />}>
               <Route index element={<BankCallerDashboard />} />
-              <Route path="calls" element={<BankCapitalCallsPage />} />
-              <Route path="calls/create" element={<CreateCapitalCallPage />} />
-              <Route path="investors" element={<PlaceholderPage title="Investor Relations" description="Manage investor relationships and communications." />} />
-              <Route path="settlements" element={<PlaceholderPage title="Settlement Instructions" description="Manage settlement processes." />} />
-              <Route path="reports" element={<PlaceholderPage title="Capital Reports" description="Generate capital markets reports." />} />
+              <Route path="calls" element={<BankCallerDashboard />} />
+              <Route path="calls/create" element={<BankCallerDashboard />} />
+              <Route path="create" element={<BankCallerDashboard />} />
+              <Route path="deposits" element={<BankCallerDashboard />} />
+              <Route path="instruments" element={<BankCallerDashboard />} />
+              <Route path="settlements" element={<BankCallerDashboard />} />
+              <Route path="analytics" element={<BankCallerDashboard />} />
+              <Route path="reports" element={<BankCallerDashboard />} />
+              <Route path="notifications" element={<BankCallerDashboard />} />
+              <Route path="settings" element={<BankCallerDashboard />} />
+              <Route path="investors" element={<BankCallerDashboard />} />
             </Route>
 
             {/* ================================================== */}
