@@ -294,14 +294,19 @@ function App() {
             {/* ================================================== */}
             {/* BANK COMPLIANCE Routes                             */}
             {/* Role: bank_compliance                              */}
+            {/* ALL routes go to BankComplianceDashboard which     */}
+            {/* reads the URL path to determine which tab to show  */}
             {/* ================================================== */}
             <Route path="/bank/compliance" element={<BankUserLayout />}>
               <Route index element={<BankComplianceDashboard />} />
-              <Route path="aml" element={<PlaceholderPage title="AML Monitoring" description="Anti-money laundering monitoring and alerts." />} />
-              <Route path="kyc" element={<PlaceholderPage title="KYC Management" description="Know Your Customer verification management." />} />
-              <Route path="alerts" element={<PlaceholderPage title="Compliance Alerts" description="View and manage compliance alerts." />} />
-              <Route path="reports" element={<PlaceholderPage title="Compliance Reports" description="Generate compliance reports." />} />
-              <Route path="blacklist" element={<PlaceholderPage title="Blacklist Management" description="Manage blacklisted entities." />} />
+              <Route path="aml" element={<BankComplianceDashboard />} />
+              <Route path="kyc" element={<BankComplianceDashboard />} />
+              <Route path="analytics" element={<BankComplianceDashboard />} />
+              <Route path="reports" element={<BankComplianceDashboard />} />
+              <Route path="notifications" element={<BankComplianceDashboard />} />
+              <Route path="settings" element={<BankComplianceDashboard />} />
+              <Route path="audit" element={<BankComplianceDashboard />} />
+              <Route path="alerts" element={<BankComplianceDashboard />} />
             </Route>
 
             {/* ================================================== */}
