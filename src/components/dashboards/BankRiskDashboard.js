@@ -37,7 +37,7 @@ import {
 } from 'recharts';
 import { db } from '../../services/DatabaseService';
 import { useAuth } from '../../context/AuthContext';
-import AmazonQChat from '../shared/AmazonQChat';
+import AmazonQChat from '../chat/AmazonQChat';
 
 const StatCard = ({ title, value, icon: Icon, color, trend, alert }) => {
   const colorClasses = {
@@ -522,7 +522,7 @@ const BankRiskDashboard = () => {
       )}
 
       {/* AI Chat Assistant */}
-      <AmazonQChat userRole="bank_risk" userName={user?.name || 'User'} />
+      <AmazonQChat userRole="bank_risk" tenantId="default" />
     </div>
   );
 };

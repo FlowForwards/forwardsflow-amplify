@@ -40,7 +40,7 @@ import {
 } from 'recharts';
 import { db } from '../../services/DatabaseService';
 import { useAuth } from '../../context/AuthContext';
-import AmazonQChat from '../shared/AmazonQChat';
+import AmazonQChat from '../chat/AmazonQChat';
 
 // ============================================
 // STAT CARD COMPONENT
@@ -656,7 +656,7 @@ const InvestorAnalystDashboard = () => {
       )}
 
       {/* AI Chat Assistant */}
-      <AmazonQChat userRole="impact_investor" userName={user?.name || 'User'} />
+      <AmazonQChat userRole="investor_analyst" tenantId="default" />
     </div>
   );
 };

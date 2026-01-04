@@ -6,6 +6,7 @@ import {
   Globe, Shield, Eye, BarChart3, PieChart as PieChartIcon
 } from 'lucide-react';
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import AmazonQChat from '../chat/AmazonQChat';
 import { db } from '../../services/DatabaseService';
 import { useAuth } from '../../context/AuthContext';
 
@@ -392,6 +393,9 @@ const ForwardsFlowAdminDashboard = () => {
           </div>
         </div>
       </div>
+
+      {/* Amazon Q AI Assistant */}
+      <AmazonQChat userRole="platform_admin" tenantId="default" />
     </div>
   );
 };

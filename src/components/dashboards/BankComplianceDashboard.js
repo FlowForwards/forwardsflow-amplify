@@ -18,6 +18,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, LineChart, Line, AreaChart, Area, Legend, ComposedChart
 } from 'recharts';
+import AmazonQChat from '../chat/AmazonQChat';
 
 // ============================================
 // UNIVERSAL SAMPLE DATABASE
@@ -2021,9 +2022,14 @@ const BankComplianceDashboard = () => {
             </button>
           </div>
         </div>
-      </Modal>
+    </Modal>
+      {/* Amazon Q AI Assistant */}
+      <AmazonQChat 
+        userRole="bank_compliance" 
+        tenantId="default"
+      />
     </div>
   );
 };
-
 export default BankComplianceDashboard;
+
